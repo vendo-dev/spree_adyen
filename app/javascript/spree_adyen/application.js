@@ -11,6 +11,6 @@ if (typeof window.Stimulus === "undefined") {
   application = window.Stimulus
 }
 
-import SpreeAdyenController from 'spree_adyen/controllers/spree_adyen_controller' 
+import AdyenController from 'spree_adyen/controllers/adyen_controller' 
 
-application.register('spree_adyen', SpreeAdyenController)
+application.register('adyen', AdyenController)

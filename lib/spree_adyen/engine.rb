@@ -16,6 +16,7 @@ module SpreeAdyen
     initializer 'spree_adyen.assets' do |app|
       app.config.assets.paths << root.join('app/javascript')
       app.config.assets.paths << root.join('vendor/javascript')
+      app.config.assets.paths << root.join('vendor/stylesheets')
       app.config.assets.precompile += %w[spree_adyen_manifest]
     end
 
