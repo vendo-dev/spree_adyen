@@ -3,4 +3,10 @@ FactoryBot.define do
   #
   # Example adding this to your spec_helper will load these Factories for use:
   # require 'spree_adyen/factories'
+
+  # Include the payment session factory
+  require 'spree_adyen/testing_support/payment_session_factory'
+  
+  # Include the payment source factories
+  require 'spree_adyen/testing_support/payment_source_factories'
 end

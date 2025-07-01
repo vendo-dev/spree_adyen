@@ -12,6 +12,9 @@ require 'spree_adyen/factories'
 # in spec/support/ and its subdirectories.
 Dir[File.join(File.dirname(__FILE__), 'support/**/*.rb')].sort.each { |f| require f }
 
+# Load VCR configuration
+require 'support/vcr'
+
 def json_response
   case body = JSON.parse(response.body)
   when Hash
