@@ -24,3 +24,4 @@ public/spree
 
 # Local settings
 config/settings.local.yml
+.env

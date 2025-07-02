@@ -2,7 +2,7 @@
 # such as promotions, shipping methods, etc.
 Rails.application.config.after_initialize do
   # Rails.application.config.spree.shipping_methods << Spree::ShippingMethods::SuperExpensiveNotVeryFastShipping
-  # Rails.application.config.spree.payment_methods << Spree::PaymentMethods::VerySafeAndReliablePaymentMethod
+  Rails.application.config.spree.payment_methods << SpreeAdyen::Gateway
 
   # Rails.application.config.spree.calculators.tax_rates << Spree::TaxRates::FinanceTeamForcedMeToCodeThis
 

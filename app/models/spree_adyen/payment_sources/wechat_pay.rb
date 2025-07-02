@@ -1,6 +1,6 @@
 module SpreeAdyen
   module PaymentSources
-    class Alipay < ::Spree::PaymentSource
+    class WechatPay < ::Spree::PaymentSource
       store_accessor :public_metadata, :buyer_id, :buyer_logon_id, :trade_no
 
       def actions
@@ -8,12 +8,12 @@ module SpreeAdyen
       end
 
       def self.display_name
-        'Alipay'
+        'WeChat Pay'
       end
 
       def display_buyer_info
-        "Alipay: #{buyer_logon_id}"
+        "WeChat Pay: #{buyer_logon_id}"
       end
     end
   end
-end 
+end

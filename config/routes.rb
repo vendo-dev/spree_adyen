@@ -1,5 +1,5 @@
 Spree::Core::Engine.add_routes do
-  # Stripe payment intents
+  # Adyen payment intents [return url]
   get '/adyen/payment_sessions/:id', to: '/spree_adyen/payment_sessions#show',
                                       as: :adyen_payment_intent,
                                       controller: '/spree_adyen/payment_sessions'

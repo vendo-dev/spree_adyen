@@ -1,37 +1,20 @@
 require 'spec_helper'
 
-RSpec.describe SpreeStripe::PaymentIntentsController, type: :controller do
+RSpec.describe SpreeAdyen::PaymentSessionsController, type: :controller do
   render_views
 
   let(:store) { Spree::Store.default }
   let(:order) { create(:order_with_line_items, store: store, state: :payment) }
-  let(:stripe_gateway) { create(:stripe_gateway, stores: [store]) }
-  let(:stripe_customer) { create(:gateway_customer, user: order.user, payment_method: stripe_gateway, profile_id: customer_id) }
-  let(:payment_intent_id) { 'pi_3QXRgr2ESifGlJez0DTXdHQ3' }
-  let(:customer_id) { 'cus_RQDNPSRR7tnHve' }
-  let(:payment_intent_record) { create(:payment_intent, order: order, stripe_id: payment_intent_id, payment_method: stripe_gateway) }
-  let(:stripe_payment_intent) {
-    Stripe::StripeObject.construct_from(
-      id: payment_intent_id,
-      status: 'succeeded',
-      amount: 1999,
-      currency: 'usd',
-      customer: customer_id,
-      charge: 'ch_3QXRgr2ESifGlJez02SSg61f'
-    )
-  }
-
-  before do
-    allow(SpreeStripe::PaymentIntent).to receive(:find).with(payment_intent_record.id.to_s).and_return(payment_intent_record)
-    allow(payment_intent_record).to receive(:stripe_payment_intent).and_return(stripe_payment_intent)
-  end
+  let(:adyen_gateway) { create(:adyen_gateway, stores: [store]) }
+  let(:payment_session_id) { 'pi_3QXRgr2ESifGlJez0DTXdHQ3' }
+  let(:payment_session) { create(:payment_session, order: order, adyen_id: payment_session_id, payment_method: adyen_gateway) }
 
   describe 'GET #show' do
-    context 'when payment intent succeeds' do
-      let(:complete_order_service) { instance_double(SpreeStripe::CompleteOrder) }
+    context 'when payment session succeeds' do
+      let(:complete_order_service) { instance_double(SpreeAdyen::CompleteOrder) }
 
       before do
-        allow(SpreeStripe::CompleteOrder).to receive(:new).with(payment_intent: payment_intent_record).and_return(complete_order_service)
+        allow(SpreeAdyen::CompleteOrder).to receive(:new).with(payment_session: payment_session_record).and_return(complete_order_service)
         allow(complete_order_service).to receive(:call).and_return(order)
       end
 
@@ -39,7 +22,7 @@ RSpec.describe SpreeStripe::PaymentIntentsController, type: :controller do
         # FIXME: this is working as expected but specs are failing
         # expect(controller).to receive(:track_checkout_completed)
 
-        get :show, params: { id: payment_intent_record.id }
+        get :show, params: { id: payment_session_record.id }
 
         expect(response).to redirect_to("/checkout/#{order.token}/complete")
       end
@@ -51,7 +34,7 @@ RSpec.describe SpreeStripe::PaymentIntentsController, type: :controller do
       it 'redirects to checkout complete' do
         expect(controller).not_to receive(:track_checkout_completed)
 
-        get :show, params: { id: payment_intent_record.id }
+        get :show, params: { id: payment_session_record.id }
 
         expect(response).to redirect_to("/checkout/#{order.token}/complete")
       end
@@ -61,18 +44,18 @@ RSpec.describe SpreeStripe::PaymentIntentsController, type: :controller do
       let(:order) { create(:completed_order_with_totals, store: store, state: :canceled, canceled_at: Time.current) }
 
       it 'redirects to cart' do
-        get :show, params: { id: payment_intent_record.id }
+        get :show, params: { id: payment_session_record.id }
 
         expect(response).to redirect_to(spree.cart_path)
       end
     end
 
-    context 'when payment intent fails' do
+    context 'when payment session fails' do
       let(:payment) { create(:payment) }
 
-      let(:stripe_payment_intent) {
-        Stripe::StripeObject.construct_from(
-          id: payment_intent_id,
+      let(:adyen_payment_session) {
+        Adyen::AdyenObject.construct_from(
+          id: payment_session_id,
           status: 'payment_failed',
           amount: 1999,
           currency: 'usd',
@@ -86,15 +69,15 @@ RSpec.describe SpreeStripe::PaymentIntentsController, type: :controller do
       }
 
       it 'handles the failure and redirects to checkout' do
-        get :show, params: { id: payment_intent_record.id }
+        get :show, params: { id: payment_session_record.id }
 
-        expect(flash[:error]).to eq(Spree.t("stripe.payment_intent_errors.payment_failed"))
+        expect(flash[:error]).to eq(Spree.t("adyen.payment_session_errors.payment_failed"))
 
         expect(response).to redirect_to("/checkout/#{order.token}")
       end
 
       context 'when payment exists' do
-        let(:payment) { create(:payment, order: order, amount: 1999, state: :pending, response_code: payment_intent_id) }
+        let(:payment) { create(:payment, order: order, amount: 1999, state: :pending, response_code: payment_session_id) }
 
         before do
           order.update_column(:total, 1999)
@@ -102,7 +85,7 @@ RSpec.describe SpreeStripe::PaymentIntentsController, type: :controller do
         end
 
         it 'voids the payment' do
-          get :show, params: { id: payment_intent_record.id }
+          get :show, params: { id: payment_session_record.id }
 
           expect(payment.reload.state).to eq('void')
         end
@@ -111,12 +94,12 @@ RSpec.describe SpreeStripe::PaymentIntentsController, type: :controller do
 
     context 'when gateway error occurs' do
       before do
-        allow(stripe_payment_intent).to receive(:latest_charge).and_raise(Spree::Core::GatewayError, 'Gateway Error')
+        allow(adyen_payment_session).to receive(:latest_charge).and_raise(Spree::Core::GatewayError, 'Gateway Error')
         allow_any_instance_of(described_class).to receive(:@order).and_return(order)
       end
 
       it 'handles the error and redirects to checkout' do
-        get :show, params: { id: payment_intent_record.id }
+        get :show, params: { id: payment_session_record.id }
 
         expect(flash[:error]).to eq('Gateway Error')
         expect(response).to redirect_to("/checkout/#{order.token}")

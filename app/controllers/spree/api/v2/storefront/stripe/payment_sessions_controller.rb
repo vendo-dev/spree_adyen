@@ -12,10 +12,11 @@ module Spree
             def create
               spree_authorize! :update, spree_current_order, order_token
 
-              @payment_session = SpreeAdyen::PaymentSessions::Create.new(
+              @payment_session = SpreeAdyen::PaymentSessions::FindOrCreate.new(
                 order: spree_current_order,
                 user: spree_current_user,
-                amount: permitted_attributes[:amount],
+                payment_method: adyen_gateway,
+                amount: permitted_attributes[:amount]
               ).call
 
               render_serialized_payload { serialize_resource(@payment_session) }

@@ -17,9 +17,9 @@ module SpreeAdyen
 
       def masked_iban
         return iban if iban.blank?
-        
-        "#{iban[0..3]}****#{iban[-4..-1]}"
+
+        "#{iban[0..3]}****#{iban[-4..]}"
       end
     end
   end
-end 
+end

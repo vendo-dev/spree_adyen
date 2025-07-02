@@ -3,7 +3,7 @@ module SpreeAdyen
     #
     # Associations
     #
-    belongs_to :order, class_name: 'Spree::Order', foreign_key: 'order_id'
+    belongs_to :order, class_name: 'Spree::Order'
 
     #
     # Validations
@@ -11,7 +11,9 @@ module SpreeAdyen
     validates :order, presence: true
     validates :adyen_id, presence: true, uniqueness: { scope: :order_id }
     validates :amount, presence: true, numericality: { greater_than: 0 }
-    validate :expiration_date_cannot_be_in_the_past_or_later_than_24_hours
+    validate :expiration_date_cannot_be_in_the_past_or_later_than_24_hours, on: :create
+
+    scope :not_expired, -> { where('expires_at > ?', DateTime.current) }
 
     #
     # Callbacks
@@ -38,13 +40,11 @@ module SpreeAdyen
     end
 
     def expiration_date_cannot_be_in_the_past_or_later_than_24_hours
-      if expires_at.present? && expires_at < DateTime.current
-        errors.add(:expires_at, "can't be in the past")
-      end
+      errors.add(:expires_at, "can't be in the past") if expires_at.present? && expires_at < DateTime.current
 
-      if expires_at.present? && expires_at > 24.hours.from_now
-        errors.add(:expires_at, "can't be more than 24 hours from now")
-      end
+      return unless expires_at.present? && expires_at > 24.hours.from_now
+
+      errors.add(:expires_at, "can't be more than 24 hours from now")
     end
   end
 end

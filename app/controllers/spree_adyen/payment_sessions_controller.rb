@@ -10,27 +10,21 @@ module SpreeAdyen
       @payment_session_record = SpreeAdyen::PaymentSession.find(params[:id])
       @order = @payment_session_record.order
 
-      # if somehow order was canceled, we need to redirect the customer to the cart
-      # this is a rare case, but we need to handle it
-      if @order.canceled?
-        flash[:error] = Spree.t(:order_canceled)
-        redirect_to spree.cart_path, status: :see_other
-      # if the order is already completed (race condition)
-      # we need to redirect the customer to the complete checkout page
-      # but we need to make sure not to set the session flag to indicate that the order was placed now
-      # because we don't know if the order was actually placed or not
-      elsif @order.completed?
-        redirect_to spree.checkout_complete_path(@order.token), status: :see_other
-      # if the payment session is successful, we need to process the payment and complete the order
-      elsif @adyen_payment_session.status == 'succeeded'
-        @order = SpreeAdyen::CompleteOrder.new(payment_session: @payment_session_record).call
+      # handle duplicated requests or already prcessed through webhook
+      redirect_to spree.checkout_complete_path(@order.token), status: :see_other if @payment_session_record.status.present?
+
+      @payment_session_record = SpreeAdyen::PaymentSessions::Update.new(payment_session: @payment_session_record,
+                                                                        session_result: params[:sessionResult]).call
+
+      if @payment_session_record.reload.succeeded?
+        @order = SpreeStripe::CompleteOrder.new(payment_intent: @payment_intent_record).call
 
         # set the session flag to indicate that the order was placed now
         track_checkout_completed if @order.completed?
 
-        # redirect the customer to the complete checkout page
         redirect_to spree.checkout_complete_path(@order.token), status: :see_other
-      else
+
+      elsif @payment_session_record.failed?
         handle_failure(Spree.t("adyen.payment_session_errors.#{@adyen_payment_session.status}"))
       end
     rescue Spree::Core::GatewayError => e

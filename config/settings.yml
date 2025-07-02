@@ -1,7 +1,0 @@
-# these values can be overridden in another settings file or by ENV variables, fe SETTINGS__SPREE_ADYEN__API_KEY
-spree_adyen:
-  api_key: "super_secret_key"
-  merchant_account: "SpreeCommerceECOM"
-  environment: "test"
-  return_url: "http://example.com"
-  session_timeout_minutes: 60

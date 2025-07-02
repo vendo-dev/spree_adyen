@@ -29,4 +29,4 @@ module SpreeAdyen
       end
     end
   end
-end 
+end

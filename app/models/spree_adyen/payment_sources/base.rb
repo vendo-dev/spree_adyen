@@ -4,4 +4,4 @@ module SpreeAdyen
       self.abstract_class = true
     end
   end
-end 
+end

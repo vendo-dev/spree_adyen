@@ -1,6 +1,6 @@
 module SpreeAdyen
   module PaymentSources
-    class GooglePay < ::Spree::PaymentSource
+    class ApplePay < ::Spree::PaymentSource
       store_accessor :public_metadata, :payment_data, :payment_method, :transaction_identifier
 
       def actions
@@ -8,12 +8,12 @@ module SpreeAdyen
       end
 
       def self.display_name
-        'Google Pay'
+        'Apple Pay'
       end
 
       def display_payment_info
-        "Google Pay: #{payment_method}"
+        "Apple Pay: #{payment_method}"
       end
     end
   end
-end 
+end

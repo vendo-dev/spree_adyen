@@ -9,4 +9,5 @@ FactoryBot.define do
   
   # Include the payment source factories
   require 'spree_adyen/testing_support/payment_source_factories'
+  require 'spree_adyen/testing_support/gateway_factory'
 end
