@@ -1,0 +1,36 @@
+{
+  "live": "false",
+  "notificationItems": [
+    {
+      "NotificationRequestItem": {
+        "additionalData": {
+          "tokenization.shopperReference": "YOUR_SHOPPER_REFERENCE",
+          "tokenization.storedPaymentMethodId": "M5N7TQ4TG5PFWR50",
+          "tokenization.store.operationType": "created",
+          "expiryDate": "03/2030",
+          "cardSummary": "1111",
+          "cardBin": "411111",
+          "authCode": "033899",
+          "sessionId": "1234567890"
+        },
+        "amount": {
+          "currency": "EUR",
+          "value": 1000
+        },
+        "eventCode": "AUTHORISATION",
+        "eventDate": "2021-01-01T01:00:00+01:00",
+        "merchantAccountCode": "YOUR_MERCHANT_ACCOUNT",
+        "merchantReference": "YOUR_MERCHANT_REFERENCE",
+        "paymentMethod": "ach",
+        "operations": [
+          "CANCEL",
+          "CAPTURE",
+          "REFUND"
+        ],
+        "pspReference": "QFQTPCQ8HXSKGK82",
+        "reason": "null",
+        "success": "true"
+      }
+    }
+  ]
+}

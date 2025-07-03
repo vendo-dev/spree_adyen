@@ -1,17 +1,10 @@
 Spree::Core::Engine.add_routes do
   # Adyen payment intents [return url]
   get '/adyen/payment_sessions/:id', to: '/spree_adyen/payment_sessions#show',
-                                      as: :adyen_payment_intent,
-                                      controller: '/spree_adyen/payment_sessions'
+                                     as: :adyen_payment_intent,
+                                     controller: '/spree_adyen/payment_sessions'
 
-
-  #TODO this seems to be global for apple and its already defined in spree_stripe
-  #TODO decide on how to handle this
-
-  # get '/.well-known/apple-developer-merchantid-domain-association' => '/spree_adyen/apple_pay_domain_verification#show'
-  
-  #TODO add adyen webhook for confirming payment sessions
-
+  post '/adyen/webhooks', to: '/spree_adyen/webhooks#create', controller: '/spree_adyen/webhooks'
 
   # Storefront API
   namespace :api, defaults: { format: 'json' } do

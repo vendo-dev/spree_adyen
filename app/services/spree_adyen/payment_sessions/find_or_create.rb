@@ -13,7 +13,7 @@ module SpreeAdyen
       def call
         return payment_session if payment_session.present?
 
-        send_request
+        payment_method.create_payment_session(order: order, amount: amount, user: user)
 
         PaymentSession.create!(
           adyen_id: response.id,
@@ -38,14 +38,6 @@ module SpreeAdyen
           order: order,
           user: user
         )
-      end
-
-      def send_request
-        @send_request ||= PaymentApi::Sessions::Create.new(payload: request_payload).call
-      end
-
-      def request_payload
-        @request_payload ||= RequestPayloadSerializer.new(order: order, amount: amount, user: user).to_h
       end
     end
   end
