@@ -16,7 +16,16 @@ module SpreeAdyen
     validate :expiration_date_cannot_be_in_the_past_or_later_than_24_hours, on: :create
 
     scope :not_expired, -> { where('expires_at > ?', DateTime.current) }
-    scope :pending, -> { where(status: 'pending') }
+
+    state_machine :status, initial: :pending do
+      event :complete do
+        transition pending: :completed
+      end
+
+      event :fail do
+        transition pending: :failed
+      end
+    end
 
     #
     # Callbacks

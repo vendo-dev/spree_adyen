@@ -32,7 +32,7 @@ module SpreeAdyen
       attr_reader :order, :payment_method, :amount, :user
 
       def payment_session
-        @payment_session ||= PaymentSession.pending.not_expired.find_by(
+        @payment_session ||= PaymentSession.with_status(:pending).not_expired.find_by(
           payment_method: payment_method,
           order: order,
           user: user,
