@@ -22,7 +22,7 @@ RSpec.describe SpreeAdyen::PaymentSessions::FindOrCreate do
 
   context 'when payment session does not exist' do
     it 'creates a payment session' do
-      VCR.use_cassette('payment_sessions/create') do
+      VCR.use_cassette('payment_sessions/success') do
         expect { service }.to change(SpreeAdyen::PaymentSession, :count).by(1)
       end
     end
@@ -48,7 +48,7 @@ RSpec.describe SpreeAdyen::PaymentSessions::FindOrCreate do
       before { Timecop.freeze(1.day.ago) { existing_payment_session } }
 
       it 'creates a new payment session' do
-        VCR.use_cassette('payment_sessions/create') do
+        VCR.use_cassette('payment_sessions/success') do
           expect { subject }.to change(SpreeAdyen::PaymentSession, :count).by(1)
         end
       end
@@ -60,7 +60,7 @@ RSpec.describe SpreeAdyen::PaymentSessions::FindOrCreate do
       let(:payment_status) { 'completed' }
 
       it 'creates a new payment session' do
-        VCR.use_cassette('payment_sessions/create') do
+        VCR.use_cassette('payment_sessions/success') do
           expect { subject }.to change(SpreeAdyen::PaymentSession, :count).by(1)
         end
       end
@@ -72,7 +72,7 @@ RSpec.describe SpreeAdyen::PaymentSessions::FindOrCreate do
       let(:payment_payment_method) { create(:payment_method) }
 
       it 'creates a new payment session' do
-        VCR.use_cassette('payment_sessions/create') do
+        VCR.use_cassette('payment_sessions/success') do
           expect { subject }.to change(SpreeAdyen::PaymentSession, :count).by(1)
         end
       end
@@ -84,7 +84,7 @@ RSpec.describe SpreeAdyen::PaymentSessions::FindOrCreate do
       let(:payment_user) { create(:user) }
 
       it 'creates a new payment session' do
-        VCR.use_cassette('payment_sessions/create') do
+        VCR.use_cassette('payment_sessions/success') do
           expect { subject }.to change(SpreeAdyen::PaymentSession, :count).by(1)
         end
       end
@@ -96,7 +96,7 @@ RSpec.describe SpreeAdyen::PaymentSessions::FindOrCreate do
       let(:payment_order) { create(:order) }
 
       it 'creates a new payment session' do
-        VCR.use_cassette('payment_sessions/create') do
+        VCR.use_cassette('payment_sessions/success') do
           expect { subject }.to change(SpreeAdyen::PaymentSession, :count).by(1)
         end
       end
@@ -108,7 +108,7 @@ RSpec.describe SpreeAdyen::PaymentSessions::FindOrCreate do
       let(:payment_amount) { 200 }
 
       it 'creates a new payment session' do
-        VCR.use_cassette('payment_sessions/create') do
+        VCR.use_cassette('payment_sessions/success') do
           expect { subject }.to change(SpreeAdyen::PaymentSession, :count).by(1)
         end
       end

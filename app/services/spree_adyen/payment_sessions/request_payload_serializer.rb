@@ -26,7 +26,6 @@ module SpreeAdyen
           merchantAccount: merchant_account,
           merchantOrderReference: order.number,
           expiresAt: expires_at,
-          allowedPaymentMethods: allowed_payment_methods,
           additionalData: { spree_order_id: order.id }
         }.merge!(shopper_details, DEFAULT_PARAMS)
       end
@@ -34,10 +33,6 @@ module SpreeAdyen
       private
 
       attr_reader :order, :amount, :user, :merchant_account
-
-      def allowed_payment_methods
-        %w[blik visa mastercard]
-      end
 
       def shopper_details
         {
@@ -53,8 +48,8 @@ module SpreeAdyen
       def line_items
         order.line_items.map do |line_item|
           {
-            amountExcludingTax: Spree::Money.new(line_item.price - line_item.included_tax_total, order.currency).cents,
-            amountIncludingTax: Spree::Money.new(line_item.price + line_item.additional_tax_total, order.currency).cents,
+            amountExcludingTax: Spree::Money.new(line_item.price - line_item.included_tax_total, currency: order.currency).cents,
+            amountIncludingTax: Spree::Money.new(line_item.price + line_item.additional_tax_total, currency: order.currency).cents,
             description: line_item.name,
             id: line_item.id,
             sku: line_item.sku,
