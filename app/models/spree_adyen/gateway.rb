@@ -53,9 +53,16 @@ module SpreeAdyen
       end
     end
 
-    def check_payment_session_status(payment_session_id, session_result)
-      send_request do
+    def payment_session_result(payment_session_id, session_result)
+      response = send_request do
         client.checkout.payments_api.get_result_of_payment_session(payment_session_id, query_params: { sessionResult: session_result })
+      end
+      response_body = response.response
+
+      if response.status == 200
+        success(response_body.id, response_body)
+      else
+        failure(response_body.slice('pspReference', 'message').values.join(' - '))
       end
     end
 

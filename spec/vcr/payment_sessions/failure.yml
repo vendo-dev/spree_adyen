@@ -5,8 +5,8 @@ http_interactions:
     uri: https://checkout-test.adyen.com/v71/sessions
     body:
       encoding: UTF-8
-      string: '{"amount":{"value":100,"currency":"USD"},"returnUrl":"https://localhost/adyen/payment_sessions","reference":"R462831802","countryCode":"INVALID","lineItems":[{"amountExcludingTax":1000,"amountIncludingTax":1000,"description":"Product
-        28166","id":1,"sku":"SKU-2","quantity":1}],"merchantAccount":"SpreeCommerceECOM","merchantOrderReference":"R462831802","expiresAt":"2025-07-07T13:41:18Z","additionalData":{"spree_order_id":1},"shopperName":{"firstName":"John","lastName":"Doe"},"shopperEmail":"loyce@reilly.ca","shopperReference":"001","channel":"Web"}'
+      string: '{"amount":{"value":100,"currency":"USD"},"returnUrl":"https://localhost/adyen/payment_sessions","reference":"R678090783","countryCode":"INVALID","lineItems":[{"amountExcludingTax":1000,"amountIncludingTax":1000,"description":"Product
+        14232","id":1,"sku":"SKU-1","quantity":1}],"merchantAccount":"SpreeCommerceECOM","merchantOrderReference":"R678090783","expiresAt":"2025-07-07T15:13:40Z","additionalData":{"spree_order_id":1},"shopperName":{"firstName":"John","lastName":"Doe"},"shopperEmail":"stefania.upton@morissetteemmerich.us","shopperReference":"001","channel":"Web"}'
     headers:
       Content-Type:
       - application/json
@@ -15,7 +15,7 @@ http_interactions:
       X-Api-Key:
       - secret
       Idempotency-Key:
-      - 74d72851-c59c-41b8-8fbc-12fc957779f5
+      - 868e08b6-172c-4533-939d-0f57736a7340
       Adyen-Library-Name:
       - adyen-ruby-api-library
       Adyen-Library-Version:
@@ -30,7 +30,7 @@ http_interactions:
       message: Unprocessable Entity
     headers:
       Date:
-      - Mon, 07 Jul 2025 12:41:18 GMT
+      - Mon, 07 Jul 2025 14:13:40 GMT
       Content-Type:
       - application/json;charset=UTF-8
       Content-Length:
@@ -38,7 +38,7 @@ http_interactions:
       Connection:
       - keep-alive
       Traceparent:
-      - 00-3527ed8376b027c69fff850e66ab4479-8ab4b0ec6ce07a54-01
+      - 00-44474c5565f3061b68de966eeea00fbf-b33d1c2b38068723-01
       X-Frame-Options:
       - SAMEORIGIN
       X-Content-Type-Options:
@@ -50,16 +50,16 @@ http_interactions:
       Expires:
       - '0'
       Set-Cookie:
-      - JSESSIONID=7F1B4CBB9F375EE7CF95DFA78CDA629C; Path=/checkout; Secure; HttpOnly
-      - __cf_bm=9YNJWoc5L5odnmM.bU30tuGrL8fGG43LZIXtL1awOqA-1751892078-1.0.1.1-Yr8UNmEeiYtx9SpVcdVxAKAlzbFiaVOg6X0fZ2aQpRPZKUUnoZ0FSgO8r4PV4bEvvxAsyQmylt0E6Y0nBqtayzQxUU4rybttgsnaffqMJBw;
-        path=/; expires=Mon, 07-Jul-25 13:11:18 GMT; domain=.adyen.com; HttpOnly;
+      - JSESSIONID=AE3553255F33BCA3856C6644FB958552; Path=/checkout; Secure; HttpOnly
+      - __cf_bm=ux.8PJlDBX_YQwtPudgOllmCUpzWa2Hu3.Tia71Xs0U-1751897620-1.0.1.1-pdR8XrnU2WPppgKAvl0BPVJ2oNdX4zFfdYFmqocfryFtWNeNZ5MRbZUHnZurCl6Yi6lO73ZsoIlJoEYAx4DwcaEIiQmo4GSLahvjF4OfuGM;
+        path=/; expires=Mon, 07-Jul-25 14:43:40 GMT; domain=.adyen.com; HttpOnly;
         Secure; SameSite=None
-      - _cfuvid=u2TgNmgUbfeBVN1mS_KuQsClRi8Xx2.PbNUvHZOxxU0-1751892078736-0.0.1.1-604800000;
+      - _cfuvid=V1erVPDENLhIY0l_5YxmD0_gDgs0MXbLMHRLtPOjafk-1751897620647-0.0.1.1-604800000;
         path=/; domain=.adyen.com; HttpOnly; Secure; SameSite=None
       Idempotency-Key:
-      - 74d72851-c59c-41b8-8fbc-12fc957779f5
+      - 868e08b6-172c-4533-939d-0f57736a7340
       Pspreference:
-      - X8HRG2XMVS3JHPT5
+      - N3FFD9KVFQ85K5V5
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains
       Cf-Cache-Status:
@@ -67,83 +67,10 @@ http_interactions:
       Server:
       - cloudflare
       Cf-Ray:
-      - 95b76a537f890250-WAW
+      - 95b7f1a039e534e8-WAW
     body:
       encoding: UTF-8
       string: '{"status":422,"errorCode":"200","message":"Field ''countryCode'' is
-        not valid.","errorType":"validation","pspReference":"X8HRG2XMVS3JHPT5"}'
-  recorded_at: Mon, 07 Jul 2025 12:41:18 GMT
-- request:
-    method: post
-    uri: https://checkout-test.adyen.com/v71/sessions
-    body:
-      encoding: UTF-8
-      string: '{"amount":{"value":100,"currency":"USD"},"returnUrl":"https://localhost/adyen/payment_sessions","reference":"R931473856","countryCode":"INVALID","lineItems":[{"amountExcludingTax":1000,"amountIncludingTax":1000,"description":"Product
-        12019","id":1,"sku":"SKU-1","quantity":1}],"merchantAccount":"SpreeCommerceECOM","merchantOrderReference":"R931473856","expiresAt":"2025-07-07T14:03:50Z","additionalData":{"spree_order_id":1},"shopperName":{"firstName":"John","lastName":"Doe"},"shopperEmail":"rebbeca@jaskolski.name","shopperReference":"001","channel":"Web"}'
-    headers:
-      Content-Type:
-      - application/json
-      User-Agent:
-      - adyen-ruby-api-library/10.3.0
-      X-Api-Key:
-      - secret
-      Idempotency-Key:
-      - 5f425b73-b565-423b-b9a3-dbefa924bcde
-      Adyen-Library-Name:
-      - adyen-ruby-api-library
-      Adyen-Library-Version:
-      - 10.3.0
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-  response:
-    status:
-      code: 422
-      message: Unprocessable Entity
-    headers:
-      Date:
-      - Mon, 07 Jul 2025 13:04:02 GMT
-      Content-Type:
-      - application/json;charset=UTF-8
-      Content-Length:
-      - '137'
-      Connection:
-      - keep-alive
-      Traceparent:
-      - 00-c44606cf105c0323bd4ddc314fc1d5ae-b73d66ff7b351c23-01
-      X-Frame-Options:
-      - SAMEORIGIN
-      X-Content-Type-Options:
-      - nosniff
-      Cache-Control:
-      - no-cache, no-store, private, must-revalidate, max-age=0
-      Pragma:
-      - no-cache
-      Expires:
-      - '0'
-      Set-Cookie:
-      - JSESSIONID=E4AB689103353A3D5F088C0C7C990CAD; Path=/checkout; Secure; HttpOnly
-      - __cf_bm=_IcyIoaVRegCJiWmZ2b4HPVrd32TY6I_pXMNR9pWiuM-1751893442-1.0.1.1-8T2Qjg0_bdEHri8MlhqJqCg2uEvBjkYNY1aRYTOcmF2zV_5RCGE4rIQHontf01se8TLaZ1UYMWRPL9CN_PHVN.EiRWpsCyZ1M5ArjGcJIsg;
-        path=/; expires=Mon, 07-Jul-25 13:34:02 GMT; domain=.adyen.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=qGePIdT1em2qehn_TI4WLXimLZsvq15FJDR2CYEwW0g-1751893442997-0.0.1.1-604800000;
-        path=/; domain=.adyen.com; HttpOnly; Secure; SameSite=None
-      Idempotency-Key:
-      - 5f425b73-b565-423b-b9a3-dbefa924bcde
-      Pspreference:
-      - VD6VD3JVFQ85K5V5
-      Strict-Transport-Security:
-      - max-age=31536000; includeSubDomains
-      Cf-Cache-Status:
-      - DYNAMIC
-      Server:
-      - cloudflare
-      Cf-Ray:
-      - 95b78ba20f98b613-WAW
-    body:
-      encoding: UTF-8
-      string: '{"status":422,"errorCode":"200","message":"Field ''countryCode'' is
-        not valid.","errorType":"validation","pspReference":"VD6VD3JVFQ85K5V5"}'
-  recorded_at: Mon, 07 Jul 2025 13:04:02 GMT
+        not valid.","errorType":"validation","pspReference":"N3FFD9KVFQ85K5V5"}'
+  recorded_at: Mon, 07 Jul 2025 14:13:40 GMT
 recorded_with: VCR 6.3.1
