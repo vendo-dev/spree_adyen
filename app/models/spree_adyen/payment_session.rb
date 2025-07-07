@@ -4,6 +4,8 @@ module SpreeAdyen
     # Associations
     #
     belongs_to :order, class_name: 'Spree::Order'
+    belongs_to :payment_method, class_name: 'Spree::PaymentMethod'
+    belongs_to :user, class_name: Spree.user_class.name
 
     #
     # Validations
@@ -14,6 +16,7 @@ module SpreeAdyen
     validate :expiration_date_cannot_be_in_the_past_or_later_than_24_hours, on: :create
 
     scope :not_expired, -> { where('expires_at > ?', DateTime.current) }
+    scope :pending, -> { where(status: 'pending') }
 
     #
     # Callbacks

@@ -24,11 +24,12 @@ Gem::Specification.new do |s|
   s.add_dependency 'spree_storefront', '>= 5.1.0.beta4'
   s.add_dependency 'spree_admin', '>= 5.1.0.beta4'
   s.add_dependency 'spree_extension'
-  s.add_dependency 'pry-rails'
 
   s.add_dependency 'adyen-ruby-api-library', '~> 10.3'
 
   s.add_development_dependency 'spree_dev_tools'
   s.add_development_dependency 'vcr'
   s.add_development_dependency 'webmock'
+  s.add_development_dependency 'pry-rails'
+  s.add_development_dependency 'timecop'
 end

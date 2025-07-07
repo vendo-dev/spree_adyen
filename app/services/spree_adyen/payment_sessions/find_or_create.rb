@@ -1,7 +1,7 @@
 module SpreeAdyen
   module PaymentSessions
     class FindOrCreate
-      DEFAULT_STATUS = 'pending'.freeze
+      DEFAULT_STATUS = 'pending'
 
       def initialize(order:, user:, amount:, payment_method:)
         @order = order
@@ -13,14 +13,15 @@ module SpreeAdyen
       def call
         return payment_session if payment_session.present?
 
-        payment_method.create_payment_session(order: order, amount: amount, user: user)
+        response = payment_method.create_payment_session(amount, order)
 
         PaymentSession.create!(
-          adyen_id: response.id,
+          adyen_id: response.params['id'],
           order: order,
           amount: amount,
+          currency: order.currency,
           user: user,
-          expires_at: response.expires_at,
+          expires_at: response.params['expiresAt'],
           status: DEFAULT_STATUS,
           payment_method: payment_method
         )
@@ -30,13 +31,12 @@ module SpreeAdyen
 
       attr_reader :order, :payment_method, :amount, :user
 
-      delegate :response, to: :send_request
-
       def payment_session
         @payment_session ||= PaymentSession.pending.not_expired.find_by(
           payment_method: payment_method,
           order: order,
-          user: user
+          user: user,
+          amount: amount
         )
       end
     end

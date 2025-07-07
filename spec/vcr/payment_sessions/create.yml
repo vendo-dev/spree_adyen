@@ -1,0 +1,74 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://checkout-test.adyen.com/v71/sessions
+    body:
+      encoding: UTF-8
+      string: '{"amount":{"value":100,"currency":"USD"},"returnUrl":"https://localhost/adyen/payment_sessions","reference":"R784457925","countryCode":"US","lineItems":[],"merchantAccount":"SpreeCommerceECOM","merchantOrderReference":"R784457925","expiresAt":"2025-07-07T11:37:20Z","allowedPaymentMethods":["blik","visa","mastercard"],"additionalData":{"spree_order_id":1},"shopperName":{"firstName":"John","lastName":"Doe"},"shopperEmail":"elois.grimes@schneider.name","shopperReference":"001","channel":"Web"}'
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - adyen-ruby-api-library/10.3.0
+      X-Api-Key:
+      - secret
+      Idempotency-Key:
+      - 28e85c63-b4ed-4aff-ba8c-d90b7dfc0bfd
+      Adyen-Library-Name:
+      - adyen-ruby-api-library
+      Adyen-Library-Version:
+      - 10.3.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Date:
+      - Mon, 07 Jul 2025 10:37:20 GMT
+      Content-Type:
+      - application/json;charset=UTF-8
+      Content-Length:
+      - '2347'
+      Connection:
+      - keep-alive
+      Traceparent:
+      - 00-01b163a88a327e49f1dcc723aa081d82-82567ca9884c9c15-01
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Cache-Control:
+      - no-cache, no-store, private, must-revalidate, max-age=0
+      Pragma:
+      - no-cache
+      Expires:
+      - '0'
+      Set-Cookie:
+      - JSESSIONID=D070CCC091690F3308890243268743C6; Path=/checkout; Secure; HttpOnly
+      - __cf_bm=4yZZ_cqs26iTUwu7gANF1jCAMvmThqKNkZIoFx0eLik-1751884640-1.0.1.1-OEujRN_yNxii8vvcrOc6.2lMr7KUWyNQcP4p5gcdBb8JFhoPXkfvQmqOQQske4jza4do6fnkm2a._jUkwcUJ8PA3tjR7ytHEKIKVpIbx_Zk;
+        path=/; expires=Mon, 07-Jul-25 11:07:20 GMT; domain=.adyen.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=G1hzsfthNRfKOjjDDz9GjfIBePWIyTdshyvQOkcO__g-1751884640670-0.0.1.1-604800000;
+        path=/; domain=.adyen.com; HttpOnly; Secure; SameSite=None
+      Idempotency-Key:
+      - 28e85c63-b4ed-4aff-ba8c-d90b7dfc0bfd
+      Pspreference:
+      - T9P2SHFVFQ85K5V5
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Cf-Cache-Status:
+      - DYNAMIC
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 95b6b4bb8a0beed5-WAW
+    body:
+      encoding: UTF-8
+      string: '{"additionalData":{"spree_order_id":"1"},"allowedPaymentMethods":["blik","visa","mastercard"],"amount":{"currency":"USD","value":100},"channel":"Web","countryCode":"US","expiresAt":"2025-07-07T13:37:20+02:00","id":"CS0FCF928ABF9E266A","lineItems":[],"merchantAccount":"SpreeCommerceECOM","merchantOrderReference":"R784457925","reference":"R784457925","returnUrl":"https:\/\/localhost\/adyen\/payment_sessions","shopperEmail":"elois.grimes@schneider.name","shopperLocale":"en-US","shopperName":{"firstName":"John","lastName":"Doe"},"shopperReference":"001","mode":"embedded","sessionData":"Ab02b4c0!BQABAgA4k42VExq8+zUrlon2CHwgTzH\/OHGkQuCoqx6fkMdBtmUNcAqD\/miGJaoj7XGrSTWxDqO5vD1EX2l2cw9rJc\/pn2PCR9HSNeqGMR1KDivVggI067i2qzRMYpl1sP1KmDIHpTsKmVt5VOYByek9l8Ri8b4hjBNTBml2SxRKpdGoZmNzbRfMHs5QnSlpCahXCPjNCXKIZyy1GeJrOJgG3IE7\/RlJaPwabWNGyaO+wX6hfJHQM6WUwgKfw4AFcksdBQNw9HZfkogi4NbZM3sJZPlXZ2UkDGcyr8E4+\/0stzRd3PD3+is0YVvxslDqE0xB\/fzUTqY0d4IthHL5Nhr\/YAJND3Vo13PZaQTyojxsmtmB7JUno9Mdf3TuGHNXtvg8ooBz3Yaj6MvNzRly4dDPzYoh\/3WLVNBAttXl0fxIUtwtelB+qH08VrSCFpo1lztAA0\/tMs\/P2wUMZUC8Ez8hzD\/VQ7WMK6JRsVMipWGb0mooc7r2wjh9eH3BumIB18LOhkvgxFvbHeG0q8zxEglL+0l9ysYE6OKqEN5f0MH7cp2Tdm0hYH2wqcGSHCqj4IMI1PQMpqHZc56HiZ+89ec6P3MP54W06MhuV+rL6dCh8ywwjRodrHlNtxnonvLZDV818P2Lcen4MFDGoHCnDfWOPO9Prr7xUXRSO0azIzRz5IKyzgxfKI4ZCN21LjwOc2kASnsia2V5IjoiQUYwQUFBMTAzQ0E1MzdFQUVEODdDMjRERDUzOTA5QjgwQTc4QTkyM0UzODIzRDY4REFDQzk0QjlGRjgzMDVEQyJ9Rg7LaFWTdMyODkB\/rRUBWAzUNazzAU8QXxWTtfTcx7GLP6+XfaSl9DpVQJl6YUm\/1Eub0tpmaCfvzgPKf3bbS5t5P4X0MwLAr+9cAXUc6csSVZUXaXF5rbf4BFM5UhjaHIcup5+zDmLfYoRBCyalPnwygOcgDYguMQumYP+ocm2f0PapLCKfAoX1anP3MFcRrGUo0JF5OktsqRGybctcGoAn8\/xCVdvmwl1naIpvajDXCbUzFElYoZ8MYV1iIS+ITjU45FE9tUCNSC9O2NKf+hctfK3EFf2fSMZQG5VRXM463iA4ZBnT\/K3Rnd550Zwb+YzsSw4Ln2zb43VpQwquIZF1bK86Bh8o2iNL1d\/SogfuCik7BLz05vOA5d3lowKZ28nsEV9h6zz9X2DKItHRy8fTnE\/\/UH47lVh2R0\/oFAo6Rxm9eDEi1VUxybyL\/xufysiWOUGkveu1gOEKkApfynBMlMoeBYHFXGWVhXN6eBNgBsKWvakrPqV0MhYKw13lygWjnBG7RBXshxBM7KSEsU6U8zNWvL1DYVq1zzNCc6HiUZKDwvy8tYZqK4TwE4sRlIDEW0y2Tx4g4IxAb\/SKDQnDYtY\/Pyiq4JDqjrlLAejoxv\/aRCGDJRUF8+a6uOb5czPNLMTfKtUKVQGFcCUL\/EXUVxuwG3XeKj9qLREXMf\/Obh8OIniBrINuNxo2Uy5zCP9L3218AGkALMkM1KktnWAkmyJ1q22I2m3V8BIP53bEWDhIa6pXny9OS+k9hZPE4FDKKPBpYVa0Ivo52Xmp+YmPuILSCQrQe3NVWd\/D3UqyA4+tDzCZNCw60MO5P5iPcO9mp78ziajyjPJSB+UoZcLdpVuq+Jjby\/hk8mXaN6fke9QiLnQkFT5FMC2+pEbmzfXX4HOF8keC3kM="}'
+  recorded_at: Mon, 07 Jul 2025 10:37:20 GMT
+recorded_with: VCR 6.3.1
