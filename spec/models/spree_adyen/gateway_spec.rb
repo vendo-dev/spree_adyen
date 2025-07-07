@@ -5,73 +5,55 @@ RSpec.describe SpreeAdyen::Gateway do
   let(:gateway) { create(:adyen_gateway, stores: [store]) }
   let(:amount) { 100 }
 
-  describe '#create_payment_session' do
-    subject { gateway.create_payment_session(amount, order) }
+  describe 'send_request' do
+    subject { gateway.send_request { action } }
 
-    let(:order) { create(:order_with_line_items) }
+    context 'when action raises Adyen::AdyenError error' do
+      let(:action) { raise Adyen::AdyenError.new(response: { 'status' => 400, 'pspReference' => '123', 'message' => 'test' }) }
 
-    let(:payment_session_id) { 'CSC9E6046E3CF70774' }
-
-    it 'creates payment session' do
-      VCR.use_cassette('gateway_create_payment_session/success') do
-        expect(subject.success?).to be_truthy
-        expect(subject.authorization).to eq(payment_session_id)
+      it 'protects Adyen API errors' do
+        expect { subject }.to raise_error(Spree::Core::GatewayError, 'Adyen::AdyenError request:{:response=>{"status"=>400, "pspReference"=>"123", "message"=>"test"}}')
       end
     end
 
-    xcontext 'when shipping address is invalid' do
-      let(:order) do
-        build(
-          :order_with_line_items,
-          ship_address: build(:address, address1: nil),
-          store: Spree::Store.default
-        )
-      end
+    context 'when action raises other error' do
+      let(:action) { raise 'test' }
 
-      it 'creates the payment session without shipping address' do
-        VCR.use_cassette('create_payment_session_invalid_address') do
-        end
+      it 'raises error' do
+        expect { subject }.to raise_error(StandardError, 'test')
       end
     end
   end
 
-  describe '#purchase' do
-    subject { gateway.purchase(amount_in_cents, credit_card, { order_id: order_id }) }
+  describe 'create_payment_session' do
+    subject { gateway.create_payment_session(amount, order) }
 
-    let(:amount_in_cents) { 1000 }
-    let(:order_id) { "#{order.number}-#{payment.number}" }
+    let(:order) { create(:order_with_line_items) }
+    let(:bill_address) { order.bill_address }
 
-    let!(:order) { create(:completed_order_with_totals, number: 'R111098765') }
+    let(:payment_session_id) { 'CS6B11058E72127704' }
 
-    let!(:credit_card) { create(:credit_card, gateway_payment_profile_id: payment_method_id, payment_method: gateway) }
-
-    let!(:payment) { create(:payment, number: 'ABC1DEF2', amount: 110, payment_method: gateway, order: order, source: credit_card, response_code: nil) }
-
-    let(:payment_method_id) { 'pm_1QXmPJ2ESifGlJezC2py6ZqS' }
-    let(:payment_session_id) { 'pi_3QY1y22ESifGlJez12haN8ah' }
-
-    it 'successfully creates a payment session' do
-      VCR.use_cassette('create_payment_session_with_payment_method') do
-        expect(subject.success?).to be true
-
-        expect(subject.authorization).to eq(payment_session_id)
-        expect(subject.params['status']).to eq('succeeded')
-        expect(subject.params['amount']).to eq(amount_in_cents)
-        expect(subject.params['payment_method']).to eq(payment_method_id)
-        expect(subject.params['customer']).to eq(customer_id)
-        expect(subject.params['transfer_group']).to eq(order.number)
-
-        expect(payment.reload.response_code).to eq(payment_session_id)
-        expect(payment.state).to eq('checkout')
+    context 'with valid params' do
+      it 'returns proper (successful) ActiveMerchant::Billing::Response instance' do
+        VCR.use_cassette('payment_sessions/success') do
+          expect(subject).to be_a(ActiveMerchant::Billing::Response)
+          expect(subject.success?).to be_truthy
+          expect(subject.authorization).to eq(payment_session_id)
+        end
       end
     end
 
-    context 'when order or payment is missing' do
-      let(:order_id) { 'missing' }
+    context 'with invalid params' do
+      before do
+        allow(bill_address).to receive(:country_iso).and_return('INVALID')
+      end
 
-      it 'returns failure' do
-        expect(subject.success?).to be(false)
-        expect(payment.reload.state).to eq 'checkout'
+      it 'returns proper (unsuccessful) ActiveMerchant::Billing::Response instance' do
+        VCR.use_cassette('payment_sessions/failure') do
+          expect(subject).to be_a(ActiveMerchant::Billing::Response)
+          expect(subject.success?).to be_falsey
+          expect(subject.message).to eq("X8HRG2XMVS3JHPT5 - Field 'countryCode' is not valid.")
+        end
       end
     end
   end

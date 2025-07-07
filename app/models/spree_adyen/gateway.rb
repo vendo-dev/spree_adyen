@@ -79,9 +79,6 @@ module SpreeAdyen
     #
     # @param amount_in_cents [Integer] the amount in cents
     # @param order [Spree::Order] the order to create a payment session for
-    # @param payment_method_id [String] Adyen payment method id to use, eg. a card token
-    # @param off_session [Boolean] whether the payment session is off session
-    # @param customer_profile_id [String] Adyen customer profile id to use, eg.  cus_123
     # @return [ActiveMerchant::Billing::Response] the response from the payment session creation
     def create_payment_session(amount_in_cents, order)
       payload = SpreeAdyen::PaymentSessions::RequestPayloadSerializer.new(
@@ -94,8 +91,13 @@ module SpreeAdyen
       response = send_request do
         client.checkout.payments_api.sessions(payload, headers: { 'Idempotency-Key' => SecureRandom.uuid })
       end
+      response_body = response.response
 
-      success(response.id, response)
+      if response.status == 201
+        success(response_body.id, response_body)
+      else
+        failure(response_body.slice('pspReference', 'message').values.join(' - '))
+      end
     end
 
     # Ensures a Adyen payment session exists for Spree payment
@@ -119,10 +121,6 @@ module SpreeAdyen
           updated_at: Time.current
         )
       end
-    end
-
-    def apple_domain_association_file_content
-      @apple_domain_association_file_content ||= apple_developer_merchantid_domain_association&.download
     end
 
     def payment_profiles_supported?
@@ -162,7 +160,7 @@ module SpreeAdyen
 
     def send_request
       protect_from_error do
-        yield.try(:response)
+        yield
       end
     end
 
