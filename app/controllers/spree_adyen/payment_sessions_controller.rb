@@ -15,7 +15,7 @@ module SpreeAdyen
       end
 
       SpreeAdyen::PaymentSessions::UpdateWithResult.new(payment_session: @payment_session, session_result: params[:sessionResult]).call
-      
+
       if @payment_session.completed?
         handle_success
       elsif @payment_session.pending?
@@ -30,11 +30,10 @@ module SpreeAdyen
     private
 
     # TODO: handle pending payment
-    def handle_pending_payment
-    end
+    def handle_pending_payment; end
 
     def handle_success
-      # update the payment session status        
+      # update the payment session status
       Spree::Payment.create!(
         order: @order,
         amount: @payment_session.amount,
