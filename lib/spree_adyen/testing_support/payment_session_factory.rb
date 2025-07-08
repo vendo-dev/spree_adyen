@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :payment_session, class: SpreeAdyen::PaymentSession do
     adyen_id { 'pi_123' }
     amount { 100 }
-    status { 'pending' }
+    status { 'initial' }
     expires_at { 1.hour.from_now }
     currency { 'EUR' }
     payment_method { create(:adyen_gateway) }

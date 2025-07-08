@@ -1,8 +1,6 @@
 module SpreeAdyen
   module PaymentSessions
     class FindOrCreate
-      DEFAULT_STATUS = 'pending'
-
       def initialize(order:, user:, amount:, payment_method:)
         @order = order
         @amount = amount
@@ -22,7 +20,6 @@ module SpreeAdyen
           currency: order.currency,
           user: user,
           expires_at: response.params['expiresAt'],
-          status: DEFAULT_STATUS,
           payment_method: payment_method
         )
       end
@@ -32,7 +29,7 @@ module SpreeAdyen
       attr_reader :order, :payment_method, :amount, :user
 
       def payment_session
-        @payment_session ||= PaymentSession.with_status(:pending).not_expired.find_by(
+        @payment_session ||= PaymentSession.with_status(:initial).not_expired.find_by(
           payment_method: payment_method,
           order: order,
           user: user,

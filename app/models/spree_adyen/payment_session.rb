@@ -13,21 +13,23 @@ module SpreeAdyen
     validates :order, presence: true
     validates :adyen_id, presence: true, uniqueness: { scope: :order_id }
     validates :amount, presence: true, numericality: { greater_than: 0 }
+    validates :status, presence: true
     validate :expiration_date_cannot_be_in_the_past_or_later_than_24_hours, on: :create
 
     scope :not_expired, -> { where('expires_at > ?', DateTime.current) }
 
-    state_machine :status, initial: :pending do
+    state_machine :status, initial: :initial do
+      event :pending do
+        transition %i[initial] => :pending
+      end
       event :complete do
-        transition pending: :completed
+        transition %i[pending initial] => :completed
       end
-
       event :cancel do
-        transition pending: :canceled
+        transition %i[pending initial] => :canceled
       end
-
       event :refuse do
-        transition pending: :refused
+        transition %i[pending initial] => :refused
       end
     end
 

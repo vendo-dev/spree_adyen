@@ -7,7 +7,15 @@ RSpec.describe SpreeAdyen::PaymentSession do
     describe 'initial state' do
       subject(:initial_state) { payment_session.status }
 
-      it { is_expected.to eq('pending') }
+      it { is_expected.to eq('initial') }
+    end
+
+    describe 'pending! event' do
+      subject(:pending_event) { payment_session.pending! }
+
+      it 'updates status to pending' do
+        expect { pending_event }.to change(payment_session, :status).to('pending')
+      end
     end
 
     describe 'complete! event' do

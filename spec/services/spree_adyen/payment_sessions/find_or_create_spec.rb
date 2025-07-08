@@ -19,6 +19,14 @@ RSpec.describe SpreeAdyen::PaymentSessions::FindOrCreate do
     )
   end
 
+  before do
+    # we use expires_at from the cassette, so we need to freeze the time
+    Timecop.freeze('2025-07-07T0:00:00+02:00')
+  end
+
+  after do
+    Timecop.return
+  end
 
   context 'when payment session does not exist' do
     it 'creates a payment session' do
@@ -29,7 +37,7 @@ RSpec.describe SpreeAdyen::PaymentSessions::FindOrCreate do
   end
 
   context 'when payment session exists' do
-    let(:payment_status) { 'pending' }
+    let(:payment_status) { 'initial' }
     let(:payment_order) { order }
     let(:payment_user) { user }
     let(:payment_amount) { amount }

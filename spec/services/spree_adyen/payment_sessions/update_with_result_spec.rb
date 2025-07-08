@@ -30,10 +30,10 @@ RSpec.describe SpreeAdyen::PaymentSessions::UpdateWithResult do
     end
   end
 
-  context 'when payment is still pending' do
-    it 'does not update payment session status (must be processed by webhook)' do
+  context 'when payment is still pending (async payment)' do
+    it 'updates the payment session status' do
       VCR.use_cassette('payment_session_results/success/payment_pending') do
-        expect { service }.to_not change(payment_session.reload, :status)
+        expect { service }.to change(payment_session.reload, :status).to('pending')
       end
     end
   end

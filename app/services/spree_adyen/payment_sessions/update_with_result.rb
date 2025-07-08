@@ -11,6 +11,7 @@ module SpreeAdyen
         when 'completed' then payment_session.complete!
         when 'canceled' then payment_session.cancel!
         when 'refused' then payment_session.refuse!
+        when 'paymentPending' then payment_session.pending!
         end
       end
 
