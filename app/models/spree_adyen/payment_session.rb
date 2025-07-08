@@ -22,8 +22,12 @@ module SpreeAdyen
         transition pending: :completed
       end
 
-      event :fail do
-        transition pending: :failed
+      event :cancel do
+        transition pending: :canceled
+      end
+
+      event :refuse do
+        transition pending: :refused
       end
     end
 

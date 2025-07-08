@@ -18,11 +18,19 @@ RSpec.describe SpreeAdyen::PaymentSession do
       end
     end
 
-    describe 'fail! event' do
-      subject(:fail_event) { payment_session.fail! }
+    describe 'cancel! event' do
+      subject(:cancel_event) { payment_session.cancel! }
 
-      it 'updates status to failed' do
-        expect { fail_event }.to change(payment_session, :status).to('failed')
+      it 'updates status to canceled' do
+        expect { cancel_event }.to change(payment_session, :status).to('canceled')
+      end
+    end
+
+    describe 'refuse! event' do
+      subject(:refuse_event) { payment_session.refuse! }
+
+      it 'updates status to refused' do
+        expect { refuse_event }.to change(payment_session, :status).to('refused')
       end
     end
   end

@@ -33,7 +33,7 @@ RSpec.describe SpreeAdyen::Gateway do
 
     context 'with valid params' do
       it 'returns proper (successful) ActiveMerchant::Billing::Response instance' do
-        VCR.use_cassette('payment_session_results/success') do
+        VCR.use_cassette('payment_session_results/success/completed') do
           expect(subject).to be_a(ActiveMerchant::Billing::Response)
           expect(subject.success?).to be_truthy
           expect(subject.authorization).to eq(payment_session_id)

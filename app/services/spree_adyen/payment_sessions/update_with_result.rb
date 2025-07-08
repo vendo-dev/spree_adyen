@@ -7,8 +7,10 @@ module SpreeAdyen
       end
 
       def call
-        payment_session.tap do |record|
-          record.update!(status: status_response.fetch('status'))
+        case status
+        when 'completed' then payment_session.complete!
+        when 'canceled' then payment_session.cancel!
+        when 'refused' then payment_session.refuse!
         end
       end
 
@@ -16,8 +18,12 @@ module SpreeAdyen
 
       attr_reader :payment_session, :session_result
 
+      def status
+        status_response.params.fetch('status')
+      end
+
       def status_response
-        payment_session.payment_method.check_payment_session_status(payment_session.adyen_id, session_result)
+        payment_session.payment_method.payment_session_result(payment_session.adyen_id, session_result)
       end
     end
   end
