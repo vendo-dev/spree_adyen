@@ -27,6 +27,9 @@ module SpreeAdyen
       handle_authorize_or_purchase(amount_in_cents, payment_source, gateway_options)
     end
 
+    def create_profile(payment)
+    end
+
     # the behavior for authorize and purchase is the same, so we can use the same method to handle both
     def handle_authorize_or_purchase(amount_in_cents, payment_source, gateway_options)
       order_number, payment_number = gateway_options[:order_id].split('-')
