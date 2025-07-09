@@ -4,10 +4,12 @@ module SpreeAdyen
     # preference :secret_key, :password
     preference :api_key, :password
     preference :merchant_account, :string
+    preference :client_key, :password
+    preference :environment, :string, default: 'test'
 
     # has_one_attached :apple_developer_merchantid_domain_association, service: Spree.private_storage_service_name
 
-    has_many :payment_sessions, class_name: 'SpreeAdyen::PaymentIntent', foreign_key: 'payment_method_id', dependent: :delete_all
+    has_many :payment_sessions, class_name: 'SpreeAdyen::PaymentSession', foreign_key: 'payment_method_id', dependent: :delete_all
 
     def self.webhook_url
       "https://#{Rails.application.routes.default_url_options[:host]}/adyen"
@@ -25,6 +27,10 @@ module SpreeAdyen
     # @param gateway_options [Hash] this is an instance of Spree::Payment::GatewayOptions.to_hash
     def purchase(amount_in_cents, payment_source, gateway_options = {})
       handle_authorize_or_purchase(amount_in_cents, payment_source, gateway_options)
+    end
+
+    def environment
+      Rails.env.production? ? preferred_environment.to_sym : :test
     end
 
     def create_profile(payment); end

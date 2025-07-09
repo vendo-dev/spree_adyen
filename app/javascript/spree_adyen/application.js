@@ -1,5 +1,4 @@
 import '@hotwired/turbo-rails'
-import { Application } from '@hotwired/stimulus'
 
 let application
 
@@ -11,6 +10,6 @@ if (typeof window.Stimulus === "undefined") {
   application = window.Stimulus
 }
 
-import SpreeAdyenController from 'spree_adyen/controllers/spree_adyen_controller' 
+import CheckoutAdyenController from 'spree_adyen/controllers/checkout_adyen_controller' 
 
-application.register('spree_adyen', SpreeAdyenController)
+application.register('checkout-adyen', CheckoutAdyenController);

@@ -18,6 +18,7 @@ module SpreeAdyen
           order: order,
           amount: amount,
           currency: order.currency,
+          adyen_data: response.params['sessionData'],
           user: user,
           expires_at: response.params['expiresAt'],
           payment_method: payment_method

@@ -16,8 +16,8 @@ module SpreeAdyen
       def to_h
         {
           amount: {
-            value: amount,
-            currency: order.currency
+            value: Spree::Money.new(amount, currency: currency).cents,
+            currency: currency
           },
           returnUrl: return_url,
           reference: order.number, # payment id
@@ -34,6 +34,8 @@ module SpreeAdyen
 
       attr_reader :order, :amount, :user, :merchant_account
 
+      delegate :currency, to: :order
+
       def shopper_details
         {
           shopperName: {
@@ -48,8 +50,8 @@ module SpreeAdyen
       def line_items
         order.line_items.map do |line_item|
           {
-            amountExcludingTax: Spree::Money.new(line_item.price - line_item.included_tax_total, currency: order.currency).cents,
-            amountIncludingTax: Spree::Money.new(line_item.price + line_item.additional_tax_total, currency: order.currency).cents,
+            amountExcludingTax: Spree::Money.new(line_item.price - line_item.included_tax_total, currency: currency).cents,
+            amountIncludingTax: Spree::Money.new(line_item.price + line_item.additional_tax_total, currency: currency).cents,
             description: line_item.name,
             id: line_item.id,
             sku: line_item.sku,

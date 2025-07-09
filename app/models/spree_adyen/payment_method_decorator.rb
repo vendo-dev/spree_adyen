@@ -1,6 +1,6 @@
 module SpreeAdyen
   module PaymentMethodDecorator
-    STRIPE_TYPE = 'SpreeAdyen::Gateway'.freeze
+    ADYEN_TYPE = 'SpreeAdyen::Gateway'.freeze
 
     def self.prepended(base)
       base.scope :adyen, -> { where(type: ADYEN_TYPE) }

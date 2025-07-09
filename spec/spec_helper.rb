@@ -2,6 +2,7 @@
 ENV['RAILS_ENV'] = 'test'
 
 require 'dotenv/load'
+require 'timecop'
 
 require File.expand_path('../dummy/config/environment.rb', __FILE__)
 

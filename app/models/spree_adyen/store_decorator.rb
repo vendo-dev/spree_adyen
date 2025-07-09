@@ -1,7 +1,7 @@
 module SpreeAdyen
   module StoreDecorator
-    def stripe_gateway
-      @stripe_gateway ||= payment_methods.adyen.active.last
+    def adyen_gateway
+      @adyen_gateway ||= payment_methods.adyen.active.last
     end
   end
 end
