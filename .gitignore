@@ -21,7 +21,3 @@ public/spree
 .ruby-gemset
 *.gem
 */*.gem
-
-# Local settings
-config/settings.local.yml
-.env
