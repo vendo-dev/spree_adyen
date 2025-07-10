@@ -21,7 +21,7 @@ module SpreeAdyen
           },
           returnUrl: return_url,
           reference: order.number, # payment id
-          countryCode: order.billing_address.country_iso,
+          countryCode: address.country_iso,
           lineItems: line_items,
           merchantAccount: merchant_account,
           merchantOrderReference: order.number,
@@ -39,12 +39,16 @@ module SpreeAdyen
       def shopper_details
         {
           shopperName: {
-            firstName: order.bill_address.firstname,
-            lastName: order.bill_address.lastname
+            firstName: address.firstname,
+            lastName: address.lastname
           },
           shopperEmail: order.email,
           shopperReference: format('%03d', order.user_id) # min 3 digits
         }
+      end
+
+      def address
+        @address ||= order.bill_address || order.ship_address
       end
 
       def line_items
@@ -61,7 +65,7 @@ module SpreeAdyen
       end
 
       def return_url
-        "https://#{Rails.application.routes.default_url_options[:host]}/adyen/payment_sessions"
+        Spree::Core::Engine.routes.url_helpers.adyen_payment_session_url(host: order.store.url)
       end
 
       def expires_at

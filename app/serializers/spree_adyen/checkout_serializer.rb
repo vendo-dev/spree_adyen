@@ -22,10 +22,10 @@ module SpreeAdyen
           value: Spree::Money.new(payment_session.amount, currency: currency).cents,
           currency: currency
         },
-        countryCode: payment_session.order.bill_address.country_iso,
+        countryCode: address.country_iso,
         locale: 'en-US',
         clientKey: payment_session.payment_method.preferred_client_key,
-        showPayButton: false,
+        showPayButton: true,
       }
     end
 
@@ -34,5 +34,9 @@ module SpreeAdyen
     attr_reader :payment_session
 
     delegate :currency, to: :payment_session
+
+    def address
+      @address ||= payment_session.order.bill_address || payment_session.order.ship_address
+    end
   end
 end 

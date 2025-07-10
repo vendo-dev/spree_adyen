@@ -12,6 +12,7 @@ module SpreeAdyen
         return payment_session if payment_session.present?
 
         response = payment_method.create_payment_session(amount, order)
+        return unless response.success?
 
         PaymentSession.create!(
           adyen_id: response.params['id'],

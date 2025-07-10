@@ -4,9 +4,9 @@ module SpreeAdyen
   class PaymentSessionsController < Spree::StoreController
     include Spree::CheckoutAnalyticsHelper
 
-    # GET /spree/payment_sessions/:id
+    # GET /adyen/payment_sessions
     def show
-      @payment_session = SpreeAdyen::PaymentSession.find(params[:id])
+      @payment_session = SpreeAdyen::PaymentSession.find_by(adyen_id: params[:sessionId])
       @order = @payment_session.order
       # handle duplicated requests or already processed through webhook
       unless @payment_session.initial?
