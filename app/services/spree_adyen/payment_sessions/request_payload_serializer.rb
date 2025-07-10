@@ -20,6 +20,9 @@ module SpreeAdyen
             currency: currency
           },
           returnUrl: return_url,
+          recurringProcessingModel: 'UnscheduledCardOnFile',
+          shopperInteraction: 'Ecommerce',
+          storePaymentMethodMode: 'enabled',
           reference: order.number, # payment id
           countryCode: address.country_iso,
           lineItems: line_items,
