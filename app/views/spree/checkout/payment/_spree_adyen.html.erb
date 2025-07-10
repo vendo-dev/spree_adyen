@@ -4,7 +4,7 @@
     data-controller="checkout-adyen"
     id="dropin-container"
     data-checkout-adyen-checkout-attrubutes="<%= SpreeAdyen::CheckoutSerializer.new(current_adyen_payment_session).to_json %>"
-    data-checkout-adyen-payment-session-path-value="<%= spree.api_v2_storefront_adyen_payment_session_url(current_adyen_payment_session.id) %>"
+    data-checkout-adyen-payment-session-path-value="<%= spree.adyen_payment_session_url(sessionId: current_adyen_payment_session.adyen_id) %>"
     data-checkout-adyen-checkout-path-value="<%= spree.api_v2_storefront_checkout_path %>"
   >
   </div>
