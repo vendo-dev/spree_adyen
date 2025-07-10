@@ -1,6 +1,6 @@
 module SpreeAdyen
   module PaymentSessions
-    class RequestPayloadSerializer
+    class RequestPayloadPresenter
       TIMEOUT_IN_MINUTES = 60
       DEFAULT_PARAMS = {
         channel: 'Web'

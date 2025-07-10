@@ -15,6 +15,7 @@ module SpreeAdyen
     validates :adyen_data, presence: true
     validates :amount, presence: true, numericality: { greater_than: 0 }
     validates :status, presence: true
+    validates :order, :payment_method, presence: true
 
     validate :expiration_date_cannot_be_in_the_past_or_later_than_24_hours, on: :create
 

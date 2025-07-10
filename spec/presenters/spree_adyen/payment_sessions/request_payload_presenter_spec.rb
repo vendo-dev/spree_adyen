@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe SpreeAdyen::PaymentSessions::RequestPayloadSerializer do
+RSpec.describe SpreeAdyen::PaymentSessions::RequestPayloadPresenter do
   subject(:serializer) { described_class.new(order: order, amount: amount, user: user, merchant_account: merchant_account) }
 
   let(:order) { create(:order, bill_address: bill_address, number: 'R123456789', user: user, currency: 'USD', line_items: [line_item]) }

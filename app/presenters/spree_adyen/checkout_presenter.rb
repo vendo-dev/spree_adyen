@@ -1,7 +1,7 @@
 module SpreeAdyen
   # use this serializer to configure the Adyen Drop-in component
   # https://docs.adyen.com/online-payments/build-your-integration/sessions-flow/?platform=Web&integration=Drop-in&version=6.18.1&tab=embed_script_and_stylesheet_1_2#configure
-  class CheckoutSerializer
+  class CheckoutPresenter
     def initialize(payment_session)
       @payment_session = payment_session
     end
