@@ -20,7 +20,7 @@ module SpreeAdyen
         handle_success
       elsif @payment_session.pending?
         handle_pending_payment
-      elsif @payment_session.failed?
+      elsif @payment_session.refused?
         handle_failure
       end
     rescue Spree::Core::GatewayError => e

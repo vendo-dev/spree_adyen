@@ -4,4 +4,7 @@
 en:
   spree:
     adyen:
-      hello: "Hello SpreeAdyen"
+      payment_session_errors:
+        refused: "Payment refused"
+        canceled: "Payment canceled"
+        expired: "Payment has been expired. Try again."
