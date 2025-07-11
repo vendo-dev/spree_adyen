@@ -14,7 +14,7 @@ module SpreeAdyen
         return
       end
 
-      SpreeAdyen::PaymentSessions::UpdateWithResult.new(payment_session: @payment_session, session_result: params[:sessionResult]).call
+      SpreeAdyen::PaymentSessions::ProcessWithResult.new(payment_session: @payment_session, session_result: params[:sessionResult]).call
 
       if @payment_session.completed?
         handle_success
@@ -34,17 +34,6 @@ module SpreeAdyen
 
     def handle_success
       # update the payment session status
-      Spree::Payment.create!(
-        order: @order,
-        amount: @payment_session.amount,
-        source_type: 'SpreeAdyen::PaymentSession',
-        source_id: @payment_session.id,
-        payment_method: @payment_session.payment_method,
-        response_code: @payment_session.id,
-        state: 'completed'
-      )
-
-      Spree::Dependencies.checkout_complete_service.constantize.call(order: @order)
 
       # set the session flag to indicate that the order was placed now
       track_checkout_completed if @order.completed?
