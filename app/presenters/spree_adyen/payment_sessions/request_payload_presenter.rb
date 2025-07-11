@@ -3,7 +3,10 @@ module SpreeAdyen
     class RequestPayloadPresenter
       TIMEOUT_IN_MINUTES = 60
       DEFAULT_PARAMS = {
-        channel: 'Web'
+        channel: 'Web',
+        recurringProcessingModel: 'UnscheduledCardOnFile',
+        shopperInteraction: 'Ecommerce',
+        storePaymentMethodMode: 'enabled'
       }.freeze
 
       def initialize(order:, amount:, user:, merchant_account:)
@@ -20,10 +23,7 @@ module SpreeAdyen
             currency: currency
           },
           returnUrl: return_url,
-          recurringProcessingModel: 'UnscheduledCardOnFile',
-          shopperInteraction: 'Ecommerce',
-          storePaymentMethodMode: 'enabled',
-          reference: order.number, # payment id
+          reference: order.number,
           countryCode: address.country_iso,
           lineItems: line_items,
           merchantAccount: merchant_account,
@@ -45,8 +45,17 @@ module SpreeAdyen
             firstName: address.firstname,
             lastName: address.lastname
           },
-          shopperEmail: order.email,
-          shopperReference: format('%03d', order.user_id) # min 3 digits
+          shopperEmail: order.email
+        }.merge(shopper_reference)
+      end
+
+      def shopper_reference
+        return {} unless user
+
+        # TODO: remove env check later, cc tokenization data is not returned for known shoppers
+        # leaving for testing purposes
+        {
+          shopperReference: Rails.env.development ? SecureRandom.uuid : "customer_#{user.id}"
         }
       end
 

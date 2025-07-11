@@ -8,7 +8,7 @@ module SpreeAdyen
       return if current_adyen_gateway.nil?
 
       @current_adyen_payment_session ||= SpreeAdyen::PaymentSessions::FindOrCreate.new(
-        order: @order,  
+        order: @order,
         amount: @order.total,
         user: @order.user,
         payment_method: current_adyen_gateway

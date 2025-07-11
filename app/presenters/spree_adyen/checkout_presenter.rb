@@ -6,7 +6,7 @@ module SpreeAdyen
       @payment_session = payment_session
     end
 
-    def to_json
+    def to_json(*_args)
       @to_json ||= to_h.to_json
     end
 
@@ -25,7 +25,7 @@ module SpreeAdyen
         countryCode: address.country_iso,
         locale: 'en-US',
         clientKey: payment_session.payment_method.preferred_client_key,
-        showPayButton: true,
+        showPayButton: true
       }
     end
 
@@ -39,4 +39,4 @@ module SpreeAdyen
       @address ||= payment_session.order.bill_address || payment_session.order.ship_address
     end
   end
-end 
+end

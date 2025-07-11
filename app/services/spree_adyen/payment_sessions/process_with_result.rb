@@ -38,12 +38,12 @@ module SpreeAdyen
           payment_method: payment_session.payment_method,
           response_code: payment_session.id,
           state: 'completed'
-        )  
+        )
       end
 
-       # TODO support other sources
+      # TODO: support other sources
       def payment_source
-        credit_card || raise(NotImplementedError.new("Payment source not implemented"))
+        credit_card || raise(NotImplementedError, 'Payment source not implemented')
       end
 
       def payment_data
@@ -52,11 +52,12 @@ module SpreeAdyen
 
       def credit_card
         return unless payment_data.fetch('paymentMethod')['type'] == 'scheme'
+
         additional_data = status_response.params.fetch('additionalData')
 
         Spree::CreditCard.find_or_create_by!(
           payment_method_id: payment_session.payment_method_id,
-          gateway_payment_profile_id: additional_data.fetch('tokenization.storedPaymentMethodId'),
+          gateway_payment_profile_id: additional_data.fetch('tokenization.storedPaymentMethodId')
         ) do |new_credit_card|
           new_credit_card.cc_type = additional_data['paymentMethod']
         end
