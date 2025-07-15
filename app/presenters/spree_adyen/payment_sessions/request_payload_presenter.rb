@@ -52,7 +52,7 @@ module SpreeAdyen
       # we need to send reference even for guest users, otherwise we can't tokenize the card
       # TODO: remove env check later, cc tokenization data is not returned for known shoppers
       def shopper_reference
-        if user.present? && !Rails.env.development?
+        if user.present?# && !Rails.env.development?
           "customer_#{user.id}"
         else
           "guest_#{order.number}"

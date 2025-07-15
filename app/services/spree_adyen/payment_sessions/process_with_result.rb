@@ -51,7 +51,7 @@ module SpreeAdyen
       end
 
       def credit_card
-        return unless ['googlepay', 'scheme'].include?(payment_data.fetch('paymentMethod')['type'])
+        return unless %w[googlepay scheme].include?(payment_data.fetch('paymentMethod')['type'])
 
         additional_data = status_response.params.fetch('additionalData')
 
