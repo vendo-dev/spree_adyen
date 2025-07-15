@@ -1,7 +1,6 @@
 module SpreeAdyen
   module PaymentSessions
     class RequestPayloadPresenter
-      TIMEOUT_IN_MINUTES = 60
       DEFAULT_PARAMS = {
         channel: 'Web',
         recurringProcessingModel: 'UnscheduledCardOnFile',
@@ -45,18 +44,19 @@ module SpreeAdyen
             firstName: address.firstname,
             lastName: address.lastname
           },
-          shopperEmail: order.email
-        }.merge(shopper_reference)
+          shopperEmail: order.email,
+          shopperReference: shopper_reference
+        }
       end
 
+      # we need to send reference even for guest users, otherwise we can't tokenize the card
+      # TODO: remove env check later, cc tokenization data is not returned for known shoppers
       def shopper_reference
-        return {} unless user
-
-        # TODO: remove env check later, cc tokenization data is not returned for known shoppers
-        # leaving for testing purposes
-        {
-          shopperReference: Rails.env.development ? SecureRandom.uuid : "customer_#{user.id}"
-        }
+        if user.present? && !Rails.env.development?
+          "customer_#{user.id}"
+        else
+          "guest_#{order.number}"
+        end
       end
 
       def address
@@ -81,7 +81,7 @@ module SpreeAdyen
       end
 
       def expires_at
-        TIMEOUT_IN_MINUTES.minutes.from_now.iso8601
+        SpreeAdyen::Config.payment_session_expiration_in_minutes.minutes.from_now.iso8601
       end
     end
   end

@@ -67,7 +67,7 @@ module SpreeAdyen
       end
       response_body = response.response
 
-      if response.status == 200
+      if response.status.to_i == 200
         success(response_body.id, response_body)
       else
         failure(response_body.slice('pspReference', 'message').values.join(' - '))
@@ -108,7 +108,7 @@ module SpreeAdyen
       end
       response_body = response.response
 
-      if response.status == 201
+      if response.status.to_i == 201
         success(response_body.id, response_body)
       else
         failure(response_body.slice('pspReference', 'message').values.join(' - '))
