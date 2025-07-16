@@ -1,11 +1,46 @@
 
-<% if current_adyen_payment_session.present? %>
-  <div
-    data-controller="checkout-adyen"
-    id="dropin-container"
-    data-checkout-adyen-checkout-attrubutes="<%= SpreeAdyen::CheckoutPresenter.new(current_adyen_payment_session).to_json %>"
-    data-checkout-adyen-payment-session-path-value="<%= spree.adyen_payment_session_url(sessionId: current_adyen_payment_session.adyen_id) %>"
-    data-checkout-adyen-checkout-path-value="<%= spree.api_v2_storefront_checkout_path %>"
-  >
+<% payment_sources = current_user.credit_cards.not_removed %>
+<% if payment_sources.any? %>
+  <div id="existing_cards">
+    <div class="form-group">
+      <ul class="list-group mb-5 border rounded-md" data-controller="reveal">
+        
+        <% payment_sources.each_with_index do |card, index| %>
+          <li class="p-0 m-0 border-b" id="<%= spree_dom_id(card) %>">
+            <div class="custom-control custom-radio px-5 py-4 flex items-center">
+              <label class="flex flex-row items-center cursor-pointer">
+                <%= radio_button_tag "order[existing_card]", card.id, index == 0, { data: { hide: "dropin-container", checkout_adyen_target: index == 0 ? "defaultCard" : nil}, class: "mr-5" } %>
+                <div class="flex space-x-4 items-center">
+                  <%= payment_method_icon_tag(card.cc_type) %>
+                  <span>****<%= card.last_digits %></span>
+                  <span><%= card.month.to_s.rjust(2, '0') %>/<%= card.year %></span>
+                </div>
+              </label>
+            </div>
+          </li>
+        <% end %>
+        <li>
+          <div class="custom-control custom-radio px-5 py-4 flex items-center w-full">
+            <label class="flex flex-row items-center w-full pr-8">
+              <%= radio_button_tag "order[existing_card]", nil, false, { data: { show: "dropin-container" }, class: "mr-5" } %>
+              <div class="w-full flex flex-col items-start space-y-4 justify-center">
+                <span class="cursor-pointer"><%= Spree.t(:add_new_credit_card) %></span>
+                <% if current_adyen_payment_session.present? %>
+                <div
+                  class="hidden"
+                  data-controller="checkout-adyen"
+                  id="dropin-container"
+                  data-checkout-adyen-checkout-attrubutes="<%= SpreeAdyen::CheckoutPresenter.new(current_adyen_payment_session).to_json %>"
+                  data-checkout-adyen-payment-session-path-value="<%= spree.adyen_payment_session_url(sessionId: current_adyen_payment_session.adyen_id) %>"
+                  data-checkout-adyen-checkout-path-value="<%= spree.api_v2_storefront_checkout_path %>"
+                  >
+                  </div>
+                <% end %>
+              </div>
+            </label>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 <% end %>

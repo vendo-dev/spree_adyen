@@ -1,19 +1,11 @@
 module SpreeAdyen
   class Gateway < ::Spree::Gateway
-    # preference :publishable_key, :password
-    # preference :secret_key, :password
     preference :api_key, :password
     preference :merchant_account, :string
     preference :client_key, :password
     preference :environment, :string, default: 'test'
 
-    # has_one_attached :apple_developer_merchantid_domain_association, service: Spree.private_storage_service_name
-
     has_many :payment_sessions, class_name: 'SpreeAdyen::PaymentSession', foreign_key: 'payment_method_id', dependent: :delete_all
-
-    # def self.webhook_url
-    #   "https://#{Rails.application.routes.default_url_options[:host]}/adyen"
-    # end
 
     # @param amount_in_cents [Integer] the amount in cents to capture
     # @param payment_source [Spree::CreditCard | Spree::PaymentSource]
@@ -94,6 +86,7 @@ module SpreeAdyen
       end
       response_body = response.response
 
+
       if response.status.to_i == 201
         success(response_body.id, response_body)
       else
@@ -132,12 +125,10 @@ module SpreeAdyen
     def reusable_sources(order)
       if order.completed?
         sources_by_order order
+      elsif order.user.present?
+        credit_cards.where(user_id: order.user_id)
       else
-        if order.user_id
-          credit_cards.where(user_id: order.user_id)
-        else
-          []
-        end
+        []
       end
     end
 
@@ -151,7 +142,9 @@ module SpreeAdyen
     end
 
     def send_request(&block)
-      protect_from_error(&block)
+      yield
+    rescue Adyen::AdyenError => e
+      raise Spree::Core::GatewayError, e.message
     end
 
     def success(authorization, full_response)
@@ -160,12 +153,6 @@ module SpreeAdyen
 
     def failure(error = nil)
       ActiveMerchant::Billing::Response.new(false, error)
-    end
-
-    def protect_from_error
-      yield
-    rescue Adyen::AdyenError => e
-      raise Spree::Core::GatewayError, e.message
     end
   end
 end

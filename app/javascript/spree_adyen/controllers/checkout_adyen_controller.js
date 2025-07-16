@@ -36,6 +36,7 @@ export default class extends Controller {
   async initDropin() {
     const { Dropin } = window.AdyenWeb;
     const dropinConfiguration = {
+      instantPaymentTypes: ['googlepay'],
       paymentMethodsConfiguration: {
         card: {
           onPaymentCompleted: (result, component) => {
@@ -62,5 +63,14 @@ export default class extends Controller {
       e.preventDefault();
       this.dropin.submit();
     });
+
+    document.querySelectorAll('#existing_cards input[type="radio"]').forEach(elem => elem.addEventListener("change", (e) => {
+      var enableElement = document.getElementById(e.target.dataset.show)
+      var hideElement = document.getElementById(e.target.dataset.hide)
+      if (enableElement) { enableElement.classList.remove('hidden') }
+      if (hideElement) { hideElement.classList.add('hidden') }
+    }))
+
+
   }
 } 
