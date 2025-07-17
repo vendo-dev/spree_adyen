@@ -77,7 +77,7 @@ module SpreeAdyen
       end
 
       def return_url
-        Spree::Core::Engine.routes.url_helpers.adyen_payment_session_url(host: order.store.url)
+        Spree::Core::Engine.routes.url_helpers.redirect_adyen_payment_session_url(host: order.store.url)
       end
 
       def expires_at

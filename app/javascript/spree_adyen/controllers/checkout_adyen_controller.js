@@ -1,15 +1,17 @@
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
-
   async connect() {
     await this.initCheckout();
-    await this.initDropin();
     this.initEventHandlers();
   }
 
+  dropinElement() {
+    return document.getElementById('dropin-container');
+  }
+
   async initCheckout() {
-    const session = JSON.parse(document.getElementById('dropin-container').dataset.checkoutAdyenCheckoutAttrubutes)
+    const session = JSON.parse(this.dropinElement().dataset.checkoutAdyenCheckoutAttrubutes)
     const eventHandlers = {
       onPaymentCompleted: (result, _component) => {
         // idk why 3ds are handled here instead of paymentMethodsConfiguration.card.onPaymentCompleted
@@ -28,7 +30,7 @@ export default class extends Controller {
   }
 
   redirectToPaymentSession(result) {
-    const url = new URL(document.getElementById('dropin-container').dataset.checkoutAdyenPaymentSessionPathValue);
+    const url = new URL(this.dropinElement().dataset.checkoutAdyenPaymentSessionPathValue);
     url.searchParams.set('sessionResult', result.sessionResult);
     window.location.replace(url.href);
   }
@@ -60,17 +62,22 @@ export default class extends Controller {
 
   initEventHandlers() {
     document.getElementById('checkout-payment-submit').addEventListener('click', (e) => {
+      if (this.dropinElement().classList.contains('hidden')) {
+        return;
+      }
       e.preventDefault();
       this.dropin.submit();
     });
 
     document.querySelectorAll('#existing_cards input[type="radio"]').forEach(elem => elem.addEventListener("change", (e) => {
-      var enableElement = document.getElementById(e.target.dataset.show)
-      var hideElement = document.getElementById(e.target.dataset.hide)
-      if (enableElement) { enableElement.classList.remove('hidden') }
-      if (hideElement) { hideElement.classList.add('hidden') }
+      if (e.target.dataset.show == 'dropin-container') {
+        this.initDropin();
+        this.dropinElement().classList.remove('hidden');
+      }
+      else if (this.dropin) {
+        this.dropin.unmount();
+        this.dropinElement().classList.add('hidden');
+      }
     }))
-
-
   }
 } 

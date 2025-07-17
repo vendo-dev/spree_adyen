@@ -11,5 +11,7 @@ if (typeof window.Stimulus === "undefined") {
 }
 
 import CheckoutAdyenController from 'spree_adyen/controllers/checkout_adyen_controller' 
+import RedirectAdyenController from 'spree_adyen/controllers/redirect_adyen_controller'
 
 application.register('checkout-adyen', CheckoutAdyenController);
+application.register('redirect-adyen', RedirectAdyenController);

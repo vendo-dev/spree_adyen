@@ -4,6 +4,12 @@ module SpreeAdyen
   class PaymentSessionsController < Spree::StoreController
     include Spree::CheckoutAnalyticsHelper
 
+    # GET /adyen/payment_sessions/redirect
+    def redirect
+      @payment_session = SpreeAdyen::PaymentSession.find_by(adyen_id: params[:sessionId])
+      @redirect_result = params[:redirectResult]
+    end
+
     # GET /adyen/payment_sessions
     def show
       @payment_session = SpreeAdyen::PaymentSession.find_by(adyen_id: params[:sessionId])
