@@ -1,10 +1,9 @@
 
-<% payment_sources = current_user.credit_cards.not_removed %>
-<% if payment_sources.any? %>
+<% payment_sources = current_user&.credit_cards&.not_removed %>
+<% if payment_sources.present? %>
   <div id="existing_cards">
     <div class="form-group">
       <ul class="list-group mb-5 border rounded-md" data-controller="reveal">
-        
         <% payment_sources.each_with_index do |card, index| %>
           <li class="p-0 m-0 border-b" id="<%= spree_dom_id(card) %>">
             <div class="custom-control custom-radio px-5 py-4 flex items-center">
@@ -25,17 +24,7 @@
               <%= radio_button_tag "order[existing_card]", nil, false, { data: { show: "dropin-container" }, class: "mr-5" } %>
               <div class="w-full flex flex-col items-start space-y-4 justify-center">
                 <span class="cursor-pointer"><%= Spree.t(:add_new_credit_card) %></span>
-                <% if current_adyen_payment_session.present? %>
-                <div
-                  class="hidden"
-                  data-controller="checkout-adyen"
-                  id="dropin-container"
-                  data-checkout-adyen-checkout-attrubutes="<%= SpreeAdyen::CheckoutPresenter.new(current_adyen_payment_session).to_json %>"
-                  data-checkout-adyen-payment-session-path-value="<%= spree.adyen_payment_session_url(sessionId: current_adyen_payment_session.adyen_id) %>"
-                  data-checkout-adyen-checkout-path-value="<%= spree.api_v2_storefront_checkout_path %>"
-                  >
-                  </div>
-                <% end %>
+                <%= render 'spree_adyen/drop_in', payment_session: current_adyen_payment_session %>
               </div>
             </label>
           </div>
@@ -43,4 +32,6 @@
       </ul>
     </div>
   </div>
+<% else %>
+  <%= render 'spree_adyen/drop_in', payment_session: current_adyen_payment_session, auto_mount: true %>
 <% end %>

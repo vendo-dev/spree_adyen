@@ -4,6 +4,9 @@ export default class extends Controller {
   async connect() {
     await this.initCheckout();
     this.initEventHandlers();
+    if (this.dropinElement().dataset.checkoutAdyenAutoMountValue) {
+      this.initDropin();
+    }
   }
 
   dropinElement() {
