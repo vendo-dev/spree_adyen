@@ -16,7 +16,6 @@ module SpreeAdyen
         when 'refused' then payment_session.refuse!
         when 'paymentPending'
           payment_session.pending!
-          # create_payment
         end
       end
 
@@ -35,6 +34,7 @@ module SpreeAdyen
           amount: payment_session.amount,
           payment_method: payment_session.payment_method,
           response_code: payment_session.id,
+          source: nil,
           state: 'completed'
         ).tap do |payment|
           # saving payment without source cause in some cases

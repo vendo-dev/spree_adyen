@@ -7,7 +7,7 @@ export default class extends Controller {
   }
 
   redirectElement() {
-    return document.getElementById('redirect-adyen-container');
+    return document.getElementById('dropin-container');
   }
 
   async initCheckout() {

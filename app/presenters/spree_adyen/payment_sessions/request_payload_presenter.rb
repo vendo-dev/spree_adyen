@@ -2,7 +2,6 @@ module SpreeAdyen
   module PaymentSessions
     class RequestPayloadPresenter
       DEFAULT_PARAMS = {
-        channel: 'Web',
         recurringProcessingModel: 'UnscheduledCardOnFile',
         shopperInteraction: 'Ecommerce',
         storePaymentMethodMode: 'enabled'
@@ -22,11 +21,12 @@ module SpreeAdyen
             currency: currency
           },
           returnUrl: return_url,
-          reference: order.number,
+          channel: SpreeAdyen::Config.channel,
+          reference: order_number,
           countryCode: address.country_iso,
           lineItems: line_items,
           merchantAccount: merchant_account,
-          merchantOrderReference: order.number,
+          merchantOrderReference: order_number,
           expiresAt: expires_at,
           additionalData: { spree_order_id: order.id }
         }.merge!(shopper_details, DEFAULT_PARAMS)
@@ -37,6 +37,7 @@ module SpreeAdyen
       attr_reader :order, :amount, :user, :merchant_account
 
       delegate :currency, to: :order
+      delegate :number, to: :order, prefix: true
 
       def shopper_details
         {
@@ -50,9 +51,8 @@ module SpreeAdyen
       end
 
       # we need to send reference even for guest users, otherwise we can't tokenize the card
-      # TODO: remove env check later, cc tokenization data is not returned for known shoppers
       def shopper_reference
-        if user.present?# && !Rails.env.development?
+        if user.present?
           "customer_#{user.id}"
         else
           "guest_#{order.number}"

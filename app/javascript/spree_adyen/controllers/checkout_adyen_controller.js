@@ -4,7 +4,7 @@ export default class extends Controller {
   async connect() {
     await this.initCheckout();
     this.initEventHandlers();
-    if (this.dropinElement().dataset.checkoutAdyenAutoMountValue) {
+    if (this.dropinElement().dataset.checkoutAdyenAutoMountValue == 'true') {
       this.initDropin();
     }
   }
@@ -65,7 +65,10 @@ export default class extends Controller {
 
   initEventHandlers() {
     document.getElementById('checkout-payment-submit').addEventListener('click', (e) => {
+      console.log(this.dropinElement())
+      console.log(this.dropinElement().classList)
       if (this.dropinElement().classList.contains('hidden')) {
+        console.log('it is what it is2')
         return;
       }
       e.preventDefault();

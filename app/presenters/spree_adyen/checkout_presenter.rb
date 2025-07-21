@@ -36,7 +36,7 @@ module SpreeAdyen
     delegate :currency, to: :payment_session
 
     def address
-      @address ||= payment_session.order.bill_address || payment_session.order.ship_address
+      @address ||= payment_session.order.bill_address || payment_session.user&.bill_address || payment_session.order.ship_address
     end
   end
 end

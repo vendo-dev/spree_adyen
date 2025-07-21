@@ -1,5 +1,8 @@
 
 <% payment_sources = current_user&.credit_cards&.not_removed %>
+
+<div data-controller="checkout-adyen"></div>
+
 <% if payment_sources.present? %>
   <div id="existing_cards">
     <div class="form-group">
