@@ -2,7 +2,7 @@ module SpreeAdyen
   module Webhooks
     class HandleEvent
       EVENT_HANDLERS = {
-        'AUTHORISATION' => SpreeAdyen::Webhooks::Events::AuthorisationEvent
+        'AUTHORISATION' => SpreeAdyen::Jobs::ProcessAuthorisationEventJob
       }.freeze
 
       def initialize(event_data:)
@@ -13,8 +13,8 @@ module SpreeAdyen
         # event not supported - skip
         return if event.code.not_in?(EVENT_HANDLERS.keys)
 
-        # TODO: - not for now - this should be processed in job
-        EVENT_HANDLERS[event.code].new(event).call
+        # TODO: - this should be processed in job
+        EVENT_HANDLERS[event.code].perform_later(event.payload)
       end
 
       private

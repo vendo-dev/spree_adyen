@@ -1,7 +1,7 @@
 module SpreeAdyen
   module Webhooks
-    module Events
-      class AuthorisationEvent
+    module EventProcessors
+      class AuthorisationEventProcessor
         def initialize(event)
           @event = event
         end
@@ -17,6 +17,8 @@ module SpreeAdyen
         private
 
         attr_reader :event
+
+        delegate :order, to: :payment_session
 
         def handle_success
           SpreeAdyen::CompleteOrder.new(payment_session: payment_session, event: event).call

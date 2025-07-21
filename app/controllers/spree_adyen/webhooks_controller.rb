@@ -1,7 +1,6 @@
 module SpreeAdyen
   class WebhooksController < ApplicationController
     skip_before_action :verify_authenticity_token
-    http_basic_authenticate_with name: ENV['ADYEN_WEBHOOK_USERNAME'], password: ENV['ADYEN_WEBHOOK_PASSWORD']
     before_action :validate_hmac!
 
     def create

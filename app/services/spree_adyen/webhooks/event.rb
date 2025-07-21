@@ -5,6 +5,10 @@ module SpreeAdyen
         @event_data = event_data
       end
 
+      def payload
+        event_data
+      end
+
       def code
         @code ||= body['eventCode']
       end
@@ -17,7 +21,7 @@ module SpreeAdyen
         @billing_address ||= begin
           return {} unless additional_data['billingAddress']
 
-          additional_data['billingAddress'].transform_keys(&:underscore)
+          SpreeAdyen::AddressPresenter.new(additional_data['billingAddress']).to_h
         end
       end
 
@@ -25,7 +29,7 @@ module SpreeAdyen
         @shipping_address ||= begin
           return {} unless additional_data['deliveryAddress']
 
-          additional_data['deliveryAddress'].transform_keys(&:underscore)
+          SpreeAdyen::AddressPresenter.new(additional_data['deliveryAddress']).to_h
         end
       end
 
@@ -47,12 +51,18 @@ module SpreeAdyen
 
       private
 
+      attr_reader :event_data
+
       def body
         @body ||= event_data['notificationItems'][0]['NotificationRequestItem']
       end
 
+      def psp_reference
+        @psp_reference ||= body['pspReference']
+      end
+
       def additional_data
-        @additional_data ||= body['additionalData']
+        @additional_data ||= body.fetch('additionalData', {})
       end
     end
   end
