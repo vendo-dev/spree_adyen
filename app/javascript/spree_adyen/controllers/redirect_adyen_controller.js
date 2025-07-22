@@ -1,9 +1,8 @@
 import { Controller } from '@hotwired/stimulus'
-
+import { AdyenCheckout } from '@adyen/adyen-web/auto'
 export default class extends Controller {
 
   async connect() {
-    await this.initCheckout();
   }
 
   redirectElement() {
@@ -11,7 +10,6 @@ export default class extends Controller {
   }
 
   async initCheckout() {
-    const { AdyenCheckout  } = window.AdyenWeb;
     const redirectResult = this.element.dataset.redirectResult;
     const session = JSON.parse(this.redirectElement().dataset.checkoutAdyenCheckoutAttrubutes)
 

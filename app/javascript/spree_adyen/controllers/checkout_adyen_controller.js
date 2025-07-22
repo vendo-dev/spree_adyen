@@ -41,7 +41,6 @@ export default class extends Controller {
 
   async initDropin() {
     const dropinConfiguration = {
-      instantPaymentTypes: ['googlepay'],
       paymentMethodsConfiguration: {
         card: {
           onPaymentCompleted: (result, component) => {
