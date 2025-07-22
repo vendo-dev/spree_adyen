@@ -1,6 +1,6 @@
 # Spree Adyen
 
-This is a Adyen extension for [Spree Commerce](https://spreecommerce.org), an open source e-commerce platform built with Ruby on Rails.
+Official Adyen payments platform integration for [Spree Commerce](https://spreecommerce.org).
 
 ## Installation
 
@@ -57,5 +57,3 @@ For more options please see [gem-release README](https://github.com/svenfuchs/ge
 If you'd like to contribute, please take a look at the
 [instructions](CONTRIBUTING.md) for installing dependencies and crafting a good
 pull request.
-
-Copyright (c) 2025 [name of extension creator], released under the New BSD License
