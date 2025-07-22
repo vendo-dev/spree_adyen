@@ -1,5 +1,7 @@
 import { Controller } from '@hotwired/stimulus'
 
+import { AdyenCheckout, Dropin } from '@adyen/adyen-web/auto'
+
 export default class extends Controller {
   async connect() {
     await this.initCheckout();
@@ -27,7 +29,6 @@ export default class extends Controller {
         console.error(error.name, error.message, error.stack, component);
       }
     }
-    const { AdyenCheckout  } = window.AdyenWeb;
     const adyenCheckout = await AdyenCheckout(Object.assign(session, eventHandlers));;
     this.adyenCheckout = adyenCheckout;
   }
@@ -39,7 +40,6 @@ export default class extends Controller {
   }
 
   async initDropin() {
-    const { Dropin } = window.AdyenWeb;
     const dropinConfiguration = {
       instantPaymentTypes: ['googlepay'],
       paymentMethodsConfiguration: {

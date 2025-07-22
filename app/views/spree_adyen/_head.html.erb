@@ -1,10 +1,6 @@
-<%= javascript_import_module_tag 'application-spree-adyen' %>
-
-<script src="https://checkoutshopper-live.cdn.adyen.com/checkoutshopper/sdk/6.18.0/adyen.js"
-      integrity="sha384-ZEPvk8M++Rrf/1zMUvnfdO73cZlnj/u9oAGHSeUIIgOXoW0ZrwfyB6pBcIrhDbdd"
-      crossorigin="anonymous"></script>
-  
+<%= javascript_import_module_tag 'application-spree-adyen' %>  
 <link rel="stylesheet"
       href="https://checkoutshopper-live.cdn.adyen.com/checkoutshopper/sdk/6.18.0/adyen.css"
       integrity="sha384-lCDmpxn4G68y4vohxVVEuRcbz4iZTDh1u/FLlsCV1wSbibWKs+knhLQpgzPBqap4"
       crossorigin="anonymous">
+<%= stylesheet_link_tag 'adyen.css', media: 'all' %>
