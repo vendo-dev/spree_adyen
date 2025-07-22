@@ -1,0 +1,69 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://checkout-test.adyen.com/v71/sessions/CS4FBB6F827EC53AC7?sessionResult=Ab02b4c0!BQABAgBWDdfk9YmejOwxjS8uGQ3SggavRtpgoKqEBlShyLIYXvBPiXq%2Bsku8Jb8uKSaLv2RYrDNc6V9mfLFIfYnh4Xz4UnOPKTks9%2BXHaJuYXlwKo6%2Bhg%2BmVGhMl1eFCkJHlpMpWGBUR7SUFXbIuMlOtUg3BXrfJ/6N0oBLbDbrd/R%2B8rAIySFixSCiB%2Bj%2BeNn7k3dShemO636LgXuzhtnr9diKgX2SThk9/K5HZhG/9tySSqFycQpfpcx03KwNxi9/dRnjA6bWXjWaQ9uPzpV8cXyNl2LOQTKAJJ93KS98INIdc8opgXQnliomFqCRTipSWTbTR/VXq1egFvcrNVDMH3oxWY8JiFZVJlmcMywXWKyIgylKhhsdS41UnjXOSoAC97OWzBR5Oq5u3HE7UHm9owy1mDazW5tZVP4igRrocSz/Xvwx53HCGRZoDaB4OdMWVGtRsn1B6SGoXnM9B47FaStQQxbCtyuDAbJK3D5VvNrXHOj7yxKDIZcfuBkNCMhS62DznX8kv3KTHJFhHg6/B%2BtAQBZiwuBS0OqTNzEBYCUH6dzNOJMJq1lQpAXqO5q9XPk59ImSE6U0u0yaQVz5JC4P1phc5CPOCRSeHKeUovtMVoGgHMSx87kCFjNg1Q4AUbcJOB7/IhIc9sIPyNIaD9RDmPXIvnCHFy64uXpmH0dC99wxzuNRSQZd67NPJHhwASnsia2V5IjoiQUYwQUFBMTAzQ0E1MzdFQUVEODdDMjRERDUzOTA5QjgwQTc4QTkyM0UzODIzRDY4REFDQzk0QjlGRjgzMDVEQyJ9TSRm1LB5JNT9WwWXsXYCaJA3Df0kgEU05L57BSNcG9vu06B4yFVMJ19Yp6ziirvUTWGFqtQISNPXt5/ax%2B%2BmQIml/jvmWcogZqfxHQJWxyCMa6ImP9JZ6NzKdX3MLUDQB3Hqz/azjyZySzlVjCMCffIV8mA8Nn9i1QiQ8EHtjLy8GgP9zRhixuwWSJSJA1YYGrqWFgGoCQCUthXzH4Fuu4diKVHjDBoQwVKX472Fp0xeODI7uyHdTuRjs6K%2Bsarj6RvLfk6Wkm8MJ2LNz2EzxGLe6LuAAQ7Rl4pGAXZdbUmwQI%2BljMwEm9js58bmiiIQdXloVa7xibXAKcxIpC7FCz3lh%2Blpntjxqx6no1K5YDEMHs8rUYTws2FNPmO5MVTls%2BAEGPFkEGGRFib6YoIr708/n/LkrAAbcQYF0RLi4Sp4pZVHphuUIAqlp3DWatlI9w3HbqZxx/lZ39W5hFzLMu4YTA4LB0uhAEsqOKpb0CYbeD6jtZVv/iCW9U9g%2BPnqSmY3xOjKhGS59dnuVhWU1v5XckZDS1ltKCQi0867tjeADFj1B92lD3zvn/2v1KQdrilWdpK1OzCl6v7Cy12VpvrH7Zw3Dw3/EKP21QOadmX9Du%2B4xoGyQyYQuVlaRbg=
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - adyen-ruby-api-library/10.3.0
+      X-Api-Key:
+      - secret
+      Adyen-Library-Name:
+      - adyen-ruby-api-library
+      Adyen-Library-Version:
+      - 10.3.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 07 Jul 2025 14:09:31 GMT
+      Content-Type:
+      - application/json;charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Traceparent:
+      - 00-1fcf9ea3fb420c647e0c167bdff4b4db-8d5d9c694d39995f-01
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Cache-Control:
+      - no-cache, no-store, private, must-revalidate, max-age=0
+      Pragma:
+      - no-cache
+      Expires:
+      - '0'
+      Set-Cookie:
+      - JSESSIONID=3D76A0B7AD9D600C7F74D6D608CC7332; Path=/checkout; Secure; HttpOnly
+      - __cf_bm=ToNadPDc8oda0ka6GHjMFXauT.VdvnohaGForym696k-1751897371-1.0.1.1-n57Ox78KVZJzNsb0x5KuhTztqC5qrL4n_rMCVeypRPHF7xvKgMkZARcrgh72fvk3mHQVVD8sJFQoQahpUrBS__x_ct82QdSPuhDpWIwww7o;
+        path=/; expires=Mon, 07-Jul-25 14:39:31 GMT; domain=.adyen.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=M4LZvwAV9zeVv1AtEcGvqF4I7z8c.zm.UV6jD1Cmhk8-1751897371921-0.0.1.1-604800000;
+        path=/; domain=.adyen.com; HttpOnly; Secure; SameSite=None
+      Pspreference:
+      - PSVRSDCNVS2S2LV5
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Cf-Cache-Status:
+      - DYNAMIC
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 95b7eb8dd9b2ee47-WAW
+    body:
+      encoding: ASCII-8BIT
+      string: '{"additionalData":{"isCardCommercial":"unknown","recurringProcessingModel":"CardOnFile","paymentMethod":"mc","tokenization.shopperReference":"foobar","tokenization.storedPaymentMethodId":"LH9XQ2ZBCFVJPPT5"},"id":"CS4FBB6F827EC53AC7","payments":[{"amount":{"currency":"EUR","value":1000},"paymentMethod":{"brand":"mc","type":"scheme"},"pspReference":"VMLWMSBWZZSBJWT5","resultCode":"Authorised"}],"reference":"d84f20d9-4a06-4173-96ca-02486188e192","status":"completed"}'
+  recorded_at: Mon, 07 Jul 2025 14:09:31 GMT

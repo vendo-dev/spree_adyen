@@ -1,0 +1,14 @@
+<% content_for(:head) do %>
+  <meta name="robots" content="noindex, nofollow">
+<% end %>
+
+<!doctype html>
+<html lang="<%= I18n.locale %>">
+  <head>
+    <%= render 'spree/shared/head' %>
+    <%= render 'spree/shared/custom_head' %>
+  </head>
+  <body id="checkout-page" class="theme-<%= current_theme.class.name.demodulize.underscore %> w-full bg-background text-text">
+    <%= yield %>
+  </body>
+</html>

@@ -1,7 +1,8 @@
-# Sample localization file for English. Add more files in this directory for other locales.
-# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
-
+---
 en:
   spree:
     adyen:
-      hello: "Hello SpreeAdyen"
+      payment_session_errors:
+        canceled: Payment canceled
+        expired: Payment has been expired. Try again.
+        refused: Payment refused

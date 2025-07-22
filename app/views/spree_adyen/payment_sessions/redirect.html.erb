@@ -1,0 +1,5 @@
+<div data-controller="redirect-adyen"></div>
+
+<%= render 'spree_adyen/drop_in', payment_session: @payment_session, auto_mount: false %>
+
+<%= javascript_import_module_tag 'application-spree-adyen' %>

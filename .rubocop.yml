@@ -8,6 +8,7 @@ AllCops:
     - '**/Gemfile'
     - '**/Rakefile'
     - '**/Appraisals'
+    - app/**/*.rb
   Exclude:
     - 'spec/dummy/**/*'
     - 'lib/generators/**/*'

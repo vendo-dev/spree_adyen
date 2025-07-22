@@ -4,8 +4,8 @@ module SpreeAdyen
     isolate_namespace Spree
     engine_name 'spree_adyen'
 
-    # use rspec for tests
-    config.generators do |g|
+    config.eager_load_paths += %W(#{config.root}/app/services)
+    config.generators do |g| # use rspec for tests
       g.test_framework :rspec
     end
 
