@@ -4,7 +4,7 @@ module SpreeAdyen
     before_action :validate_hmac!
 
     def create
-      SpreeAdyen::EventHandler::ParseEvent.new(request.body.read).call
+      SpreeAdyen::Webhooks::HandleEvent.new(event_data: request.body.read).call
 
       head :ok
     end
