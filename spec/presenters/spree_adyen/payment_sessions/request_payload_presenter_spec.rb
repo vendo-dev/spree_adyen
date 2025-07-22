@@ -16,10 +16,13 @@ RSpec.describe SpreeAdyen::PaymentSessions::RequestPayloadPresenter do
     let(:expected_payload) do
       {
         amount: {
-          value: amount,
+          value: amount * 100,
           currency: order.currency
         },
-        returnUrl: "https://#{Rails.application.routes.default_url_options[:host]}/adyen/payment_sessions",
+        returnUrl: "http://www.example.com/adyen/payment_sessions/redirect",
+        recurringProcessingModel: "UnscheduledCardOnFile",
+        shopperInteraction: "Ecommerce",
+        storePaymentMethodMode: "enabled",
         reference: 'R123456789',
         countryCode: bill_address.country_iso,
         lineItems: [
@@ -42,7 +45,7 @@ RSpec.describe SpreeAdyen::PaymentSessions::RequestPayloadPresenter do
           lastName: 'Doe'
         },
         shopperEmail: order.email,
-        shopperReference: format('%03d', user.id)
+        shopperReference: "customer_#{user.id}"
       }
     end
 

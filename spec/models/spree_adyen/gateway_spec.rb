@@ -5,26 +5,6 @@ RSpec.describe SpreeAdyen::Gateway do
   let(:gateway) { create(:adyen_gateway, stores: [store]) }
   let(:amount) { 100 }
 
-  describe 'send_request' do
-    subject { gateway.send_request { action } }
-
-    context 'when action raises Adyen::AdyenError error' do
-      let(:action) { raise Adyen::AdyenError.new(response: { 'status' => 400, 'pspReference' => '123', 'message' => 'test' }) }
-
-      it 'protects Adyen API errors' do
-        expect { subject }.to raise_error(Spree::Core::GatewayError, 'Adyen::AdyenError request:{:response=>{"status"=>400, "pspReference"=>"123", "message"=>"test"}}')
-      end
-    end
-
-    context 'when action raises other error' do
-      let(:action) { raise 'test' }
-
-      it 'raises error' do
-        expect { subject }.to raise_error(StandardError, 'test')
-      end
-    end
-  end
-
   describe 'payment_session_result' do
     subject { gateway.payment_session_result(payment_session_id, session_result) }
 

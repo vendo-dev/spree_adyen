@@ -37,9 +37,8 @@ module SpreeAdyen
           source: nil,
           state: 'completed'
         ).tap do |payment|
-          # saving payment without source cause in some cases
-          # response doesn't contain all required payment data
-          payment.save!(validate: false)
+          payment.skip_source_requirement = true
+          payment.save!
         end
       end
 

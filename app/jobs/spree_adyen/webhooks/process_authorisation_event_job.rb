@@ -1,4 +1,4 @@
-module Spree
+module SpreeAdyen
   module Webhooks
     class ProcessAuthorisationEventJob < SpreeAdyen::BaseJob
       def perform(payload)
