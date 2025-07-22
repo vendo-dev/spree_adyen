@@ -5,7 +5,10 @@ module SpreeAdyen
     preference :client_key, :password
     preference :environment, :string, default: 'test'
 
-    has_many :payment_sessions, class_name: 'SpreeAdyen::PaymentSession', foreign_key: 'payment_method_id', dependent: :delete_all
+    has_many :payment_sessions, class_name: 'SpreeAdyen::PaymentSession',
+                                foreign_key: 'payment_method_id',
+                                dependent: :delete_all,
+                                inverse_of: :payment_method
 
     # @param amount_in_cents [Integer] the amount in cents to capture
     # @param payment_source [Spree::CreditCard | Spree::PaymentSource]
@@ -86,7 +89,6 @@ module SpreeAdyen
       end
       response_body = response.response
 
-
       if response.status.to_i == 201
         success(response_body.id, response_body)
       else
@@ -141,7 +143,7 @@ module SpreeAdyen
       end
     end
 
-    def send_request(&block)
+    def send_request
       yield
     rescue Adyen::AdyenError => e
       raise Spree::Core::GatewayError, e.message

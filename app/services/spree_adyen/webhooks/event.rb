@@ -2,7 +2,7 @@ module SpreeAdyen
   module Webhooks
     class Event
       def initialize(event_data:)
-        @event_data = event_data
+        @event_data = event_data.deep_stringify_keys
       end
 
       def payload
@@ -33,16 +33,24 @@ module SpreeAdyen
         end
       end
 
-      def payment_method
-        @payment_method ||= body['paymentMethod']
+      def payment_method_reference
+        @payment_method_reference ||= body['paymentMethod'].to_sym
+      end
+
+      def stored_payment_method_id
+        @stored_payment_method_id ||= additional_data['storedPaymentMethodId']
       end
 
       def card_details
-        @card_details ||= additional_data.slice('expiryDate', 'cardSummary').transform_keys(&:underscore)
+        @card_details ||= additional_data.slice('expiryDate', 'cardSummary', 'type')
+      end
+
+      def merchant_reference
+        @merchant_reference ||= body['merchantReference']
       end
 
       def session_id
-        @session_id ||= body.dig('additional_data', 'checkoutSessionId')
+        @session_id ||= additional_data['checkoutSessionId']
       end
 
       def event_date

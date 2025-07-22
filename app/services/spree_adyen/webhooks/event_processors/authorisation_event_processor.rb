@@ -21,7 +21,14 @@ module SpreeAdyen
         delegate :order, to: :payment_session
 
         def handle_success
-          SpreeAdyen::CompleteOrder.new(payment_session: payment_session, event: event).call
+          create_payment_source
+          complete_order unless order.completed?
+        end
+
+        def create_payment_source
+          payment = order.payments.find_or_initialize_by(response_code: event.psp_reference)
+          payment.source ||= SpreeAdyen::Webhooks::Actions::CreateSource.new(event: event).call
+          payment.save!
         end
 
         def handle_failure

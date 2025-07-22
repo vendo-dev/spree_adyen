@@ -10,7 +10,7 @@ module SpreeAdyen
         country: Spree::Country.find_by(name: address['countrystring']),
         zipcode: address['postalCodestring'],
         address1: address['streetstring'],
-        address2: address['houseNumberOrNamestring'],
+        address2: address['houseNumberOrNamestring']
       }
     end
 
