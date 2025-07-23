@@ -1,16 +1,14 @@
 module SpreeAdyen
   module PaymentSources
-    class Billie < ::Spree::PaymentSource
+    class Paypal < Base
+      store_accessor :public_metadata
+
       def actions
         %w[credit void capture]
       end
 
       def self.display_name
-        'Billie'
-      end
-
-      def display_payment_info
-        'Billie'
+        'PayPal'
       end
     end
   end

@@ -4,7 +4,7 @@ module SpreeAdyen
       store_accessor :public_metadata, :payment_method_type, :authorization_token, :session_id
 
       def actions
-        %w[credit void]
+        %w[credit void capture]
       end
 
       def self.display_name

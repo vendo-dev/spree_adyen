@@ -1,14 +1,14 @@
 module SpreeAdyen
   module PaymentSources
-    class Ideal < Base
-      store_accessor :public_metadata
+    class PayByBank < Base
+      store_accessor :public_metadata, :bank
 
       def actions
-        %w[credit]
+        %w[credit void]
       end
 
       def self.display_name
-        'iDEAL'
+        'Pay by Bank Europe'
       end
     end
   end

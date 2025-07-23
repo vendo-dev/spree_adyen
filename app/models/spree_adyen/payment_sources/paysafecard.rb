@@ -1,14 +1,14 @@
 module SpreeAdyen
   module PaymentSources
-    class Ideal < Base
+    class Paysafecard < Base
       store_accessor :public_metadata
 
       def actions
-        %w[credit]
+        %w[credit void]
       end
 
       def self.display_name
-        'iDEAL'
+        'PaySafeCard'
       end
     end
   end
