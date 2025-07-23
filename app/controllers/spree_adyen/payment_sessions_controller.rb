@@ -7,7 +7,6 @@ module SpreeAdyen
     # GET /adyen/payment_sessions/redirect
     def redirect
       @payment_session = SpreeAdyen::PaymentSession.find_by(adyen_id: params[:sessionId])
-      @redirect_result = params[:redirectResult]
       render layout: 'spree_adyen/default'
     end
 
