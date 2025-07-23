@@ -11,9 +11,11 @@ module SpreeAdyen
     # Validations
     #
     validates :order, :payment_method, presence: true
-    validates :adyen_id, :adyen_data, :status, :expires_at, presence: true
+    validates :adyen_id, uniqueness: true, presence: true
+    validates :adyen_data, :status, :expires_at, presence: true
     validates :amount, presence: true, numericality: { greater_than: 0 }
-    validates :adyen_id, uniqueness: { scope: :payment_method_id }
+    validates :currency, presence: true
+    validate :currency_matches_order_currency
 
     validate :expiration_date_cannot_be_in_the_past_or_later_than_24_hours, on: :create
 
@@ -38,6 +40,7 @@ module SpreeAdyen
     # Callbacks
     #
     before_validation :set_amount_from_order
+    before_validation :set_currency_from_order
 
     #
     # Delegations
@@ -48,6 +51,10 @@ module SpreeAdyen
 
     def set_amount_from_order
       self.amount = order&.total_minus_store_credits if order.present? && (amount.nil? || amount.zero?)
+    end
+
+    def set_currency_from_order
+      self.currency = order&.currency
     end
 
     def amount_in_cents
@@ -64,6 +71,10 @@ module SpreeAdyen
       return unless expires_at.present? && expires_at > 24.hours.from_now
 
       errors.add(:expires_at, "can't be more than 24 hours from now")
+    end
+
+    def currency_matches_order_currency
+      errors.add(:currency, "must match order currency") if currency != order&.currency
     end
   end
 end
