@@ -2,7 +2,7 @@ module SpreeAdyen
   module PaymentSources
     class Clearpay < ::Spree::PaymentSource
       def actions
-        %w[credit void]
+        %w[credit void capture]
       end
 
       def self.display_name

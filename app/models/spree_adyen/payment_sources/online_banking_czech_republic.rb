@@ -1,14 +1,14 @@
 module SpreeAdyen
   module PaymentSources
-    class Blik < Base
-      store_accessor :public_metadata
+    class OnlineBankingCzechRepublic < Base
+      store_accessor :public_metadata, :bank
 
       def actions
         %w[credit void]
       end
 
       def self.display_name
-        'BLIK'
+        'Online Banking Czech Republic'
       end
     end
   end
