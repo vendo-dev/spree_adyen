@@ -11,7 +11,12 @@ module SpreeAdyen
       def call
         return payment_session if payment_session.present?
 
-        Create.new(order: order, user: user, amount: amount, payment_method: payment_method).call
+        SpreeAdyen::PaymentSession.create!(
+          order: order,
+          amount: amount,
+          user: user,
+          payment_method: payment_method
+        )
       end
 
       private

@@ -3,9 +3,9 @@ require 'spec_helper'
 RSpec.describe SpreeAdyen::PaymentSessions::FindOrCreate do
   subject(:service) { described_class.new(order: order, user: user, amount: amount, payment_method: payment_method).call }
 
-  let(:order) { create(:order) }
+  let(:order) { create(:order_with_line_items) }
   let(:user) { create(:user) }
-  let(:amount) { 100 }
+  let(:amount) { order.total_minus_store_credits }
   let(:payment_method) { create(:adyen_gateway) }
 
   let(:existing_payment_session) do
@@ -64,7 +64,7 @@ RSpec.describe SpreeAdyen::PaymentSessions::FindOrCreate do
 
     context 'when payment session is not pending (for example completed)' do
       before { existing_payment_session }
-      
+
       let(:payment_status) { 'completed' }
 
       it 'creates a new payment session' do
@@ -76,7 +76,7 @@ RSpec.describe SpreeAdyen::PaymentSessions::FindOrCreate do
 
     context 'when payment session is for a different payment method' do
       before { existing_payment_session }
-      
+
       let(:payment_payment_method) { create(:payment_method) }
 
       it 'creates a new payment session' do
@@ -88,7 +88,7 @@ RSpec.describe SpreeAdyen::PaymentSessions::FindOrCreate do
 
     context 'when payment session is for a different user' do
       before { existing_payment_session }
-      
+
       let(:payment_user) { create(:user) }
 
       it 'creates a new payment session' do
@@ -100,8 +100,8 @@ RSpec.describe SpreeAdyen::PaymentSessions::FindOrCreate do
 
     context 'when payment session is for a different order' do
       before { existing_payment_session }
-      
-      let(:payment_order) { create(:order) }
+
+      let(:payment_order) { create(:order_with_line_items) }
 
       it 'creates a new payment session' do
         VCR.use_cassette('payment_sessions/success') do
@@ -112,8 +112,8 @@ RSpec.describe SpreeAdyen::PaymentSessions::FindOrCreate do
 
     context 'when payment session is for a different amount' do
       before { existing_payment_session }
-      
-      let(:payment_amount) { 200 }
+
+      let(:payment_amount) { order.total_minus_store_credits - 1 }
 
       it 'creates a new payment session' do
         VCR.use_cassette('payment_sessions/success') do
@@ -122,4 +122,4 @@ RSpec.describe SpreeAdyen::PaymentSessions::FindOrCreate do
       end
     end
   end
-end 
+end
