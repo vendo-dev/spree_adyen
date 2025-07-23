@@ -5,7 +5,7 @@ RSpec.describe SpreeAdyen::Gateway do
   let(:gateway) { create(:adyen_gateway, stores: [store]) }
   let(:amount) { 100 }
 
-  describe 'payment_session_result' do
+  describe '#payment_session_result' do
     subject { gateway.payment_session_result(payment_session_id, session_result) }
 
     let(:payment_session_id) { 'CS4FBB6F827EC53AC7' }
@@ -34,7 +34,7 @@ RSpec.describe SpreeAdyen::Gateway do
     end
   end
 
-  describe 'create_payment_session' do
+  describe '#create_payment_session' do
     subject { gateway.create_payment_session(amount, order) }
 
     let(:order) { create(:order_with_line_items) }
@@ -64,6 +64,20 @@ RSpec.describe SpreeAdyen::Gateway do
           expect(subject.message).to eq("N3FFD9KVFQ85K5V5 - Field 'countryCode' is not valid.")
         end
       end
+    end
+  end
+
+  describe '#environment' do
+    subject { gateway.environment }
+
+    context 'when test_mode is true' do
+      it { is_expected.to eq(:test) }
+    end
+
+    context 'when test_mode is false' do
+      let(:gateway) { create(:adyen_gateway, preferred_test_mode: false) }
+
+      it { is_expected.to eq(:live) }
     end
   end
 end

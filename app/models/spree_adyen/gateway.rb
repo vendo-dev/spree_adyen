@@ -1,9 +1,9 @@
 module SpreeAdyen
   class Gateway < ::Spree::Gateway
-    preference :api_key, :password
     preference :merchant_account, :string
+    preference :api_key, :password
     preference :client_key, :password
-    preference :environment, :string, default: 'test'
+    preference :test_mode, :boolean, default: true
 
     has_many :payment_sessions, class_name: 'SpreeAdyen::PaymentSession',
                                 foreign_key: 'payment_method_id',
@@ -37,7 +37,11 @@ module SpreeAdyen
     end
 
     def environment
-      Rails.env.production? ? preferred_environment.to_sym : :test
+      if preferred_test_mode
+        :test
+      else
+        :live
+      end
     end
 
     def create_profile(payment); end
@@ -113,10 +117,6 @@ module SpreeAdyen
     end
 
     def description_partial_name
-      'spree_adyen'
-    end
-
-    def custom_form_fields_partial_name
       'spree_adyen'
     end
 
