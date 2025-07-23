@@ -101,8 +101,7 @@ module SpreeAdyen
     end
 
     def update_session_in_adyen
-      response = payment_method.update_payment_session(amount, order)
-      return unless response.success?
+      # TODO: Implement this
     end
 
     def amount_or_currency_changed?
