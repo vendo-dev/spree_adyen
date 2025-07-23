@@ -5,7 +5,12 @@ module SpreeAdyen
     #
     belongs_to :order, class_name: 'Spree::Order'
     belongs_to :payment_method, class_name: 'Spree::PaymentMethod'
-    belongs_to :user, class_name: Spree.user_class.name
+    belongs_to :user, class_name: Spree.user_class.name, optional: true
+
+    #
+    # Attributes
+    #
+    attribute :skip_expiration_date_validation, :boolean, default: false
 
     #
     # Validations
@@ -15,9 +20,10 @@ module SpreeAdyen
     validates :adyen_data, :status, :expires_at, presence: true
     validates :amount, presence: true, numericality: { greater_than: 0 }
     validates :currency, presence: true
-    validate :currency_matches_order_currency
 
-    validate :expiration_date_cannot_be_in_the_past_or_later_than_24_hours, on: :create
+    validate :amount_cannot_be_greater_than_order_total
+    validate :currency_matches_order_currency
+    validate :expiration_date_cannot_be_in_the_past_or_later_than_24_hours, on: :create, unless: :skip_expiration_date_validation
 
     scope :not_expired, -> { where('expires_at > ?', DateTime.current) }
 
@@ -41,6 +47,8 @@ module SpreeAdyen
     #
     before_validation :set_amount_from_order
     before_validation :set_currency_from_order
+    before_validation :create_session_in_adyen, on: :create
+    after_update :update_session_in_adyen, if: :amount_or_currency_changed?
 
     #
     # Delegations
@@ -50,7 +58,7 @@ module SpreeAdyen
     private
 
     def set_amount_from_order
-      self.amount = order&.total_minus_store_credits if order.present? && (amount.nil? || amount.zero?)
+      self.amount ||= order&.total_minus_store_credits
     end
 
     def set_currency_from_order
@@ -75,6 +83,29 @@ module SpreeAdyen
 
     def currency_matches_order_currency
       errors.add(:currency, "must match order currency") if currency != order&.currency
+    end
+
+    def amount_cannot_be_greater_than_order_total
+      errors.add(:amount, "can't be greater than order total (minus store credits)") if amount > order&.total_minus_store_credits
+    end
+
+    def create_session_in_adyen
+      return if adyen_id.present?
+
+      response = payment_method.create_payment_session(amount, order)
+      return unless response.success?
+
+      self.adyen_id = response.params['id']
+      self.adyen_data = response.params['sessionData']
+      self.expires_at = response.params['expiresAt']
+    end
+
+    def update_session_in_adyen
+      # TODO: Implement this
+    end
+
+    def amount_or_currency_changed?
+      amount_changed? || currency_changed?
     end
   end
 end

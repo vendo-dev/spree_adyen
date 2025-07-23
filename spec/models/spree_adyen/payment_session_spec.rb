@@ -1,7 +1,9 @@
 require 'spec_helper'
 
 RSpec.describe SpreeAdyen::PaymentSession do
-  subject(:payment_session) { create(:payment_session) }
+  subject(:payment_session) { create(:payment_session, order: order) }
+
+  let(:order) { create(:order_with_line_items) }
 
   describe 'state machine' do
     describe 'initial state' do
@@ -79,7 +81,7 @@ RSpec.describe SpreeAdyen::PaymentSession do
       end
 
       context 'on create' do
-        subject(:payment_session) { build(:payment_session, expires_at: expires_at) }
+        subject(:payment_session) { build(:payment_session, expires_at: expires_at, order: order) }
 
         context 'when expires_at is in the past' do
           let(:expires_at) { 1.day.ago }
