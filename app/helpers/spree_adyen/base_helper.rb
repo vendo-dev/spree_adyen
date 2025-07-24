@@ -9,7 +9,7 @@ module SpreeAdyen
 
       @current_adyen_payment_session ||= SpreeAdyen::PaymentSessions::FindOrCreate.new(
         order: @order,
-        amount: @order.total,
+        amount: @order.total_minus_store_credits,
         user: @order.user,
         payment_method: current_adyen_gateway
       ).call

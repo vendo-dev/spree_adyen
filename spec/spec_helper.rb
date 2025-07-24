@@ -16,6 +16,8 @@ Dir[File.join(File.dirname(__FILE__), 'support/**/*.rb')].sort.each { |f| requir
 # Load VCR configuration
 require 'support/vcr'
 
+RSpec::Matchers.define_negated_matcher :not_change, :change
+
 def json_response
   case body = JSON.parse(response.body)
   when Hash

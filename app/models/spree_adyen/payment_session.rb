@@ -1,5 +1,6 @@
 module SpreeAdyen
   class PaymentSession < Base
+    acts_as_paranoid
     #
     # Associations
     #
@@ -48,7 +49,6 @@ module SpreeAdyen
     before_validation :set_amount_from_order
     before_validation :set_currency_from_order
     before_validation :create_session_in_adyen, on: :create
-    after_update :update_session_in_adyen, if: :amount_or_currency_changed?
 
     #
     # Delegations
@@ -65,14 +65,6 @@ module SpreeAdyen
       self.currency = order&.currency
     end
 
-    def amount_in_cents
-      @amount_in_cents ||= money.cents
-    end
-
-    def money
-      @money ||= Spree::Money.new(amount, currency: currency)
-    end
-
     def expiration_date_cannot_be_in_the_past_or_later_than_24_hours
       errors.add(:expires_at, "can't be in the past") if expires_at.present? && expires_at < DateTime.current
 
@@ -82,7 +74,7 @@ module SpreeAdyen
     end
 
     def currency_matches_order_currency
-      errors.add(:currency, "must match order currency") if currency != order&.currency
+      errors.add(:currency, 'must match order currency') if currency != order&.currency
     end
 
     def amount_cannot_be_greater_than_order_total
@@ -98,14 +90,6 @@ module SpreeAdyen
       self.adyen_id = response.params['id']
       self.adyen_data = response.params['sessionData']
       self.expires_at = response.params['expiresAt']
-    end
-
-    def update_session_in_adyen
-      # TODO: Implement this
-    end
-
-    def amount_or_currency_changed?
-      amount_changed? || currency_changed?
     end
   end
 end

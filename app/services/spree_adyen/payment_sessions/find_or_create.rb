@@ -14,6 +14,7 @@ module SpreeAdyen
         SpreeAdyen::PaymentSession.create!(
           order: order,
           amount: amount,
+          currency: order.currency,
           user: user,
           payment_method: payment_method
         )
@@ -27,6 +28,7 @@ module SpreeAdyen
         @payment_session ||= PaymentSession.with_status(:initial).not_expired.find_by(
           payment_method: payment_method,
           order: order,
+          currency: order.currency,
           user: user,
           amount: amount
         )

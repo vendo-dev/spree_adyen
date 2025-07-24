@@ -18,6 +18,9 @@ Layout/LineLength:
 
 # DISABLED
 
+Rails/RakeEnvironment:
+  Enabled: false
+
 Style/Documentation:
   Enabled: false
 
