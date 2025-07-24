@@ -3,10 +3,11 @@ require 'spec_helper'
 RSpec.describe SpreeAdyen::PaymentSessions::FindOrCreate do
   subject(:service) { described_class.new(order: order, user: user, amount: amount, payment_method: payment_method).call }
 
-  let(:order) { create(:order_with_line_items) }
+  let(:order) { create(:order_with_line_items, currency: 'USD') }
   let(:user) { create(:user) }
   let(:amount) { order.total_minus_store_credits }
   let(:payment_method) { create(:adyen_gateway) }
+  let(:payment_currency) { order.currency }
 
   let(:existing_payment_session) do
     create(:payment_session,
@@ -14,6 +15,7 @@ RSpec.describe SpreeAdyen::PaymentSessions::FindOrCreate do
       status: payment_status,
       expires_at: 1.hour.from_now,
       user: payment_user,
+      currency: payment_currency,
       amount: payment_amount,
       payment_method: payment_payment_method
     )
@@ -114,6 +116,16 @@ RSpec.describe SpreeAdyen::PaymentSessions::FindOrCreate do
       before { existing_payment_session }
 
       let(:payment_amount) { order.total_minus_store_credits - 1 }
+
+      it 'creates a new payment session' do
+        VCR.use_cassette('payment_sessions/success') do
+          expect { subject }.to change(SpreeAdyen::PaymentSession, :count).by(1)
+        end
+      end
+    end
+
+    context 'when payment session is for a different currency' do
+      let(:payment_currency) { 'PLN' }
 
       it 'creates a new payment session' do
         VCR.use_cassette('payment_sessions/success') do

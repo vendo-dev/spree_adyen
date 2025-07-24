@@ -11,6 +11,7 @@ module SpreeAdyen
     # Attributes
     #
     attribute :skip_expiration_date_validation, :boolean, default: false
+    attribute :skip_amount_and_currency_validation, :boolean, default: false
 
     #
     # Validations
@@ -21,13 +22,16 @@ module SpreeAdyen
     validates :amount, presence: true, numericality: { greater_than: 0 }
     validates :currency, presence: true
 
-    validate :amount_cannot_be_greater_than_order_total
-    validate :currency_matches_order_currency
+    validate :amount_cannot_be_greater_than_order_total, unless: :skip_amount_and_currency_validation
+    validate :currency_matches_order_currency, unless: :skip_amount_and_currency_validation
     validate :expiration_date_cannot_be_in_the_past_or_later_than_24_hours, on: :create, unless: :skip_expiration_date_validation
 
     scope :not_expired, -> { where('expires_at > ?', DateTime.current) }
 
     state_machine :status, initial: :initial do
+      before_transition any => :outdated do |payment_session, _transition|
+        payment_session.skip_amount_and_currency_validation = true
+      end
       event :pending do
         transition %i[initial] => :pending
       end
@@ -40,15 +44,19 @@ module SpreeAdyen
       event :refuse do
         transition %i[pending initial] => :refused
       end
+      event :outdate do
+        transition %i[initial] => :outdated
+      end
+    end
+
+    def skip_amount_and_currency_validation
+      outdated? || super
     end
 
     #
     # Callbacks
     #
-    before_validation :set_amount_from_order
-    before_validation :set_currency_from_order
     before_validation :create_session_in_adyen, on: :create
-    after_update :update_session_in_adyen, if: :amount_or_currency_changed?
 
     #
     # Delegations
@@ -56,14 +64,6 @@ module SpreeAdyen
     delegate :store, :currency, to: :order
 
     private
-
-    def set_amount_from_order
-      self.amount ||= order&.total_minus_store_credits
-    end
-
-    def set_currency_from_order
-      self.currency = order&.currency
-    end
 
     def amount_in_cents
       @amount_in_cents ||= money.cents
@@ -82,7 +82,7 @@ module SpreeAdyen
     end
 
     def currency_matches_order_currency
-      errors.add(:currency, "must match order currency") if currency != order&.currency
+      errors.add(:currency, 'must match order currency') if currency != order&.currency
     end
 
     def amount_cannot_be_greater_than_order_total
@@ -98,14 +98,6 @@ module SpreeAdyen
       self.adyen_id = response.params['id']
       self.adyen_data = response.params['sessionData']
       self.expires_at = response.params['expiresAt']
-    end
-
-    def update_session_in_adyen
-      # TODO: Implement this
-    end
-
-    def amount_or_currency_changed?
-      amount_changed? || currency_changed?
     end
   end
 end
