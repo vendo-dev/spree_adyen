@@ -7,6 +7,7 @@ class SetupSpreeAdyenModels < ActiveRecord::Migration[7.2]
       t.references :user, null: true, index: true
       t.string :status, null: false, index: true
       t.datetime :expires_at, null: false, index: true
+      t.datetime :deleted_at, index: true
       t.references :payment_method, null: false, index: true
       t.string :adyen_id, null: false, index: { unique: true }
       t.text :adyen_data, null: false

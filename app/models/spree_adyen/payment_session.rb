@@ -1,5 +1,6 @@
 module SpreeAdyen
   class PaymentSession < Base
+    acts_as_paranoid
     #
     # Associations
     #
@@ -11,7 +12,6 @@ module SpreeAdyen
     # Attributes
     #
     attribute :skip_expiration_date_validation, :boolean, default: false
-    attribute :skip_amount_and_currency_validation, :boolean, default: false
 
     #
     # Validations
@@ -22,16 +22,13 @@ module SpreeAdyen
     validates :amount, presence: true, numericality: { greater_than: 0 }
     validates :currency, presence: true
 
-    validate :amount_cannot_be_greater_than_order_total, unless: :skip_amount_and_currency_validation
-    validate :currency_matches_order_currency, unless: :skip_amount_and_currency_validation
+    validate :amount_cannot_be_greater_than_order_total
+    validate :currency_matches_order_currency
     validate :expiration_date_cannot_be_in_the_past_or_later_than_24_hours, on: :create, unless: :skip_expiration_date_validation
 
     scope :not_expired, -> { where('expires_at > ?', DateTime.current) }
 
     state_machine :status, initial: :initial do
-      before_transition any => :outdated do |payment_session, _transition|
-        payment_session.skip_amount_and_currency_validation = true
-      end
       event :pending do
         transition %i[initial] => :pending
       end
@@ -44,13 +41,6 @@ module SpreeAdyen
       event :refuse do
         transition %i[pending initial] => :refused
       end
-      event :outdate do
-        transition %i[initial] => :outdated
-      end
-    end
-
-    def skip_amount_and_currency_validation
-      outdated? || super
     end
 
     #

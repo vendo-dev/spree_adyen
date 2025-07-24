@@ -7,9 +7,8 @@ module SpreeAdyen
     def outdate_payment_sessions
       adyen_payment_sessions
         .where.not(currency: currency).or(adyen_payment_sessions.where.not(amount: total_minus_store_credits))
-        .not_expired
         .with_status(:initial)
-        .each(&:outdate!)
+        .each(&:destroy)
     end
   end
 end
