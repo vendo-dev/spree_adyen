@@ -15,7 +15,6 @@ module Spree
               @payment_session = SpreeAdyen::PaymentSession.new(
                 order: spree_current_order,
                 amount: permitted_attributes[:amount],
-                currency: spree_current_order.currency,
                 user: spree_current_user,
                 payment_method: adyen_gateway
               )

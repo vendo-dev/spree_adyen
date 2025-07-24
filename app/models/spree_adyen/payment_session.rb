@@ -46,6 +46,8 @@ module SpreeAdyen
     #
     # Callbacks
     #
+    before_validation :set_amount_from_order
+    before_validation :set_currency_from_order
     before_validation :create_session_in_adyen, on: :create
 
     #
@@ -55,12 +57,12 @@ module SpreeAdyen
 
     private
 
-    def amount_in_cents
-      @amount_in_cents ||= money.cents
+    def set_amount_from_order
+      self.amount ||= order&.total_minus_store_credits
     end
 
-    def money
-      @money ||= Spree::Money.new(amount, currency: currency)
+    def set_currency_from_order
+      self.currency = order&.currency
     end
 
     def expiration_date_cannot_be_in_the_past_or_later_than_24_hours
