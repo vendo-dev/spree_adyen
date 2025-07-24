@@ -25,7 +25,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'spree_admin', '>= 5.1.0'
   s.add_dependency 'spree_extension'
 
-  s.add_dependency 'paranoia', '>= 2.4'
   s.add_dependency 'adyen-ruby-api-library', '~> 10.3'
 
   s.add_development_dependency 'spree_dev_tools'
