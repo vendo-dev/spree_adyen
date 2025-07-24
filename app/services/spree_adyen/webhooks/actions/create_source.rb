@@ -96,7 +96,8 @@ module SpreeAdyen
 
         def find_or_create_credit_card
           cc_attributes = SpreeAdyen::Webhooks::CreditCardPresenter.new(event).to_h
-          Spree::CreditCard.find_or_create_by(cc_attributes.slice(:gateway_payment_profile_id, :gateway_customer_profile_id)) do |cc|
+          cc_reference = cc_attributes.slice(:gateway_payment_profile_id).compact
+          gateway.credit_cards.capturable.find_or_initialize_by(cc_reference).tap do |cc|
             cc.assign_attributes(cc_attributes)
             cc.user = payment_session.user
             cc.payment_method = gateway

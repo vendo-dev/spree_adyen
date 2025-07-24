@@ -10,7 +10,7 @@ module SpreeAdyen
           if event.success?
             handle_success
           else
-            handle_failure
+            payment.failure!
           end
         end
 
@@ -21,18 +21,15 @@ module SpreeAdyen
         delegate :order, to: :payment_session
 
         def handle_success
-          create_payment_source
+          payment.update!(source: SpreeAdyen::Webhooks::Actions::CreateSource.new(event: event).call)
           complete_order unless order.completed?
         end
 
-        def create_payment_source
-          payment = order.payments.find_or_initialize_by(response_code: event.psp_reference)
-          payment.source ||= SpreeAdyen::Webhooks::Actions::CreateSource.new(event: event).call
-          payment.save!
-        end
-
-        def handle_failure
-          # TODO: Implement
+        def payment
+          order.payments.find_by!(response_code: payment_session.adyen_id)
+        rescue ActiveRecord::RecordNotFound
+          # it is possible that the payment is not created yet, so we should retry the job
+          raise "Payment with response code #{payment_session.adyen_id} not found, retrying the job"
         end
 
         def payment_session

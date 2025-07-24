@@ -12,7 +12,7 @@ module SpreeAdyen
           year: event.card_details['expiryDate']&.split('/')&.last,
           cc_type: event.payment_method_reference,
           last_digits: event.card_details['cardSummary'],
-          gateway_customer_profile_id: event.payload.dig('notificationItems', 0, 'NotificationRequestItem', 'merchantReference'),
+          gateway_customer_profile_id: nil,
           gateway_payment_profile_id: event.stored_payment_method_id
         }
       end

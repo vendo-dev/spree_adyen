@@ -33,7 +33,7 @@ module SpreeAdyen
         order.payments.build(
           amount: payment_session.amount,
           payment_method: payment_session.payment_method,
-          response_code: payment_session.id,
+          response_code: payment_session.adyen_id,
           source: nil,
           state: 'completed'
         ).tap do |payment|

@@ -38,7 +38,7 @@ module SpreeAdyen
       end
 
       def stored_payment_method_id
-        @stored_payment_method_id ||= additional_data['storedPaymentMethodId']
+        @stored_payment_method_id ||= additional_data['tokenization.storedPaymentMethodId']
       end
 
       def card_details
@@ -57,16 +57,16 @@ module SpreeAdyen
         @event_date ||= body['eventDate'].to_datetime
       end
 
+      def psp_reference
+        @psp_reference ||= body['pspReference']
+      end
+
       private
 
       attr_reader :event_data
 
       def body
         @body ||= event_data['notificationItems'][0]['NotificationRequestItem']
-      end
-
-      def psp_reference
-        @psp_reference ||= body['pspReference']
       end
 
       def additional_data

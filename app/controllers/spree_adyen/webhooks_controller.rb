@@ -1,10 +1,10 @@
 module SpreeAdyen
   class WebhooksController < ApplicationController
     skip_before_action :verify_authenticity_token
-    before_action :validate_hmac!
+    # before_action :validate_hmac!
 
     def create
-      SpreeAdyen::Webhooks::HandleEvent.new(event_data: request.body.read).call
+      SpreeAdyen::Webhooks::HandleEvent.new(raw_data: request.body.read).call
 
       head :ok
     end
