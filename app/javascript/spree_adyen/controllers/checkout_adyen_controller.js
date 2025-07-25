@@ -41,6 +41,7 @@ export default class extends Controller {
 
   async initDropin() {
     const dropinConfiguration = {
+      showStoredPaymentMethods: false,
       paymentMethodsConfiguration: {
         card: {
           onPaymentCompleted: (result, component) => {

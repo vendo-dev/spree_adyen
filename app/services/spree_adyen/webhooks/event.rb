@@ -38,7 +38,7 @@ module SpreeAdyen
       end
 
       def stored_payment_method_id
-        @stored_payment_method_id ||= additional_data['tokenization.storedPaymentMethodId']
+        @stored_payment_method_id ||= additional_data['tokenization.storedPaymentMethodId'] || additional_data['storedPaymentMethodId']
       end
 
       def card_details
@@ -66,7 +66,7 @@ module SpreeAdyen
       attr_reader :event_data
 
       def body
-        @body ||= event_data['notificationItems'][0]['NotificationRequestItem']
+        @body ||= event_data.dig('notificationItems', 0, 'NotificationRequestItem') || {}
       end
 
       def additional_data

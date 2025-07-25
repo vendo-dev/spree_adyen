@@ -22,7 +22,12 @@ module SpreeAdyen
 
         def handle_success
           payment.update!(source: SpreeAdyen::Webhooks::Actions::CreateSource.new(event: event).call)
+          payment.complete! unless payment.completed?
           complete_order unless order.completed?
+        end
+
+        def complete_order
+          Spree::Dependencies.checkout_complete_service.constantize.call(order: order)
         end
 
         def payment

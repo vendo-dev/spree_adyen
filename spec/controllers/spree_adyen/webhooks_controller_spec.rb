@@ -8,18 +8,10 @@ RSpec.describe SpreeAdyen::WebhooksController, type: :controller do
   let(:user_encoded_credentials) { ActionController::HttpAuthentication::Basic.encode_credentials('login', 'password') }
   let(:valid_hmac) { true }
 
-  before do
-    expect_any_instance_of(Adyen::Utils::HmacValidator).to receive(:valid_webhook_hmac?).and_return(valid_hmac)
+  let(:payment_method) { create(:adyen_gateway) }
 
-    allow(ENV).to receive(:[]).and_call_original
-    allow(ENV).to receive(:[]).with('ADYEN_WEBHOOK_USERNAME').and_return('login')
-    allow(ENV).to receive(:[]).with('ADYEN_WEBHOOK_PASSWORD').and_return('password')
-  end
-
-  xdescribe 'POST #create' do
-    let(:params) { JSON.parse(file_fixture('webhooks/authorised/success.json').read) }
-
-    describe 'endpoint auth' do
+  describe 'POST #create' do
+    xdescribe 'endpoint auth' do
       before do
         # testing only auth in this block
         allow_any_instance_of(SpreeAdyen::Webhooks::HandleEvent).to_receive(:call).and_return(true)
@@ -47,47 +39,69 @@ RSpec.describe SpreeAdyen::WebhooksController, type: :controller do
     end
 
     describe 'full webhook flow' do
+      subject { post :create, body: params.to_json }
+
       describe 'authorisation event' do
+        let(:order) { create(:order_with_line_items, state: 'payment') }
+        let!(:payment) { create(:payment, skip_source_requirement: true, payment_method: payment_method, source: nil, order: order, amount: order.total_minus_store_credits, response_code: 'webhooks_authorisation_success_checkout_session_id') }
+        let!(:payment_session) { create(:payment_session, amount: order.total_minus_store_credits, currency: order.currency, payment_method: payment_method, order: order, adyen_id: 'webhooks_authorisation_success_checkout_session_id') }
+
         context 'with valid payment' do
-          context 'with minimum required params' do
+          context 'with other payment (blik)' do
             let(:params) { JSON.parse(file_fixture('webhooks/authorised/success.json').read) }
 
-            xit 'completes the order' do
+            it 'completes the order' do
+              expect { subject }.to change { order.reload.completed? }.from(false).to(true)
+
+              expect(response).to have_http_status(:ok)
             end
 
-            xit 'creates a new payment' do
+            it 'completes the payment' do
+              expect { subject }.to change { payment.reload.state }.from('checkout').to('completed')
+
+              expect(response).to have_http_status(:ok)
             end
 
-            xit 'creates a payment source' do
-            end
-          end
-
-          context 'with billing address details' do
-            let(:params) { JSON.parse(file_fixture('webhooks/authorised/success_with_billing_address.json').read) }
-
-            xit 'assigns billing address data to order' do
+            it 'creates a blik payment source' do
+              subject
+              
+              expect(payment.reload.source).to be_a(SpreeAdyen::PaymentSources::Blik)
+              expect(response).to have_http_status(:ok)
             end
           end
 
           context 'with card details' do
             let(:params) { JSON.parse(file_fixture('webhooks/authorised/success_with_cc_details.json').read) }
 
-            xit 'saves card details to payment method' do
+            it 'completes the order' do
+              expect { subject }.to change { order.reload.completed? }.from(false).to(true)
+
+              expect(response).to have_http_status(:ok)
+            end
+
+            it 'completes the payment' do
+              expect { subject }.to change { payment.reload.state }.from('checkout').to('completed')
+
+              expect(response).to have_http_status(:ok)
+            end
+
+            it 'creates a credit card with card details' do
+              subject
+              
+              cc = payment.reload.source
+              expect(cc).to be_a(Spree::CreditCard)
+              expect(cc.gateway_payment_profile_id).to eq('webhooks_authorisation_success_stored_payment_method_id')
+              expect(cc.last_digits).to eq('7777')
+              expect(cc.year).to eq(2077)
+              expect(cc.month).to eq(12)
+              expect(cc.cc_type).to eq('master')
+
+              expect(response).to have_http_status(:ok)
             end
           end
         end
 
-        context 'with failed payment' do
-          context 'with minimum required params' do
-            let(:params) { JSON.parse(file_fixture('webhooks/authorised/failed.json').read) }
-
-            xit 'does not complete the order' do
-            end
-
-            # ????
-            xit 'idk rn' do
-            end
-          end
+        xcontext 'with failed payment' do
         end
       end
     end
