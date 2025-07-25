@@ -20,9 +20,10 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.requirements << 'none'
 
-  s.add_dependency 'spree', '>= 5.1.0'
-  s.add_dependency 'spree_storefront', '>= 5.1.0'
-  s.add_dependency 'spree_admin', '>= 5.1.0'
+  spree_version = '>= 5.1.4'
+  s.add_dependency 'spree', spree_version
+  s.add_dependency 'spree_storefront', spree_version
+  s.add_dependency 'spree_admin', spree_version
   s.add_dependency 'spree_extension'
 
   s.add_dependency 'adyen-ruby-api-library', '~> 10.3'
