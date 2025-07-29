@@ -13,8 +13,8 @@ module SpreeAdyen
         # event not supported - skip
         return unless event.code.in?(EVENT_HANDLERS.keys)
 
-        # EVENT_HANDLERS[event.code].perform_later(event.payload)
-        SpreeAdyen::Webhooks::EventProcessors::AuthorisationEventProcessor.new(event).call
+        EVENT_HANDLERS[event.code].set(wait: SpreeAdyen::Config.webhook_delay_in_seconds.seconds)
+                                  .perform_later(event.payload)
       end
 
       def event
