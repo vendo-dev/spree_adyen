@@ -36,8 +36,8 @@ module SpreeAdyen
 
       attr_reader :order, :amount, :user, :merchant_account
 
-      delegate :currency, to: :order
       delegate :number, to: :order, prefix: true
+      delegate :currency, to: :order
 
       def shopper_details
         {

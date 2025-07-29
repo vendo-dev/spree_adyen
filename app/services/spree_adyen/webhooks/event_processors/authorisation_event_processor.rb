@@ -7,10 +7,15 @@ module SpreeAdyen
         end
 
         def call
+          # it is possible that the payment is not created yet, so we should retry the job
+          validate_payment!
+
+          payment.update!(source: SpreeAdyen::Webhooks::Actions::CreateSource.new(event: event).call)
+
           if event.success?
             handle_success
           else
-            payment.failure!
+            handle_failure
           end
         end
 
@@ -20,10 +25,22 @@ module SpreeAdyen
 
         delegate :order, to: :payment_session
 
+        def validate_payment!
+          return if payment.present?
+
+          raise SpreeAdyen::Webhooks::Errors::PaymentNotFound.new(order_id: order.id)
+        end
+
         def handle_success
-          payment.update!(source: SpreeAdyen::Webhooks::Actions::CreateSource.new(event: event).call)
-          payment.complete! unless payment.completed?
+          payment.complete! if payment.processing?
           complete_order unless order.completed?
+        end
+
+        def handle_failure
+          payment.failure!
+          return unless order.completed?
+
+          raise SpreeAdyen::Webhooks::Errors::FailureForCompleteOrder.new(order_id: order.id)
         end
 
         def complete_order
@@ -31,10 +48,9 @@ module SpreeAdyen
         end
 
         def payment
-          order.payments.find_by!(response_code: payment_session.adyen_id)
-        rescue ActiveRecord::RecordNotFound
-          # it is possible that the payment is not created yet, so we should retry the job
-          raise "Payment with response code #{payment_session.adyen_id} not found, retrying the job"
+          @payment ||= order.payments.find_by(response_code: payment_session.adyen_id).tap do |payment|
+            # payment.skip_source_requirement = true
+          end
         end
 
         def payment_session

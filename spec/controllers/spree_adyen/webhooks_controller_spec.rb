@@ -5,9 +5,6 @@ require 'spec_helper'
 RSpec.describe SpreeAdyen::WebhooksController, type: :controller do
   render_views
 
-  let(:user_encoded_credentials) { ActionController::HttpAuthentication::Basic.encode_credentials('login', 'password') }
-  let(:valid_hmac) { true }
-
   let(:payment_method) { create(:adyen_gateway) }
 
   describe 'POST #create' do
@@ -43,7 +40,7 @@ RSpec.describe SpreeAdyen::WebhooksController, type: :controller do
 
       describe 'authorisation event' do
         let(:order) { create(:order_with_line_items, state: 'payment') }
-        let!(:payment) { create(:payment, skip_source_requirement: true, payment_method: payment_method, source: nil, order: order, amount: order.total_minus_store_credits, response_code: 'webhooks_authorisation_success_checkout_session_id') }
+        let!(:payment) { create(:payment, state: 'processing', skip_source_requirement: true, payment_method: payment_method, source: nil, order: order, amount: order.total_minus_store_credits, response_code: 'webhooks_authorisation_success_checkout_session_id') }
         let!(:payment_session) { create(:payment_session, amount: order.total_minus_store_credits, currency: order.currency, payment_method: payment_method, order: order, adyen_id: 'webhooks_authorisation_success_checkout_session_id') }
 
         context 'with valid payment' do
@@ -57,7 +54,7 @@ RSpec.describe SpreeAdyen::WebhooksController, type: :controller do
             end
 
             it 'completes the payment' do
-              expect { subject }.to change { payment.reload.state }.from('checkout').to('completed')
+              expect { subject }.to change { payment.reload.state }.from('processing').to('completed')
 
               expect(response).to have_http_status(:ok)
             end
@@ -80,7 +77,7 @@ RSpec.describe SpreeAdyen::WebhooksController, type: :controller do
             end
 
             it 'completes the payment' do
-              expect { subject }.to change { payment.reload.state }.from('checkout').to('completed')
+              expect { subject }.to change { payment.reload.state }.from('processing').to('completed')
 
               expect(response).to have_http_status(:ok)
             end
@@ -101,7 +98,40 @@ RSpec.describe SpreeAdyen::WebhooksController, type: :controller do
           end
         end
 
-        xcontext 'with failed payment' do
+        context 'with failed payment' do
+          let(:params) { JSON.parse(file_fixture('webhooks/authorised/failure.json').read) }
+
+          context 'with not completed order' do
+            it 'does not complete the order' do
+              expect { subject }.not_to change { order.reload.completed? }
+
+              expect(response).to have_http_status(:ok)
+            end
+          end
+
+          context 'with completed order' do
+            let(:order) { create(:order_with_line_items, state: 'complete', completed_at: Time.current) }
+            let!(:payment) { create(:payment, state: 'processing', skip_source_requirement: true, payment_method: payment_method, source: nil, order: order, amount: order.total_minus_store_credits, response_code: 'webhooks_authorisation_success_checkout_session_id') }
+
+            context 'with the same payment' do
+              it 'raises an error' do
+                expect { subject }.to raise_error(SpreeAdyen::Webhooks::Errors::FailureForCompleteOrder)
+
+                expect(response).to have_http_status(:ok)
+              end
+            end
+
+            context 'with another payment' do
+              let(:order) { create(:order_with_line_items, state: 'payment') }
+              let!(:payment) { create(:payment, state: 'processing', skip_source_requirement: true, payment_method: payment_method, source: nil, order: order, amount: order.total_minus_store_credits, response_code: 'webhooks_authorisation_success_checkout_session_id') }
+
+              it 'does not complete the order' do
+                expect { subject }.not_to change { order.reload.completed? }
+
+                expect(response).to have_http_status(:ok)
+              end
+            end
+          end
         end
       end
     end

@@ -2,7 +2,6 @@ module SpreeAdyen
   module Payments
     class RequestPayloadPresenter
       DEFAULT_PARAMS = {
-        channel: 'Web',
         recurringProcessingModel: 'UnscheduledCardOnFile',
         shopperInteraction: 'ContAuth'
       }.freeze
@@ -25,6 +24,7 @@ module SpreeAdyen
           },
           reference: gateway_options[:order_id],
           shopperReference: shopper_reference,
+          channel: SpreeAdyen::Config.channel,
           merchantAccount: source.payment_method.preferred_merchant_account
         }.merge!(DEFAULT_PARAMS)
       end

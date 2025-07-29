@@ -7,7 +7,7 @@
           "tokenization.shopperReference": "YOUR_SHOPPER_REFERENCE",
           "tokenization.storedPaymentMethodId": "M5N7TQ4TG5PFWR50",
           "tokenization.store.operationType": "created",
-          "sessionId": "1234567890"
+          "checkoutSessionId": "webhooks_authorisation_success_checkout_session_id"
         },
         "amount": {
           "currency": "EUR",
