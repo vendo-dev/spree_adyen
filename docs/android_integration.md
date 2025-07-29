@@ -38,8 +38,8 @@ val sessionModel = SessionModel.SERIALIZER.deserialize(sessionsResponseJSON)
 ```
 
 sessionsResponseJSON should contain:
-- `sessionData` - available as `adyen_data` in spree_adyen API response
-- `id` - available as `adyen_id` in spree_adyen API response
+- `sessionData` - available as `adyen_data` in payment_session API response
+- `id` - available as `adyen_id` in payment_session API response
 
 
 ## Step 3
