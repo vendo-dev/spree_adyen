@@ -130,9 +130,6 @@ Example:
 
 # Get payment outcome
 
-The are two possible ways to achieve this at the moment:
-
-or just:
 1. Wait for backend to process the payment
 2. Continue shopping experience
 
@@ -144,3 +141,8 @@ backend will change the state of `payment_session` to one of the following state
 - completed - payment resulted in success, order has been completed
 - canceled - payment canceled
 - refused - payment failed
+
+2. Continue shopping experience
+
+if succeed - order is processed and completed
+if failed - payment can be retried using new payment session
