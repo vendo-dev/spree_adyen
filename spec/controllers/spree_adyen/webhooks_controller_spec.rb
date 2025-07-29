@@ -14,8 +14,12 @@ RSpec.describe SpreeAdyen::WebhooksController, type: :controller do
 
       describe 'authorisation event' do
         let(:order) { create(:order_with_line_items, state: 'payment') }
-        let!(:payment) { create(:payment, state: 'processing', skip_source_requirement: true, payment_method: payment_method, source: nil, order: order, amount: order.total_minus_store_credits, response_code: 'webhooks_authorisation_success_checkout_session_id') }
+        let(:payment) { create(:payment, state: 'processing', skip_source_requirement: true, payment_method: payment_method, source: nil, order: order, amount: order.total_minus_store_credits, response_code: 'webhooks_authorisation_success_checkout_session_id') }
         let!(:payment_session) { create(:payment_session, amount: order.total_minus_store_credits, currency: order.currency, payment_method: payment_method, order: order, adyen_id: 'webhooks_authorisation_success_checkout_session_id') }
+
+        before do
+          payment
+        end
 
         context 'with valid payment' do
           context 'with other payment (blik)' do
@@ -50,6 +54,16 @@ RSpec.describe SpreeAdyen::WebhooksController, type: :controller do
 
               expect(payment.reload.source).to be_a(SpreeAdyen::PaymentSources::Blik)
               expect(response).to have_http_status(:ok)
+            end
+
+            context 'without payment' do
+              let(:payment) { nil }
+
+              it 'creates a payment' do
+                perform_enqueued_jobs do
+                  expect { subject }.to change { order.payments.count }.by(1)
+                end
+              end
             end
           end
 
@@ -93,6 +107,16 @@ RSpec.describe SpreeAdyen::WebhooksController, type: :controller do
 
               expect(response).to have_http_status(:ok)
             end
+
+            context 'without payment' do
+              let(:payment) { nil }
+
+              it 'creates a payment' do
+                perform_enqueued_jobs do
+                  expect { subject }.to change { order.payments.count }.by(1)
+                end
+              end
+            end
           end
         end
 
@@ -133,6 +157,16 @@ RSpec.describe SpreeAdyen::WebhooksController, type: :controller do
                 end
 
                 expect(response).to have_http_status(:ok)
+              end
+            end
+          end
+
+          context 'without payment' do
+            let(:payment) { nil }
+
+            it 'creates a payment' do
+              perform_enqueued_jobs do
+                expect { subject }.to change { order.payments.count }.by(1)
               end
             end
           end

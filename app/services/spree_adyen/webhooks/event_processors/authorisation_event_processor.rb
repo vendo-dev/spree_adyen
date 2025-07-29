@@ -7,9 +7,7 @@ module SpreeAdyen
         end
 
         def call
-          # it is possible that the payment is not created yet, so we should retry the job
-          validate_payment!
-
+          payment.started_processing!
           payment.update!(source: SpreeAdyen::Webhooks::Actions::CreateSource.new(event: event).call)
 
           if event.success?
@@ -24,12 +22,6 @@ module SpreeAdyen
         attr_reader :event
 
         delegate :order, to: :payment_session
-
-        def validate_payment!
-          return if payment.present?
-
-          raise SpreeAdyen::Webhooks::Errors::PaymentNotFound.new(order_id: order.id)
-        end
 
         def handle_success
           payment.complete! if payment.processing?
@@ -48,8 +40,13 @@ module SpreeAdyen
         end
 
         def payment
-          @payment ||= order.payments.find_by(response_code: payment_session.adyen_id).tap do |payment|
-            # payment.skip_source_requirement = true
+          @payment ||= order.payments.first_or_initialize(
+            response_code: payment_session.adyen_id,
+            payment_method: payment_session.payment_method,
+            amount: order.total_minus_store_credits,
+            order: order
+          ).tap do |payment|
+            payment.skip_source_requirement = true
           end
         end
 
