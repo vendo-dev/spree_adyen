@@ -7,6 +7,10 @@ module SpreeAdyen
 
           attributes :adyen_id, :amount, :currency, :adyen_data, :status, :expires_at
 
+          attribute :client_key do |object|
+            object.payment_method.preferred_client_key
+          end
+
           belongs_to :order, serializer: ::Spree::Api::Dependencies.storefront_cart_serializer.constantize
           belongs_to :payment_method, serializer: ::Spree::Api::Dependencies.storefront_payment_method_serializer.constantize
           belongs_to :user, serializer: ::Spree::Api::Dependencies.storefront_user_serializer.constantize

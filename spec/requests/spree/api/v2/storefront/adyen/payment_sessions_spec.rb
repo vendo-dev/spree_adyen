@@ -4,7 +4,7 @@ RSpec.describe 'API V2 Storefront Adyen Payment Sessions', type: :request do
   let(:store) { Spree::Store.default }
   let(:user) { create(:user) }
   let(:order) { create(:order_with_line_items, user: nil, store: store, state: :payment, total: 100) }
-  let!(:adyen_gateway) { create(:adyen_gateway, stores: [store]) }
+  let!(:adyen_gateway) { create(:adyen_gateway, stores: [store], preferred_client_key: 'test_client_key') }
   let(:order_token) { order.token }
 
   let(:headers) {
@@ -48,6 +48,7 @@ RSpec.describe 'API V2 Storefront Adyen Payment Sessions', type: :request do
             expect(json_data['attributes']['amount']).to eq(amount.to_f.to_s)
             expect(json_data['attributes']['status']).to eq('initial')
             expect(json_data['attributes']['adyen_id']).to be_present
+            expect(json_data['attributes']['client_key']).to eq('test_client_key')
             expect(json_data['attributes']['adyen_data']).to be_present
 
             # Verify relationships
