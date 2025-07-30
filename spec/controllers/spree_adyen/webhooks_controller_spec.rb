@@ -137,10 +137,11 @@ RSpec.describe SpreeAdyen::WebhooksController, type: :controller do
             let(:order) { create(:order_with_line_items, state: 'complete', completed_at: Time.current) }
             let!(:payment) { create(:payment, state: 'processing', skip_source_requirement: true, payment_method: payment_method, source: nil, order: order, amount: order.total_minus_store_credits, response_code: 'webhooks_authorisation_success_checkout_session_id') }
 
+
             context 'with the same payment' do
-              it 'raises an error' do
+              it 'reports an error' do
                 perform_enqueued_jobs do
-                  expect { subject }.to raise_error(SpreeAdyen::Webhooks::Errors::FailureForCompleteOrder)
+                  expect { subject }.to raise_error(ActiveSupport::ErrorReporter::UnexpectedError)
                 end
 
                 expect(response).to have_http_status(:ok)

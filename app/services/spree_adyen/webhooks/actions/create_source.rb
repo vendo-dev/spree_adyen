@@ -78,8 +78,9 @@ module SpreeAdyen
           grabpay_SG: SpreeAdyen::PaymentSources::Grabpay
         }.freeze
 
-        def initialize(event:)
+        def initialize(event:, payment_session:)
           @event = event
+          @payment_session = payment_session
         end
 
         def call
@@ -104,13 +105,9 @@ module SpreeAdyen
 
         private
 
-        attr_reader :event
+        attr_reader :event, :payment_session
 
         delegate :payment_method_reference, to: :event
-
-        def payment_session
-          @payment_session ||= SpreeAdyen::PaymentSession.find_by!(adyen_id: event.session_id)
-        end
 
         def source_klass_factory
           SOURCE_KLASS_MAP[event.payment_method_reference] ||= SpreeAdyen::PaymentSources::Unknown

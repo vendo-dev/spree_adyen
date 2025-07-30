@@ -5,6 +5,10 @@ module SpreeAdyen
         @event_data = event_data.deep_stringify_keys
       end
 
+      def id
+        @id ||= body['pspReference']
+      end
+
       def payload
         event_data
       end
