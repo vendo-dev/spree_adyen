@@ -70,7 +70,8 @@ RSpec.describe SpreeAdyen::Webhooks::Actions::CreateSource do
           {
             "NotificationRequestItem": {
               "additionalData": {
-                'checkoutSessionId': session.adyen_id
+                'checkoutSessionId': session.adyen_id,
+                'metadata.payment_method_id': session.payment_method_id
               },
               "amount": {
                 "currency": "EUR",

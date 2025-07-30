@@ -3,6 +3,7 @@ module SpreeAdyen
     preference :merchant_account, :string
     preference :api_key, :password
     preference :client_key, :password
+    preference :hmac_key, :password
     preference :test_mode, :boolean, default: true
 
     has_many :payment_sessions, class_name: 'SpreeAdyen::PaymentSession',
@@ -85,7 +86,8 @@ module SpreeAdyen
         order: order,
         amount: amount_in_cents,
         user: order.user,
-        merchant_account: preferred_merchant_account
+        merchant_account: preferred_merchant_account,
+        payment_method: self
       ).to_h
 
       response = send_request do

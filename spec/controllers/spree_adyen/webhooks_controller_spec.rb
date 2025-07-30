@@ -6,12 +6,43 @@ RSpec.describe SpreeAdyen::WebhooksController, type: :controller do
   include ActiveJob::TestHelper
   render_views
 
-  let(:payment_method) { create(:adyen_gateway) }
+  let(:payment_method) { create(:adyen_gateway, preferred_hmac_key: 'hmac_key') }
+  let(:valid_hmac) { true }
+
+  before do
+    allow_any_instance_of(Adyen::Utils::HmacValidator).to receive(:valid_webhook_hmac?).and_return(valid_hmac)
+    allow_any_instance_of(SpreeAdyen::Webhooks::Event).to receive(:payment_method_id).and_return(payment_method.id)
+  end
+
 
   describe 'POST #create' do
-    describe 'full webhook flow' do
-      subject { post :create, body: params.to_json }
+    subject { post :create, params: params, as: :json }
+    
+    describe 'hmac validation' do
+      let(:params) { JSON.parse(file_fixture('webhooks/authorised/success.json').read) }
 
+      context 'with valid hmac' do
+        let(:valid_hmac) { true }
+
+        it 'returns ok' do
+          subject
+
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+      context 'with invalid hmac' do
+        let(:valid_hmac) { false }
+
+        it 'returns unauthorized' do
+          subject
+
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+    end
+
+    describe 'full webhook flow' do
       describe 'authorisation event' do
         let(:order) { create(:order_with_line_items, state: 'payment') }
         let(:payment) { create(:payment, state: 'processing', skip_source_requirement: true, payment_method: payment_method, source: nil, order: order, amount: order.total_minus_store_credits, response_code: 'webhooks_authorisation_success_checkout_session_id') }

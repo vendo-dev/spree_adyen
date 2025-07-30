@@ -1,11 +1,12 @@
 require 'spec_helper'
 
 RSpec.describe SpreeAdyen::PaymentSessions::RequestPayloadPresenter do
-  subject(:serializer) { described_class.new(order: order, amount: amount, user: user, merchant_account: merchant_account) }
+  subject(:serializer) { described_class.new(order: order, amount: amount, user: user, merchant_account: merchant_account, payment_method: payment_method) }
 
   let(:order) { create(:order, bill_address: bill_address, number: 'R123456789', user: user, currency: 'USD', line_items: [line_item]) }
   let(:user) { create(:user, email: 'test@example.com', first_name: 'John', last_name: 'Doe') }
   let(:amount) { 100 }
+  let(:payment_method) { create(:adyen_gateway) }
   let(:merchant_account) { 'SpreeCommerceECOM' }
   let(:line_items) { [line_item] }
   let(:line_item) { build(:line_item, price: 100, variant: variant) }
@@ -15,6 +16,9 @@ RSpec.describe SpreeAdyen::PaymentSessions::RequestPayloadPresenter do
   context 'with valid params' do
     let(:expected_payload) do
       {
+        metadata: {
+          payment_method_id: payment_method.id
+        },
         amount: {
           value: amount * 100,
           currency: order.currency
@@ -38,7 +42,6 @@ RSpec.describe SpreeAdyen::PaymentSessions::RequestPayloadPresenter do
         merchantAccount: merchant_account,
         merchantOrderReference: 'R123456789',
         expiresAt: 60.minutes.from_now.iso8601,
-        additionalData: { spree_order_id: order.id },
         channel: 'Web',
         shopperName: {
           firstName: 'John',

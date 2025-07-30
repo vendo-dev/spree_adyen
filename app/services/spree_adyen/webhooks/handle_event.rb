@@ -5,8 +5,8 @@ module SpreeAdyen
         'AUTHORISATION' => SpreeAdyen::Webhooks::ProcessAuthorisationEventJob
       }.freeze
 
-      def initialize(raw_data:)
-        @raw_data = raw_data
+      def initialize(event_payload:)
+        @event_payload = event_payload
       end
 
       def call
@@ -20,19 +20,12 @@ module SpreeAdyen
       end
 
       def event
-        @event ||= SpreeAdyen::Webhooks::Event.new(event_data: parsed_event_data)
-      end
-
-      def parsed_event_data
-        JSON.parse(raw_data)
-      rescue JSON::ParserError => e
-        Rails.logger.error("Failed to parse event data: #{raw_data}")
-        raise e
+        @event ||= SpreeAdyen::Webhooks::Event.new(event_data: event_payload)
       end
 
       private
 
-      attr_reader :raw_data
+      attr_reader :event_payload
 
       delegate :id, to: :event, prefix: true
     end

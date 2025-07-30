@@ -7,15 +7,19 @@ module SpreeAdyen
         storePaymentMethodMode: 'enabled'
       }.freeze
 
-      def initialize(order:, amount:, user:, merchant_account:)
+      def initialize(order:, amount:, user:, merchant_account:, payment_method:)
         @order = order
         @amount = amount
         @user = user
         @merchant_account = merchant_account
+        @payment_method = payment_method
       end
 
       def to_h
         {
+          metadata: {
+            payment_method_id: payment_method.id # this is needed to validate hmac in webhooks controller
+          },
           amount: {
             value: Spree::Money.new(amount, currency: currency).cents,
             currency: currency
@@ -27,14 +31,13 @@ module SpreeAdyen
           lineItems: line_items,
           merchantAccount: merchant_account,
           merchantOrderReference: order_number,
-          expiresAt: expires_at,
-          additionalData: { spree_order_id: order.id }
+          expiresAt: expires_at
         }.merge!(shopper_details, DEFAULT_PARAMS)
       end
 
       private
 
-      attr_reader :order, :amount, :user, :merchant_account
+      attr_reader :order, :amount, :user, :merchant_account, :payment_method
 
       delegate :number, to: :order, prefix: true
       delegate :currency, to: :order
