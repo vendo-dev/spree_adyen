@@ -9,10 +9,10 @@ module SpreeAdyen
         def call
           Rails.logger.info("[adyen-webhook][#{event_id}]: Started processing")
           payment_session = SpreeAdyen::PaymentSession.find_by!(adyen_id: event.session_id)
-          source = SpreeAdyen::Webhooks::Actions::CreateSource.new(event: event, payment_session: payment_session).call
           order = payment_session.order
 
           order.with_lock do
+            source = SpreeAdyen::Webhooks::Actions::CreateSource.new(event: event, payment_session: payment_session).call
             # create or find payment
             # atm payment should be already created for web channel (but there is no payment for mobile channels)
             payment_session.lock!
