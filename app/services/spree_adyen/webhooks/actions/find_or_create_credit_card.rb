@@ -2,10 +2,9 @@ module SpreeAdyen
   module Webhooks
     module Actions
       class FindOrCreateCreditCard
-        def initialize(event:, gateway:, user: nil)
+        def initialize(event:, gateway:)
           @event = event
           @gateway = gateway
-          @user = user
         end
 
         def call
@@ -18,7 +17,7 @@ module SpreeAdyen
 
         private
 
-        attr_reader :event, :gateway, :user
+        attr_reader :event, :gateway
 
         def payment_session
           @payment_session ||= SpreeAdyen::PaymentSession.find_by!(adyen_id: event.session_id)

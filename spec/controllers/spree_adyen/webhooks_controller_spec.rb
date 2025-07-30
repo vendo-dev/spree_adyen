@@ -141,7 +141,9 @@ RSpec.describe SpreeAdyen::WebhooksController, type: :controller do
             context 'with the same payment' do
               it 'reports an error' do
                 perform_enqueued_jobs do
-                  expect { subject }.to raise_error(ActiveSupport::ErrorReporter::UnexpectedError)
+                  expect(Rails.error).to receive(:unexpected).with('Payment failed for previously completed order', context: { order_id: order.id, event: anything }, source: 'spree_adyen')
+
+                  subject
                 end
 
                 expect(response).to have_http_status(:ok)

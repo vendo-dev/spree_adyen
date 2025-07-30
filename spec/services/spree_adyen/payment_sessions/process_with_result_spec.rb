@@ -81,7 +81,7 @@ RSpec.describe SpreeAdyen::PaymentSessions::ProcessWithResult do
       end
     end
 
-    it 'creates a failed with processing status' do
+    it 'creates a payment with failed status' do
       VCR.use_cassette('payment_session_results/success/expired') do
         expect { service }.to change(Spree::Payment, :count).by(1)
 

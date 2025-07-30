@@ -30,7 +30,7 @@ module SpreeAdyen
             else
               payment.failure!
               payment_session.refuse
-              if order.complete?
+              if order.completed?
                 Rails.error.unexpected('Payment failed for previously completed order', context: { order_id: order.id, event: event.payload },
                                                                                         source: 'spree_adyen')
               end
