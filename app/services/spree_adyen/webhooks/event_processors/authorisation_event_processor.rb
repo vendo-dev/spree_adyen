@@ -14,11 +14,12 @@ module SpreeAdyen
 
           order.with_lock do
             # create or find payment
-            # atm payment should already created for web channel (but there is no payment for mobile channels)
+            # atm payment should be already created for web channel (but there is no payment for mobile channels)
+            payment_session.lock!
             payment = Spree::Payment.find_or_create_by(
               response_code: payment_session.adyen_id,
               payment_method: payment_session.payment_method,
-              amount: order.total_minus_store_credits,
+              amount: payment_session.amount,
               order: order
             ).tap { |payment| payment.skip_source_requirement = true }
             payment.update!(source: source, state: 'processing')

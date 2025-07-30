@@ -2,7 +2,13 @@ module SpreeAdyen
   module Webhooks
     class CreditCardPresenter
       CREDIT_CARD_BRANDS = {
-        'mc' => 'master'
+        'mc' => 'master',
+        'maestro' => 'master',
+        'amex' => 'american_express',
+        'cartebancaire' => 'cartes_bancaires',
+        'diners' => 'diners_club',
+        'eftpos_australia' => 'eftpos_au',
+        'googlepay' => 'google_pay'
       }.freeze
 
       def initialize(event)
