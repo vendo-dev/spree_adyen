@@ -12,10 +12,13 @@ module SpreeAdyen
 
     # GET /adyen/payment_sessions
     def show
-      @payment_session = SpreeAdyen::PaymentSession.find_by(adyen_id: params[:sessionId])
+      @payment_session = SpreeAdyen::PaymentSession.find_by!(adyen_id: params[:sessionId])
       @order = @payment_session.order
       # handle duplicated requests or already processed through webhook
-      unless @payment_session.initial?
+      if @payment_session.canceled? || @order.canceled?
+        redirect_to spree.cart_path, status: :see_other
+        return
+      elsif @order.completed?
         redirect_to spree.checkout_complete_path(@order.token), status: :see_other
         return
       end
@@ -26,6 +29,8 @@ module SpreeAdyen
         handle_success
       elsif @payment_session.pending?
         handle_pending_payment
+      elsif @payment_session.canceled?
+        redirect_to spree.checkout_path(@order.token), status: :see_other
       elsif @payment_session.refused?
         handle_failure
       end

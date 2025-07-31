@@ -3,7 +3,7 @@ require 'spec_helper'
 RSpec.describe SpreeAdyen::PaymentSessions::RequestPayloadPresenter do
   subject(:serializer) { described_class.new(order: order, amount: amount, user: user, merchant_account: merchant_account, payment_method: payment_method) }
 
-  let(:order) { create(:order, bill_address: bill_address, number: 'R123456789', user: user, currency: 'USD', line_items: [line_item]) }
+  let(:order) { create(:order, bill_address: bill_address, number: 'R123456789', total: 100, user: user, currency: 'USD', line_items: [line_item]) }
   let(:user) { create(:user, email: 'test@example.com', first_name: 'John', last_name: 'Doe') }
   let(:amount) { 100 }
   let(:payment_method) { create(:adyen_gateway) }
@@ -28,7 +28,7 @@ RSpec.describe SpreeAdyen::PaymentSessions::RequestPayloadPresenter do
         recurringProcessingModel: "UnscheduledCardOnFile",
         shopperInteraction: "Ecommerce",
         storePaymentMethodMode: "enabled",
-        reference: 'R123456789',
+        reference: expected_reference,
         countryCode: bill_address.country_iso,
         lineItems: [
           {
@@ -53,11 +53,25 @@ RSpec.describe SpreeAdyen::PaymentSessions::RequestPayloadPresenter do
       }
     end
 
+    let(:expected_reference) { 'R123456789_1' }
+
     describe '#to_h' do
       subject(:payload) { serializer.to_h }
 
       it 'returns a valid payload' do
         expect(payload).to eq(expected_payload)
+      end
+
+      context 'when payment session already exists' do
+        let(:expected_reference) { 'R123456789_2' }
+
+        before do
+          create(:payment_session, deleted_at: 1.day.ago, amount: order.total_minus_store_credits, order: order, adyen_id: 'CS4FBB6F827EC53AC7')
+        end
+
+        it 'returns a valid payload' do
+          expect(payload).to eq(expected_payload)
+        end
       end
     end
   end
