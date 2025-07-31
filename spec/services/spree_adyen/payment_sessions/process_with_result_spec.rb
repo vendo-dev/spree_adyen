@@ -13,6 +13,19 @@ RSpec.describe SpreeAdyen::PaymentSessions::ProcessWithResult do
       end
     end
 
+    context 'when void payment exists for other payment session' do
+      let!(:void_payment) { create(:payment, order: payment_session.order, state: 'void') }
+
+      it 'creates a new payment with completed status' do
+        VCR.use_cassette('payment_session_results/success/completed') do
+          expect { service }.to change(Spree::Payment, :count).by(1)
+  
+          expect(payment_session.order.payments).to be_present
+          expect(payment_session.order.payments.last.state).to eq('completed')
+        end
+      end
+    end
+
     it 'creates a payment with completed status' do
       VCR.use_cassette('payment_session_results/success/completed') do
         expect { service }.to change(Spree::Payment, :count).by(1)
