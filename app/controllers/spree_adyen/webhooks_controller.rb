@@ -4,7 +4,7 @@ module SpreeAdyen
     before_action :validate_hmac!
 
     def create
-      SpreeAdyen::Webhooks::HandleEvent.new(event_data: request.body.read).call
+      SpreeAdyen::Webhooks::HandleEvent.new(event_payload: webhook_params).call
 
       head :ok
     end
@@ -12,27 +12,23 @@ module SpreeAdyen
     private
 
     def validate_hmac!
-      return if hmac_keys.any? do |key|
-        params.require(:webhook)[:notificationItems].all? do |item|
-          Adyen::Utils::HmacValidator.new.valid_webhook_hmac?(item, key)
-        end
-      end
+      event = SpreeAdyen::Webhooks::Event.new(event_data: webhook_params)
+      gateway = SpreeAdyen::Gateway.find(event.payment_method_id)
+      return if Adyen::Utils::HmacValidator.new.valid_webhook_hmac?(
+        webhook_params.dig('notificationItems', 0, 'NotificationRequestItem'),
+        gateway.preferred_hmac_key
+      )
 
-      # TODO: log failed hmac validation
+      Rails.logger.error("[SpreeAdyen][#{event.id}]: Failed to validate hmac")
 
       head :unauthorized
     end
 
-    def permitted_params
-      params.require(:webhook)
-    end
-
-    # https://docs.adyen.com/development-resources/webhooks/verify-hmac-signatures/
-    # If you generate a new HMAC key, make sure that you can still accept webhooks signed with your previous HMAC key for some time, because:
-    # - It can take some time to propagate the new key in our infrastructure.
-    # - HMAC signatures are calculated when the webhook payload is generated, so any webhook events queued before you saved the new key are signed using your previous key.
-    def hmac_keys
-      [ENV['ADYEN_WEBHOOK_HMAC_1'], ENV['ADYEN_WEBHOOK_HMAC_2']]
+    def webhook_params
+      params.require(:webhook).permit(
+        :live,
+        notificationItems: [{ NotificationRequestItem: {} }]
+      )
     end
   end
 end

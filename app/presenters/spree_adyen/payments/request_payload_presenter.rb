@@ -2,7 +2,6 @@ module SpreeAdyen
   module Payments
     class RequestPayloadPresenter
       DEFAULT_PARAMS = {
-        channel: 'Web',
         recurringProcessingModel: 'UnscheduledCardOnFile',
         shopperInteraction: 'ContAuth'
       }.freeze
@@ -15,6 +14,10 @@ module SpreeAdyen
 
       def to_h
         {
+          metadata: {
+            spree_payment_method_id: source.payment_method_id, # this is needed to validate hmac in webhooks controller
+            spree_order_id: order_number
+          },
           amount: {
             value: amount_in_cents,
             currency: currency
@@ -25,6 +28,7 @@ module SpreeAdyen
           },
           reference: gateway_options[:order_id],
           shopperReference: shopper_reference,
+          channel: SpreeAdyen::Config.channel,
           merchantAccount: source.payment_method.preferred_merchant_account
         }.merge!(DEFAULT_PARAMS)
       end

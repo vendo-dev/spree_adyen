@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe SpreeAdyen::Webhooks::Actions::CreateSource do
-  subject(:service) { described_class.new(event: event).call }
+  subject(:service) { described_class.new(event: event, payment_session: session).call }
 
   let(:event) { SpreeAdyen::Webhooks::Event.new(event_data: event_data) }
 
@@ -70,7 +70,8 @@ RSpec.describe SpreeAdyen::Webhooks::Actions::CreateSource do
           {
             "NotificationRequestItem": {
               "additionalData": {
-                'checkoutSessionId': session.adyen_id
+                'checkoutSessionId': session.adyen_id,
+                'metadata.payment_method_id': session.payment_method_id
               },
               "amount": {
                 "currency": "EUR",

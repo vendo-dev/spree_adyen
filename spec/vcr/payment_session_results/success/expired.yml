@@ -65,5 +65,5 @@ http_interactions:
       - 95b7eb8dd9b2ee47-WAW
     body:
       encoding: ASCII-8BIT
-      string: '{"additionalData":{"isCardCommercial":"unknown","recurringProcessingModel":"CardOnFile","paymentMethod":"mc","tokenization.shopperReference":"foobar","tokenization.storedPaymentMethodId":"LH9XQ2ZBCFVJPPT5"},"id":"CS4FBB6F827EC53AC7","payments":[{"amount":{"currency":"EUR","value":1000},"paymentMethod":{"brand":"mc","type":"scheme"},"pspReference":"VMLWMSBWZZSBJWT5","resultCode":"Authorised"}],"reference":"d84f20d9-4a06-4173-96ca-02486188e192","status":"paymentPending"}'
+      string: '{"additionalData":{"isCardCommercial":"unknown","recurringProcessingModel":"CardOnFile","paymentMethod":"mc","tokenization.shopperReference":"foobar","tokenization.storedPaymentMethodId":"LH9XQ2ZBCFVJPPT5"},"id":"CS4FBB6F827EC53AC7","payments":[{"amount":{"currency":"EUR","value":1000},"paymentMethod":{"brand":"mc","type":"scheme"},"pspReference":"VMLWMSBWZZSBJWT5","resultCode":"Authorised"}],"reference":"d84f20d9-4a06-4173-96ca-02486188e192","status":"expired"}'
   recorded_at: Mon, 07 Jul 2025 14:09:31 GMT

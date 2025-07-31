@@ -10,6 +10,7 @@ module SpreeAdyen
     # preference :supported_locales, :array, default: [:en]
 
     preference :payment_session_expiration_in_minutes, :integer, default: 60
+    preference :webhook_delay_in_seconds, :integer, default: 5
     preference :channel, :string, default: 'Web'
   end
 end

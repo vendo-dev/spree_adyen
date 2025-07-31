@@ -4,31 +4,33 @@
     {
       "NotificationRequestItem": {
         "additionalData": {
-          "tokenization.shopperReference": "YOUR_SHOPPER_REFERENCE",
-          "tokenization.storedPaymentMethodId": "M5N7TQ4TG5PFWR50",
-          "tokenization.store.operationType": "created",
-          "expiryDate": "03/2030",
-          "cardSummary": "1111",
-          "cardBin": "411111",
-          "authCode": "033899",
-          "sessionId": "1234567890"
+          "expiryDate": "12/2077",
+          "authCode": "1234",
+          "cardSummary": "7777",
+          "totalFraudScore": "10",
+          "hmacSignature": "8XYK/YLak7UP3gA2MPdXuaS51JK6OrP/FMwA/UwXdIs=",
+          "NAME2": "VALUE2",
+          "NAME1": "VALUE1",
+          "storedPaymentMethodId": "webhooks_authorisation_success_stored_payment_method_id",
+          "checkoutSessionId": "webhooks_authorisation_success_checkout_session_id",
+          "fraudCheck-6-ShopperIpUsage": "10"
         },
         "amount": {
           "currency": "EUR",
-          "value": 1000
+          "value": 10100
         },
         "eventCode": "AUTHORISATION",
-        "eventDate": "2021-01-01T01:00:00+01:00",
-        "merchantAccountCode": "YOUR_MERCHANT_ACCOUNT",
-        "merchantReference": "YOUR_MERCHANT_REFERENCE",
-        "paymentMethod": "ach",
+        "eventDate": "2025-07-25T15:40:40+02:00",
+        "merchantAccountCode": "SpreeCommerceECOM",
+        "merchantReference": "8313842560770001",
         "operations": [
           "CANCEL",
           "CAPTURE",
           "REFUND"
         ],
-        "pspReference": "QFQTPCQ8HXSKGK82",
-        "reason": "null",
+        "paymentMethod": "mc",
+        "pspReference": "SV6HL28S77MNK375",
+        "reason": "1234:7777:12/2012",
         "success": "true"
       }
     }

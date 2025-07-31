@@ -7,37 +7,50 @@ module SpreeAdyen
         end
 
         def call
-          if event.success?
-            handle_success
-          else
-            handle_failure
+          Rails.logger.info("[SpreeAdyen][#{event_id}]: Started processing")
+          payment_session = SpreeAdyen::PaymentSession.find_by!(adyen_id: event.session_id)
+          order = payment_session.order
+
+          order.with_lock do
+            source = SpreeAdyen::Webhooks::Actions::CreateSource.new(event: event, payment_session: payment_session).call
+            # create or find payment
+            # atm payment should be already created for web channel (but there is no payment for mobile channels)
+            payment_session.lock!
+            payment = Spree::Payment.find_or_initialize_by(
+              response_code: payment_session.adyen_id,
+              payment_method: payment_session.payment_method
+            ).tap do |payment|
+              payment.assign_attributes(
+                skip_source_requirement: true,
+                amount: payment_session.amount,
+                order: order,
+                source: source,
+                state: 'processing'
+              )
+              payment.save!
+            end
+
+            if event.success?
+              payment.complete! if payment.processing?
+              payment_session.complete
+              Spree::Dependencies.checkout_complete_service.constantize.call(order: order) unless order.completed?
+            else
+              payment.failure!
+              payment_session.refuse
+              if order.completed?
+                Rails.error.unexpected('Payment failed for previously completed order', context: { order_id: order.id, event: event.payload },
+                                                                                        source: 'spree_adyen')
+              end
+            end
           end
+          Rails.logger.info("[SpreeAdyen][#{event_id}]: Finished processing")
         end
 
         private
 
         attr_reader :event
 
-        delegate :order, to: :payment_session
-
-        def handle_success
-          create_payment_source
-          complete_order unless order.completed?
-        end
-
-        def create_payment_source
-          payment = order.payments.find_or_initialize_by(response_code: event.psp_reference)
-          payment.source ||= SpreeAdyen::Webhooks::Actions::CreateSource.new(event: event).call
-          payment.save!
-        end
-
-        def handle_failure
-          # TODO: Implement
-        end
-
-        def payment_session
-          @payment_session ||= SpreeAdyen::PaymentSession.find_by!(adyen_id: event.session_id)
-        end
+        delegate :id, to: :event, prefix: true
       end
     end
   end

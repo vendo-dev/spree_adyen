@@ -7,15 +7,33 @@ module SpreeAdyen
       end
 
       def call
-        case status
-        when 'completed'
-          payment_session.complete!
-          create_payment
-          complete_order
-        when 'canceled' then payment_session.cancel!
-        when 'refused' then payment_session.refuse!
-        when 'paymentPending'
-          payment_session.pending!
+        status = payment_session.payment_method.payment_session_result(payment_session.adyen_id, session_result).params.fetch('status')
+
+        order.with_lock do
+          payment = order.payments.first_or_initialize(
+            payment_method: payment_session.payment_method,
+            response_code: payment_session.adyen_id
+          )
+          payment.state = 'processing' if payment.checkout? # it can be already changed by webhook
+          payment.update!(amount: payment_session.amount, skip_source_requirement: true)
+
+          case status
+          when 'completed'
+            payment_session.complete! if payment_session.can_complete?
+            payment.complete! unless payment.completed?
+            Spree::Dependencies.checkout_complete_service.constantize.call(order: order) unless order.completed?
+          when 'canceled'
+            payment.void! if payment.can_void?
+            payment_session.cancel! unless payment_session.canceled?
+          when 'refused', 'expired'
+            payment.failure! unless payment.failed?
+            payment_session.refuse! unless payment_session.refused?
+          when 'paymentPending'
+            payment_session.pending! if payment_session.can_pending? # this can have other status after
+          else
+            Rails.error.unexpected('Unexpected payment status', context: { order_id: order.id, status: status },
+                                                                source: 'spree_adyen')
+          end
         end
       end
 
@@ -24,31 +42,6 @@ module SpreeAdyen
       attr_reader :payment_session, :session_result
 
       delegate :order, to: :payment_session
-
-      def status
-        status_response.params.fetch('status')
-      end
-
-      def create_payment
-        order.payments.build(
-          amount: payment_session.amount,
-          payment_method: payment_session.payment_method,
-          response_code: payment_session.id,
-          source: nil,
-          state: 'completed'
-        ).tap do |payment|
-          payment.skip_source_requirement = true
-          payment.save!
-        end
-      end
-
-      def complete_order
-        Spree::Dependencies.checkout_complete_service.constantize.call(order: order)
-      end
-
-      def status_response
-        @status_response ||= payment_session.payment_method.payment_session_result(payment_session.adyen_id, session_result)
-      end
     end
   end
 end

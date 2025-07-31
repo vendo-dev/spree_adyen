@@ -2,11 +2,19 @@ module SpreeAdyen
   module Webhooks
     class Event
       def initialize(event_data:)
-        @event_data = event_data.deep_stringify_keys
+        @event_data = event_data.to_h.with_indifferent_access
+      end
+
+      def id
+        @id ||= body['pspReference']
       end
 
       def payload
         event_data
+      end
+
+      def payment_method_id
+        @payment_method_id ||= additional_data['metadata.spree_payment_method_id']
       end
 
       def code
@@ -38,7 +46,7 @@ module SpreeAdyen
       end
 
       def stored_payment_method_id
-        @stored_payment_method_id ||= additional_data['storedPaymentMethodId']
+        @stored_payment_method_id ||= additional_data['tokenization.storedPaymentMethodId'] || additional_data['storedPaymentMethodId']
       end
 
       def card_details
@@ -57,16 +65,16 @@ module SpreeAdyen
         @event_date ||= body['eventDate'].to_datetime
       end
 
+      def psp_reference
+        @psp_reference ||= body['pspReference']
+      end
+
       private
 
       attr_reader :event_data
 
       def body
-        @body ||= event_data['notificationItems'][0]['NotificationRequestItem']
-      end
-
-      def psp_reference
-        @psp_reference ||= body['pspReference']
+        @body ||= event_data.dig('notificationItems', 0, 'NotificationRequestItem') || {}
       end
 
       def additional_data
