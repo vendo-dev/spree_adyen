@@ -18,7 +18,7 @@ module SpreeAdyen
       def to_h
         {
           metadata: {
-            payment_method_id: payment_method.id, # this is needed to validate hmac in webhooks controller
+            spree_payment_method_id: payment_method.id, # this is needed to validate hmac in webhooks controller
             spree_order_id: order_number
           },
           amount: {

@@ -14,7 +14,7 @@ module SpreeAdyen
       end
 
       def payment_method_id
-        @payment_method_id ||= additional_data['metadata.payment_method_id']
+        @payment_method_id ||= additional_data['metadata.spree_payment_method_id']
       end
 
       def code
