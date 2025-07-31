@@ -26,6 +26,8 @@ module SpreeAdyen
         handle_success
       elsif @payment_session.pending?
         handle_pending_payment
+      elsif @payment_session.canceled?
+        redirect_to spree.checkout_path(@order.token), status: :see_other
       elsif @payment_session.refused?
         handle_failure
       end
