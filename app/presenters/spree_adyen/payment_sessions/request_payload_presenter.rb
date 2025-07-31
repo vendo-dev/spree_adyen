@@ -27,7 +27,7 @@ module SpreeAdyen
           },
           returnUrl: return_url,
           channel: SpreeAdyen::Config.channel,
-          reference: order_number,
+          reference: reference,
           countryCode: address.country_iso,
           lineItems: line_items,
           merchantAccount: merchant_account,
@@ -42,6 +42,10 @@ module SpreeAdyen
 
       delegate :number, to: :order, prefix: true
       delegate :currency, to: :order
+
+      def reference # reference should be unique for each payment session
+        "#{order.number}_#{order.adyen_payment_sessions.with_deleted.count + 1}"
+      end
 
       def shopper_details
         {

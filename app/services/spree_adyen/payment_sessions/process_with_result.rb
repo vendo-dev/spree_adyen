@@ -7,13 +7,15 @@ module SpreeAdyen
       end
 
       def call
-        status = payment_session.payment_method.payment_session_result(payment_session.adyen_id, session_result).params.fetch('status')
+        response = payment_session.payment_method.payment_session_result(payment_session.adyen_id, session_result)
+        status = response.params.fetch('status')
 
         order.with_lock do
-          payment = order.payments.first_or_initialize(
+          payment = order.payments.where(
             payment_method: payment_session.payment_method,
             response_code: payment_session.adyen_id
-          )
+          ).first_or_initialize
+
           payment.state = 'processing' if payment.checkout? # it can be already changed by webhook
           payment.update!(amount: payment_session.amount, skip_source_requirement: true)
 
