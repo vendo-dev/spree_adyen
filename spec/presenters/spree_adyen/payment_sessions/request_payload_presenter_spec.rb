@@ -17,7 +17,8 @@ RSpec.describe SpreeAdyen::PaymentSessions::RequestPayloadPresenter do
     let(:expected_payload) do
       {
         metadata: {
-          payment_method_id: payment_method.id
+          payment_method_id: payment_method.id,
+          spree_order_id: order.number
         },
         amount: {
           value: amount * 100,
