@@ -68,6 +68,24 @@ RSpec.describe SpreeAdyen::PaymentSessionsController, type: :controller do
       end
     end
 
+    context 'when payment session is expired' do
+      let(:payment_session_id) { 'CS4FBB6F827EC53AC7' }
+
+      it 'redirects to checkout' do
+        VCR.use_cassette('payment_session_results/success/expired') do
+          get :show, params: { sessionId: payment_session.adyen_id, sessionResult: session_result }
+        end
+        expect(response).to redirect_to("/checkout/#{order.token}")
+      end
+
+      it 'fails the payment' do
+        VCR.use_cassette('payment_session_results/success/expired') do
+          get :show, params: { sessionId: payment_session.adyen_id, sessionResult: session_result }
+        end
+        expect(order.payments.first.state).to eq('failed')
+      end
+    end
+
     context 'when payment session is refused' do
       let(:payment_session_id) { 'CS4FBB6F827EC53AC7' }
 
