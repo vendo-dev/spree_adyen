@@ -7,18 +7,22 @@ module SpreeAdyen
       end
 
       def call
-        payment = order.payments.build(
-          amount: payment_session.amount,
-          payment_method: payment_session.payment_method,
-          response_code: payment_session.adyen_id,
-          source: nil,
-          state: 'processing',
-          skip_source_requirement: true
-        )
-
         status = payment_session.payment_method.payment_session_result(payment_session.adyen_id, session_result).params.fetch('status')
 
         order.with_lock do
+          payment = order.payments.first_or_initialize(
+            payment_method: payment_session.payment_method,
+            response_code: payment_session.adyen_id
+          ).tap do |payment|
+            payment.assign_attributes(
+              amount: payment_session.amount,
+              source: nil,
+              state: 'processing',
+              skip_source_requirement: true
+            )
+            payment.save!
+          end
+
           case status
           when 'completed'
             payment_session.complete!
