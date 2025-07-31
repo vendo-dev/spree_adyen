@@ -16,13 +16,20 @@ module SpreeAdyen
             # create or find payment
             # atm payment should be already created for web channel (but there is no payment for mobile channels)
             payment_session.lock!
-            payment = Spree::Payment.find_or_create_by(
+            payment = Spree::Payment.find_or_initialize_by(
               response_code: payment_session.adyen_id,
-              payment_method: payment_session.payment_method,
-              amount: payment_session.amount,
-              order: order
-            ).tap { |payment| payment.skip_source_requirement = true }
-            payment.update!(source: source, state: 'processing')
+              payment_method: payment_session.payment_method
+            ).tap do |payment|
+              payment.assign_attributes(
+                skip_source_requirement: true,
+                amount: payment_session.amount,
+                order: order,
+                source: source,
+                state: 'processing'
+              )
+              payment.save!
+            end
+
             if event.success?
               payment.complete! if payment.processing?
               payment_session.complete

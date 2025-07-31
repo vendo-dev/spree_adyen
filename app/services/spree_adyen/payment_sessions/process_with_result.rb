@@ -7,56 +7,41 @@ module SpreeAdyen
       end
 
       def call
-        build_payment
-        payment.started_processing!
-
-        update_resources_with_status
-      end
-
-      private
-
-      attr_reader :payment_session, :session_result, :payment
-
-      delegate :order, to: :payment_session
-
-      def update_resources_with_status
-        case status
-        when 'completed'
-          payment_session.complete!
-          payment.complete!
-          complete_order
-        when 'canceled'
-          payment.void!
-          payment_session.cancel!
-        when 'refused', 'expired'
-          payment.failure!
-          payment_session.refuse!
-        when 'paymentPending'
-          payment_session.pending!
-        end
-      end
-
-      def status
-        status_response.params.fetch('status')
-      end
-
-      def build_payment
-        @payment = order.payments.build(
+        payment = order.payments.build(
           amount: payment_session.amount,
           payment_method: payment_session.payment_method,
           response_code: payment_session.adyen_id,
           source: nil,
+          state: 'processing',
           skip_source_requirement: true
         )
+
+        status = payment_session.payment_method.payment_session_result(payment_session.adyen_id, session_result).params.fetch('status')
+
+        order.with_lock do
+          case status
+          when 'completed'
+            payment_session.complete!
+            payment.complete!
+            Spree::Dependencies.checkout_complete_service.constantize.call(order: order)
+          when 'canceled'
+            payment.void!
+            payment_session.cancel!
+          when 'refused', 'expired'
+            payment.failure!
+            payment_session.refuse!
+          when 'paymentPending'
+            payment_session.pending!
+            payment.save!
+          end
+        end
       end
 
-      def complete_order
-        Spree::Dependencies.checkout_complete_service.constantize.call(order: order)
-      end
+      private
 
-      def status_response
-        @status_response ||= payment_session.payment_method.payment_session_result(payment_session.adyen_id, session_result)
-      end
+      attr_reader :payment_session, :session_result
+
+      delegate :order, to: :payment_session
     end
   end
 end
