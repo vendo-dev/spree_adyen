@@ -10,11 +10,11 @@ module SpreeAdyen
       end
 
       def call
-        Rails.logger.info("[adyen-webhook][#{event_id}]: Event received")
+        Rails.logger.info("[SpreeAdyen][#{event_id}]: Event received")
         # event not supported - skip
         return unless event.code.in?(EVENT_HANDLERS.keys)
 
-        Rails.logger.info("[adyen-webhook][#{event_id}]: Event queued")
+        Rails.logger.info("[SpreeAdyen][#{event_id}]: Event queued")
         EVENT_HANDLERS[event.code].set(wait: SpreeAdyen::Config.webhook_delay_in_seconds.seconds)
                                   .perform_later(event.payload)
       end

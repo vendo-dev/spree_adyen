@@ -37,6 +37,10 @@ module SpreeAdyen
           when 'paymentPending'
             payment_session.pending!
             payment.save!
+          else
+            payment.save!
+            Rails.error.unexpected('Unexpected payment status', context: { order_id: order.id, status: status },
+                                                                source: 'spree_adyen')
           end
         end
       end

@@ -90,4 +90,14 @@ RSpec.describe SpreeAdyen::PaymentSessions::ProcessWithResult do
       end
     end
   end
+
+  context 'when payment is in other state (should not according to adyen docs but...)' do
+    it 'raises an error' do
+      VCR.use_cassette('payment_session_results/success/other_state') do
+        expect(Rails.error).to receive(:unexpected).with('Unexpected payment status', context: { order_id: payment_session.order.id, status: 'unknown' }, source: 'spree_adyen')
+
+        subject
+      end
+    end
+  end
 end

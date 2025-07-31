@@ -19,7 +19,7 @@ module SpreeAdyen
         gateway.preferred_hmac_key
       )
 
-      Rails.logger.error("[adyen-webhook][#{event.id}]: Failed to validate hmac")
+      Rails.logger.error("[SpreeAdyen][#{event.id}]: Failed to validate hmac")
 
       head :unauthorized
     end

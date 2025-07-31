@@ -7,7 +7,7 @@ module SpreeAdyen
         end
 
         def call
-          Rails.logger.info("[adyen-webhook][#{event_id}]: Started processing")
+          Rails.logger.info("[SpreeAdyen][#{event_id}]: Started processing")
           payment_session = SpreeAdyen::PaymentSession.find_by!(adyen_id: event.session_id)
           order = payment_session.order
 
@@ -43,7 +43,7 @@ module SpreeAdyen
               end
             end
           end
-          Rails.logger.info("[adyen-webhook][#{event_id}]: Finished processing")
+          Rails.logger.info("[SpreeAdyen][#{event_id}]: Finished processing")
         end
 
         private
