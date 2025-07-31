@@ -2,7 +2,7 @@ module SpreeAdyen
   module Webhooks
     class Event
       def initialize(event_data:)
-        @event_data = event_data.deep_stringify_keys
+        @event_data = event_data.to_h.with_indifferent_access
       end
 
       def id
@@ -11,6 +11,10 @@ module SpreeAdyen
 
       def payload
         event_data
+      end
+
+      def payment_method_id
+        @payment_method_id ||= additional_data['metadata.payment_method_id']
       end
 
       def code
