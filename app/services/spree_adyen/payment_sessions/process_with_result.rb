@@ -13,32 +13,24 @@ module SpreeAdyen
           payment = order.payments.first_or_initialize(
             payment_method: payment_session.payment_method,
             response_code: payment_session.adyen_id
-          ).tap do |payment|
-            payment.assign_attributes(
-              amount: payment_session.amount,
-              source: nil,
-              state: 'processing',
-              skip_source_requirement: true
-            )
-            payment.save!
-          end
+          )
+          payment.state = 'processing' if payment.checkout? # it can be already changed by webhook
+          payment.update!(amount: payment_session.amount, skip_source_requirement: true)
 
           case status
           when 'completed'
-            payment_session.complete!
-            payment.complete!
-            Spree::Dependencies.checkout_complete_service.constantize.call(order: order)
+            payment_session.complete! if payment_session.can_complete?
+            payment.complete! unless payment.completed?
+            Spree::Dependencies.checkout_complete_service.constantize.call(order: order) unless order.completed?
           when 'canceled'
-            payment.void!
-            payment_session.cancel!
+            payment.void! if payment.can_void?
+            payment_session.cancel! unless payment_session.canceled?
           when 'refused', 'expired'
-            payment.failure!
-            payment_session.refuse!
+            payment.failure! unless payment.failed?
+            payment_session.refuse! unless payment_session.refused?
           when 'paymentPending'
-            payment_session.pending!
-            payment.save!
+            payment_session.pending! if payment_session.can_pending? # this can have other status after
           else
-            payment.save!
             Rails.error.unexpected('Unexpected payment status', context: { order_id: order.id, status: status },
                                                                 source: 'spree_adyen')
           end
