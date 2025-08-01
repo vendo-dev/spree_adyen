@@ -1,5 +1,5 @@
 module SpreeAdyen
-  class WebhooksController < ApplicationController
+  class WebhooksController < Spree::BaseController
     skip_before_action :verify_authenticity_token
     before_action :validate_hmac!
 
