@@ -13,8 +13,12 @@ module SpreeAdyen
         event_data
       end
 
+      def order_number
+        @order_number ||= merchant_reference.split('_')[0]
+      end
+
       def payment_method_id
-        @payment_method_id ||= additional_data['metadata.spree_payment_method_id']
+        @payment_method_id ||= merchant_reference.split('_')[1]
       end
 
       def code

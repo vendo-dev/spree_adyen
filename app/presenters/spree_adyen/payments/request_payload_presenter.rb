@@ -14,8 +14,8 @@ module SpreeAdyen
 
       def to_h
         {
-          metadata: {
-            spree_payment_method_id: source.payment_method_id, # this is needed to validate hmac in webhooks controller
+          metadata: { # unfortunately metadata is not always available in webhooks, even for AUTHORISATION events
+            spree_payment_method_id: source.payment_method_id,
             spree_order_id: order_number
           },
           amount: {
@@ -26,7 +26,7 @@ module SpreeAdyen
             type: 'scheme',
             storedPaymentMethodId: source.gateway_payment_profile_id
           },
-          reference: gateway_options[:order_id],
+          reference: reference,
           shopperReference: shopper_reference,
           channel: SpreeAdyen::Config.channel,
           merchantAccount: source.payment_method.preferred_merchant_account
@@ -40,6 +40,16 @@ module SpreeAdyen
       delegate :currency, to: :order
       delegate :user, to: :order, allow_nil: true
 
+      # since we cannot count on metadata reference is the simplest way to store data for webhooks
+      # so let's keep its format as ORDERNUMBER_PAYMENTMETHODID_UNIQGUARANTER
+      def reference
+        [
+          order_number,
+          source.payment_method_id,
+          payment_number
+        ].join('_')
+      end
+
       # we need to send reference even for guest users, otherwise we can't tokenize the card
       def shopper_reference
         if user.present?
@@ -51,6 +61,10 @@ module SpreeAdyen
 
       def order_number
         @order_number ||= gateway_options[:order_id].split('-').first
+      end
+
+      def payment_number
+        @payment_number ||= gateway_options[:order_id].split('-').last
       end
 
       def order

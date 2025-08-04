@@ -53,7 +53,7 @@ RSpec.describe SpreeAdyen::PaymentSessions::RequestPayloadPresenter do
       }
     end
 
-    let(:expected_reference) { 'R123456789_1' }
+    let(:expected_reference) { "R123456789_#{payment_method.id}_1" }
 
     describe '#to_h' do
       subject(:payload) { serializer.to_h }
@@ -63,7 +63,7 @@ RSpec.describe SpreeAdyen::PaymentSessions::RequestPayloadPresenter do
       end
 
       context 'when payment session already exists' do
-        let(:expected_reference) { 'R123456789_2' }
+        let(:expected_reference) { "R123456789_#{payment_method.id}_2" }
 
         before do
           create(:payment_session, deleted_at: 1.day.ago, amount: order.total_minus_store_credits, order: order, adyen_id: 'CS4FBB6F827EC53AC7')
