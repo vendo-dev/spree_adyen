@@ -17,8 +17,8 @@ module SpreeAdyen
 
       def to_h
         {
-          metadata: {
-            spree_payment_method_id: payment_method.id, # this is needed to validate hmac in webhooks controller
+          metadata: { # unfortunately metadata is not always available in webhooks, even for AUTHORISATION events
+            spree_payment_method_id: payment_method.id,
             spree_order_id: order_number
           },
           amount: {
@@ -43,8 +43,14 @@ module SpreeAdyen
       delegate :number, to: :order, prefix: true
       delegate :currency, to: :order
 
-      def reference # reference should be unique for each payment session
-        "#{order.number}_#{order.adyen_payment_sessions.with_deleted.count + 1}"
+      # since we cannot count on metadata reference is the simplest way to store data for webhooks
+      # so let's keep its format as ORDERNUMBER_PAYMENTMETHODID_UNIQGUARANTER
+      def reference
+        [
+          order.number,
+          payment_method.id,
+          order.adyen_payment_sessions.with_deleted.count + 1
+        ].join('_')
       end
 
       def shopper_details
