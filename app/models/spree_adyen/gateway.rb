@@ -59,7 +59,9 @@ module SpreeAdyen
 
     def credit(amount_in_cents, _source, payment_id, _gateway_options = {})
       payment = Spree::Payment.find_by(response_code: payment_id)
-      return failure(payment_id, 'Payment not found') unless payment
+      return failure("#{payment_id} - Payment not found") unless payment
+      return failure("#{payment_id} - Amount to refund is negative") if amount_in_cents.negative?
+      return failure("#{payment_id} - Amount to refund is greater than payment amount") if amount_in_cents > payment.amount * 100
 
       payload = SpreeAdyen::RefundPayloadPresenter.new(
         payment: payment,
@@ -72,7 +74,11 @@ module SpreeAdyen
         client.checkout.modifications_api.refund_captured_payment(payload, payment_id, headers: { 'Idempotency-Key' => SecureRandom.uuid })
       end
 
-      success(response.response['pspReference'], response)
+      if response.status.to_i == 201
+        success(response.response['pspReference'], response)
+      else
+        failure(response.response.slice('pspReference', 'message').values.join(' - '))
+      end
     end
 
     def capture(amount_in_cents, payment_session_id, _gateway_options = {})

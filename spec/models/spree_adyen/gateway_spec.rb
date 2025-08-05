@@ -136,5 +136,27 @@ RSpec.describe SpreeAdyen::Gateway do
         expect(subject.params['response']['amount']['value']).to eq(amount_in_cents)
       end 
     end
+
+    context 'if amount to refund is greater than payment amount' do
+      let(:amount_in_cents) { 1100 }
+
+      it 'does not create refund' do
+        expect { subject }.not_to change(Spree::Refund, :count)
+
+        expect(subject.success?).to be false
+        expect(subject.message).to eq('X4G6K4DDZ46B8ZV5 - Amount to refund is greater than payment amount')
+      end
+    end
+
+    context 'if amount to refund is negative' do
+      let(:amount_in_cents) { -1 }
+
+      it 'does not create refund' do
+        expect { subject }.not_to change(Spree::Refund, :count)
+
+        expect(subject.success?).to be false
+        expect(subject.message).to eq('X4G6K4DDZ46B8ZV5 - Amount to refund is negative')
+      end
+    end
   end
 end
