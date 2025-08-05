@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe SpreeAdyen::Gateway do
-  let(:store) { Spree::Store.default }
-  let(:gateway) { create(:adyen_gateway, stores: [store]) }
-  let(:amount) { 100 }
+  subject(:gateway) { create(:adyen_gateway, preferred_api_key: "secret", preferred_merchant_account: 'SpreeCommerceECOM') }
 
   describe '#payment_session_result' do
     subject { gateway.payment_session_result(payment_session_id, session_result) }
@@ -39,6 +37,7 @@ RSpec.describe SpreeAdyen::Gateway do
 
     let(:order) { create(:order_with_line_items) }
     let(:bill_address) { order.bill_address }
+    let(:amount) { 100 }
 
     let(:payment_session_id) { 'CS6B11058E72127704' }
 
@@ -126,8 +125,8 @@ RSpec.describe SpreeAdyen::Gateway do
 
   describe '#credit' do
     subject { gateway.credit(amount_in_cents, payment.source, payment.response_code, {}) }
+
     let!(:order) { create(:order, total: 10, number: 'R142767632') }
-    let(:gateway) { create(:adyen_gateway, preferred_api_key: "secret", preferred_merchant_account: 'SpreeCommerceECOM') }
     let(:payment) { create(:payment, state: 'completed', order: order, payment_method: gateway, amount: 10.0, response_code: 'X4G6K4DDZ46B8ZV5') }
     let(:amount_in_cents) { 800 }
 

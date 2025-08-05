@@ -1,6 +1,6 @@
 module SpreeAdyen
   class RefundPayloadPresenter
-    REFERENCE_SUFIX = 'refund'.freeze
+    REFERENCE_SUFFIX = 'refund'.freeze
 
     def initialize(amount_in_cents:, currency:, payment_method:, payment:)
       @amount_in_cents = amount_in_cents
@@ -29,7 +29,7 @@ module SpreeAdyen
         payment.order.number,
         payment_method.id,
         payment.response_code,
-        REFERENCE_SUFIX
+        REFERENCE_SUFFIX
       ].join('_')
     end
   end
