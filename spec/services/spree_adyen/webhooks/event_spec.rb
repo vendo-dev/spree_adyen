@@ -55,4 +55,10 @@ RSpec.describe SpreeAdyen::Webhooks::Event do
       expect(event.payment_method_id).to eq('12345')
     end
   end
+
+  describe '#amount' do
+    it 'returns the amount' do
+      expect(event.amount).to eq(Spree::Money.new(1000.0, currency: 'EUR'))
+    end
+  end
 end

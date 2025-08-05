@@ -1,12 +1,13 @@
 require 'spec_helper'
 
 RSpec.describe SpreeAdyen::Webhooks::Actions::CreateSource do
-  subject(:service) { described_class.new(event: event, payment_session: session).call }
+  subject(:service) { described_class.new(event: event, payment_method: payment_method, user: user).call }
 
   let(:event) { SpreeAdyen::Webhooks::Event.new(event_data: event_data) }
 
-
   let(:session) { create(:payment_session, adyen_id: 'CS4FBB6F827EC53AC7', status: 'pending') }
+  let(:payment_method) { create(:adyen_gateway) }
+  let(:user) { create(:user) }
 
   context 'with credit card payment method' do
     let(:event_data) do
