@@ -92,7 +92,7 @@ RSpec.describe SpreeAdyen::Gateway do
       let(:payment) { create(:payment, state: 'completed', order: order, payment_method: gateway, amount: 10.0, response_code: 'X4G6K4DDZ46B8ZV5') }
 
       it 'creates a refund with credit_allowed_amount' do
-        VCR.use_cassette("payment_api/create_refund/success", match_requests_on: [:path, :body]) do
+        VCR.use_cassette("payment_api/create_refund/success") do
           expect { subject }.to change(Spree::Refund, :count).by(1)
 
           expect(payment.refunds.last.amount).to eq(10.0)
@@ -132,9 +132,10 @@ RSpec.describe SpreeAdyen::Gateway do
     let(:amount_in_cents) { 800 }
 
     it 'refunds some of the payment amount' do
-      VCR.use_cassette("payment_api/create_refund/success_partial", match_requests_on: [:path, :body]) do
+      VCR.use_cassette("payment_api/create_refund/success_partial") do
         expect(subject.success?).to be(true)
-      end
+        expect(subject.params['response']['amount']['value']).to eq(amount_in_cents)
+      end 
     end
   end
 end
