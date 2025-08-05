@@ -23,7 +23,7 @@ RSpec.describe SpreeAdyen::Webhooks::Event do
             },
             "amount": {
               "currency": "EUR",
-              "value": 1000
+              "value": 100_00
             },
             "eventCode": "AUTHORISATION",
             "eventDate": "2025-07-04T12:59:19+02:00",
@@ -58,7 +58,8 @@ RSpec.describe SpreeAdyen::Webhooks::Event do
 
   describe '#amount' do
     it 'returns the amount' do
-      expect(event.amount).to eq(Spree::Money.new(1000.0, currency: 'EUR'))
+      expect(event.amount).to eq(Spree::Money.new(100, currency: 'EUR'))
+      expect(event.amount.cents).to eq(100_00)
     end
   end
 end

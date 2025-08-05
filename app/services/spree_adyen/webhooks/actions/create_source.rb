@@ -99,7 +99,8 @@ module SpreeAdyen
         def find_or_create_credit_card
           SpreeAdyen::Webhooks::Actions::FindOrCreateCreditCard.new(
             event: event,
-            gateway: payment_method
+            gateway: payment_method,
+            user: user
           ).call
         end
 

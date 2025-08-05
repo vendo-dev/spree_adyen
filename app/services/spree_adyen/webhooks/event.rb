@@ -58,7 +58,12 @@ module SpreeAdyen
       end
 
       def amount
-        @amount ||= Spree::Money.new(body['amount']['value'], currency: body['amount']['currency'])
+        @amount ||= begin
+          amount_data = body['amount']
+          return nil unless amount_data&.key?('value') && amount_data.key?('currency')
+
+          Spree::Money.new(amount_data['value'] / 100.0, currency: amount_data['currency'])
+        end
       end
 
       def merchant_reference

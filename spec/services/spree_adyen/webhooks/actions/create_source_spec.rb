@@ -5,7 +5,6 @@ RSpec.describe SpreeAdyen::Webhooks::Actions::CreateSource do
 
   let(:event) { SpreeAdyen::Webhooks::Event.new(event_data: event_data) }
 
-  let(:session) { create(:payment_session, adyen_id: 'CS4FBB6F827EC53AC7', status: 'pending') }
   let(:payment_method) { create(:adyen_gateway) }
   let(:user) { create(:user) }
 
@@ -22,7 +21,6 @@ RSpec.describe SpreeAdyen::Webhooks::Actions::CreateSource do
                 "cardSummary": "0004",
                 "isCardCommercial": "something",
                 "threeds2.cardEnrolled": "false",
-                "checkoutSessionId": session.adyen_id,
                 "paymentMethod": "mc",
                 "checkout.cardAddedBrand": "**",
                 "storedPaymentMethodId": "HF7Z59JSZZSBJWT5",
@@ -70,10 +68,6 @@ RSpec.describe SpreeAdyen::Webhooks::Actions::CreateSource do
         "notificationItems": [
           {
             "NotificationRequestItem": {
-              "additionalData": {
-                'checkoutSessionId': session.adyen_id,
-                'metadata.payment_method_id': session.payment_method_id
-              },
               "amount": {
                 "currency": "EUR",
                 "value": 1000

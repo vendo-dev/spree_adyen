@@ -59,6 +59,8 @@ module SpreeAdyen
 
     def credit(amount_in_cents, _source, payment_id, _gateway_options = {})
       payment = Spree::Payment.find_by(response_code: payment_id)
+      return failure(payment_id, 'Payment not found') unless payment
+
       payload = SpreeAdyen::RefundPayloadPresenter.new(
         payment: payment,
         amount_in_cents: amount_in_cents,
