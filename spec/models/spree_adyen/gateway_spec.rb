@@ -80,4 +80,61 @@ RSpec.describe SpreeAdyen::Gateway do
       it { is_expected.to eq(:live) }
     end
   end
+
+  describe '#cancel' do
+    subject { gateway.cancel(payment) }
+
+    let!(:refund_reason) { Spree::RefundReason.first || create(:default_refund_reason) }
+
+    context 'when payment is completed' do
+      let!(:order) { create(:order, total: 10, number: 'R142767632') }
+      let(:gateway) { create(:adyen_gateway, preferred_api_key: "secret", preferred_merchant_account: 'SpreeCommerceECOM') }
+      let(:payment) { create(:payment, state: 'completed', order: order, payment_method: gateway, amount: 10.0, response_code: 'X4G6K4DDZ46B8ZV5') }
+
+      it 'creates a refund with credit_allowed_amount' do
+        VCR.use_cassette("payment_api/create_refund/success", match_requests_on: [:path, :body]) do
+          expect { subject }.to change(Spree::Refund, :count).by(1)
+
+          expect(payment.refunds.last.amount).to eq(10.0)
+          expect(subject.success?).to be(true)
+          expect(subject.authorization).to eq(payment.response_code)
+        end
+      end
+
+      context 'if amount to refund is zero' do
+        let!(:refund) { create(:refund, payment: payment, amount: payment.amount) }
+
+        it 'does not create refund' do
+          expect { subject }.not_to change(Spree::Refund, :count)
+
+          expect(subject.success?).to be true
+        end
+      end
+    end
+
+    context 'when payment is not completed' do
+      let!(:payment) { create(:payment, state: 'processing') }
+
+      it 'voids the payment' do
+        expect { subject }.not_to change(Spree::Refund, :count)
+
+        expect(payment.reload.state).to eq('void')
+        expect(subject.authorization).to eq(payment.response_code)
+      end
+    end
+  end
+
+  describe '#credit' do
+    subject { gateway.credit(amount_in_cents, payment.source, payment.response_code, {}) }
+    let!(:order) { create(:order, total: 10, number: 'R142767632') }
+    let(:gateway) { create(:adyen_gateway, preferred_api_key: "secret", preferred_merchant_account: 'SpreeCommerceECOM') }
+    let(:payment) { create(:payment, state: 'completed', order: order, payment_method: gateway, amount: 10.0, response_code: 'X4G6K4DDZ46B8ZV5') }
+    let(:amount_in_cents) { 800 }
+
+    it 'refunds some of the payment amount' do
+      VCR.use_cassette("payment_api/create_refund/success_partial", match_requests_on: [:path, :body]) do
+        expect(subject.success?).to be(true)
+      end
+    end
+  end
 end
