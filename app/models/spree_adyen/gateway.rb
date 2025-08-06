@@ -33,8 +33,9 @@ module SpreeAdyen
       end
     end
 
-    def cancel(payment)
-      transaction_id = payment.response_code
+    def cancel(id, payment)
+      transaction_id = id
+      payment = payment ||Spree::Payment.find_by(response_code: id)
       if payment.completed?
         amount = payment.credit_allowed
         return success(transaction_id, {}) if amount.zero?
