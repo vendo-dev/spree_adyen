@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe SpreeAdyen::Gateway do
-  subject(:gateway) { create(:adyen_gateway, preferred_api_key: "secret", preferred_merchant_account: 'SpreeCommerceECOM') }
+  subject(:gateway) { create(:adyen_gateway, preferred_api_key: 'secret', preferred_merchant_account: 'SpreeCommerceECOM') }
 
   describe '#payment_session_result' do
     subject { gateway.payment_session_result(payment_session_id, session_result) }
@@ -86,8 +86,7 @@ RSpec.describe SpreeAdyen::Gateway do
     let!(:refund_reason) { Spree::RefundReason.first || create(:default_refund_reason) }
 
     context 'when payment is completed' do
-      let!(:order) { create(:order, total: 10, number: 'R142767632') }
-      let(:gateway) { create(:adyen_gateway, preferred_api_key: "secret", preferred_merchant_account: 'SpreeCommerceECOM') }
+      let(:order) { create(:order, total: 10, number: 'R142767632') }
       let(:payment) { create(:payment, state: 'completed', order: order, payment_method: gateway, amount: 10.0, response_code: 'X4G6K4DDZ46B8ZV5') }
 
       it 'creates a refund with credit_allowed_amount' do
@@ -112,7 +111,7 @@ RSpec.describe SpreeAdyen::Gateway do
     end
 
     context 'when payment is not completed' do
-      let!(:payment) { create(:payment, state: 'processing') }
+      let(:payment) { create(:payment, state: 'processing') }
 
       it 'voids the payment' do
         expect { subject }.not_to change(Spree::Refund, :count)
@@ -121,14 +120,26 @@ RSpec.describe SpreeAdyen::Gateway do
         expect(subject.authorization).to eq(payment.response_code)
       end
     end
+
+    context 'when response is not successful' do
+      let(:payment) { create(:payment, state: 'completed', order: order, payment_method: gateway, amount: 10.0, response_code: 'foobar') }
+      let(:order) { create(:order, total: 10, number: 'R142767632') }
+
+      it 'should raises Spree::Core::GatewayError with the error message' do
+        VCR.use_cassette("payment_api/create_refund/failure/invalid_payment_id") do
+          expect { subject }.to raise_error(Spree::Core::GatewayError, 'X4NZMCHN86JCNP65 - Original pspReference required for this operation')
+        end
+      end
+    end
   end
 
   describe '#credit' do
-    subject { gateway.credit(amount_in_cents, payment.source, payment.response_code, {}) }
+    subject { gateway.credit(amount_in_cents, payment.source, passed_response_code, {}) }
 
-    let!(:order) { create(:order, total: 10, number: 'R142767632') }
+    let(:order) { create(:order, total: 10, number: 'R142767632') }
     let(:payment) { create(:payment, state: 'completed', order: order, payment_method: gateway, amount: 10.0, response_code: 'X4G6K4DDZ46B8ZV5') }
     let(:amount_in_cents) { 800 }
+    let(:passed_response_code) { payment.response_code }
 
     it 'refunds some of the payment amount' do
       VCR.use_cassette("payment_api/create_refund/success_partial") do
@@ -137,25 +148,25 @@ RSpec.describe SpreeAdyen::Gateway do
       end 
     end
 
-    context 'if amount to refund is greater than payment amount' do
-      let(:amount_in_cents) { 1100 }
+    context 'when response is not successful' do
+      let(:payment) { create(:payment, state: 'completed', order: order, payment_method: gateway, amount: 10.0, response_code: 'X4G6K4DDZ46B8ZV5') }
+      let(:order) { create(:order, total: 10, number: 'R142767632') }
+      let(:amount_in_cents) { 0 }
 
-      it 'does not create refund' do
-        expect { subject }.not_to change(Spree::Refund, :count)
-
-        expect(subject.success?).to be false
-        expect(subject.message).to eq('X4G6K4DDZ46B8ZV5 - Amount to refund is greater than payment amount')
+      it 'should return failure response' do
+        VCR.use_cassette("payment_api/create_refund/failure/invalid_amount") do
+          expect(subject.success?).to eq(false)
+          expect(subject.message).to eq("SQLBC925DFMK8B75 - Field 'amount' is not valid.")
+        end
       end
     end
 
-    context 'if amount to refund is negative' do
-      let(:amount_in_cents) { -1 }
+    context 'when payment is not found' do
+      let(:passed_response_code) { 'foobar' }
 
-      it 'does not create refund' do
-        expect { subject }.not_to change(Spree::Refund, :count)
-
-        expect(subject.success?).to be false
-        expect(subject.message).to eq('X4G6K4DDZ46B8ZV5 - Amount to refund is negative')
+      it 'should return failure response' do
+        expect(subject.success?).to eq(false)
+        expect(subject.message).to eq("foobar - Payment not found")
       end
     end
   end
