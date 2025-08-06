@@ -6,6 +6,8 @@ module SpreeAdyen
     preference :hmac_key, :password
     preference :test_mode, :boolean, default: true
 
+    has_one_attached :apple_developer_merchantid_domain_association, service: Spree.private_storage_service_name
+
     has_many :payment_sessions, class_name: 'SpreeAdyen::PaymentSession',
                                 foreign_key: 'payment_method_id',
                                 dependent: :delete_all,
@@ -74,6 +76,10 @@ module SpreeAdyen
 
     def cancel(payment_session_id, payment = nil)
       raise NotImplementedError
+    end
+
+    def apple_domain_association_file_content
+      @apple_domain_association_file_content ||= apple_developer_merchantid_domain_association&.download
     end
 
     # Creates a Adyen payment session for the order
