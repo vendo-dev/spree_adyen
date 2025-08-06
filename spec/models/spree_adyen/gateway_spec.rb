@@ -81,7 +81,7 @@ RSpec.describe SpreeAdyen::Gateway do
   end
 
   describe '#cancel' do
-    subject { gateway.cancel(payment) }
+    subject { gateway.cancel(payment.response_code, payment) }
 
     let!(:refund_reason) { Spree::RefundReason.first || create(:default_refund_reason) }
 
