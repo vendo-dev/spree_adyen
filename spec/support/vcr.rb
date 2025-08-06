@@ -10,8 +10,7 @@ VCR.configure do |c|
   c.ignore_localhost = true
   c.configure_rspec_metadata!
   c.default_cassette_options = { record: :new_episodes }
-  c.filter_sensitive_data('<STRIPE_PUBLISHABLE_KEY>') { ENV['STRIPE_PUBLISHABLE_KEY'] }
-  c.filter_sensitive_data('<STRIPE_SECRET_KEY>') { ENV['STRIPE_SECRET_KEY'] }
+  c.filter_sensitive_data('<ADYEN_API_KEY>') { |i| i.request.headers['X-Api-Key']&.first }
 
   c.before_record do |interaction|
     header_names = %w[X-Stripe-Client-User-Agent]

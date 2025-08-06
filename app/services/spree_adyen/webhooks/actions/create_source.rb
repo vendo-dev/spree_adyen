@@ -78,9 +78,10 @@ module SpreeAdyen
           grabpay_SG: SpreeAdyen::PaymentSources::Grabpay
         }.freeze
 
-        def initialize(event:, payment_session:)
+        def initialize(event:, payment_method:, user:)
           @event = event
-          @payment_session = payment_session
+          @payment_method = payment_method
+          @user = user
         end
 
         def call
@@ -92,35 +93,25 @@ module SpreeAdyen
         end
 
         def find_or_create_source
-          source_klass_factory.find_or_create_by(source_params)
+          source_klass_factory.find_or_create_by(payment_method: payment_method, user: user)
         end
 
         def find_or_create_credit_card
           SpreeAdyen::Webhooks::Actions::FindOrCreateCreditCard.new(
             event: event,
-            gateway: gateway
+            gateway: payment_method,
+            user: user
           ).call
         end
 
         private
 
-        attr_reader :event, :payment_session
+        attr_reader :event, :payment_method, :user
 
         delegate :payment_method_reference, to: :event
 
         def source_klass_factory
           SOURCE_KLASS_MAP[event.payment_method_reference] ||= SpreeAdyen::PaymentSources::Unknown
-        end
-
-        def gateway
-          @gateway ||= payment_session.payment_method
-        end
-
-        def source_params
-          {
-            payment_method: gateway,
-            user: payment_session.user
-          }
         end
       end
     end

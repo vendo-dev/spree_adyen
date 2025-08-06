@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe SpreeAdyen::Gateway do
-  let(:store) { Spree::Store.default }
-  let(:gateway) { create(:adyen_gateway, stores: [store]) }
-  let(:amount) { 100 }
+  subject(:gateway) { create(:adyen_gateway, preferred_api_key: 'secret', preferred_merchant_account: 'SpreeCommerceECOM') }
 
   describe '#payment_session_result' do
     subject { gateway.payment_session_result(payment_session_id, session_result) }
@@ -39,6 +37,7 @@ RSpec.describe SpreeAdyen::Gateway do
 
     let(:order) { create(:order_with_line_items) }
     let(:bill_address) { order.bill_address }
+    let(:amount) { 100 }
 
     let(:payment_session_id) { 'CS6B11058E72127704' }
 
@@ -78,6 +77,97 @@ RSpec.describe SpreeAdyen::Gateway do
       let(:gateway) { create(:adyen_gateway, preferred_test_mode: false) }
 
       it { is_expected.to eq(:live) }
+    end
+  end
+
+  describe '#cancel' do
+    subject { gateway.cancel(payment) }
+
+    let!(:refund_reason) { Spree::RefundReason.first || create(:default_refund_reason) }
+
+    context 'when payment is completed' do
+      let(:order) { create(:order, total: 10, number: 'R142767632') }
+      let(:payment) { create(:payment, state: 'completed', order: order, payment_method: gateway, amount: 10.0, response_code: 'X4G6K4DDZ46B8ZV5') }
+
+      it 'creates a refund with credit_allowed_amount' do
+        VCR.use_cassette("payment_api/create_refund/success") do
+          expect { subject }.to change(Spree::Refund, :count).by(1)
+
+          expect(payment.refunds.last.amount).to eq(10.0)
+          expect(subject.success?).to be(true)
+          expect(subject.authorization).to eq(payment.response_code)
+        end
+      end
+
+      context 'if amount to refund is zero' do
+        let!(:refund) { create(:refund, payment: payment, amount: payment.amount) }
+
+        it 'does not create refund' do
+          expect { subject }.not_to change(Spree::Refund, :count)
+
+          expect(subject.success?).to be true
+        end
+      end
+    end
+
+    context 'when payment is not completed' do
+      let(:payment) { create(:payment, state: 'processing') }
+
+      it 'voids the payment' do
+        expect { subject }.not_to change(Spree::Refund, :count)
+
+        expect(payment.reload.state).to eq('void')
+        expect(subject.authorization).to eq(payment.response_code)
+      end
+    end
+
+    context 'when response is not successful' do
+      let(:payment) { create(:payment, state: 'completed', order: order, payment_method: gateway, amount: 10.0, response_code: 'foobar') }
+      let(:order) { create(:order, total: 10, number: 'R142767632') }
+
+      it 'should raises Spree::Core::GatewayError with the error message' do
+        VCR.use_cassette("payment_api/create_refund/failure/invalid_payment_id") do
+          expect { subject }.to raise_error(Spree::Core::GatewayError, 'X4NZMCHN86JCNP65 - Original pspReference required for this operation')
+        end
+      end
+    end
+  end
+
+  describe '#credit' do
+    subject { gateway.credit(amount_in_cents, payment.source, passed_response_code, {}) }
+
+    let(:order) { create(:order, total: 10, number: 'R142767632') }
+    let(:payment) { create(:payment, state: 'completed', order: order, payment_method: gateway, amount: 10.0, response_code: 'X4G6K4DDZ46B8ZV5') }
+    let(:amount_in_cents) { 800 }
+    let(:passed_response_code) { payment.response_code }
+
+    it 'refunds some of the payment amount' do
+      VCR.use_cassette("payment_api/create_refund/success_partial") do
+        expect(subject.success?).to be(true)
+        expect(subject.params['response']['amount']['value']).to eq(amount_in_cents)
+      end 
+    end
+
+    context 'when response is not successful' do
+      let(:payment) { create(:payment, state: 'completed', order: order, payment_method: gateway, amount: 10.0, response_code: 'X4G6K4DDZ46B8ZV5') }
+      let(:order) { create(:order, total: 10, number: 'R142767632') }
+      let(:amount_in_cents) { 0 }
+
+      it 'should return failure response' do
+        VCR.use_cassette("payment_api/create_refund/failure/invalid_amount") do
+          expect(subject.success?).to eq(false)
+          expect(subject.message).to eq("SQLBC925DFMK8B75 - Field 'amount' is not valid.")
+        end
+      end
+    end
+
+    context 'when payment is not found' do
+      let(:passed_response_code) { 'foobar' }
+
+      it 'should return failure response' do
+        expect(subject.success?).to eq(false)
+        expect(subject.message).to eq("foobar - Payment not found")
+      end
     end
   end
 end
