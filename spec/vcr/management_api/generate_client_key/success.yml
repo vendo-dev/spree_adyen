@@ -1,0 +1,50 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://management-test.adyen.com/v3/me/generateClientKey
+    body:
+      encoding: UTF-8
+      string: "{}"
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - adyen-ruby-api-library/10.3.0
+      X-Api-Key:
+      - secret
+      Adyen-Library-Name:
+      - adyen-ruby-api-library
+      Adyen-Library-Version:
+      - 10.3.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Traceparent:
+      - 00-70ba1f21fc5498cdfd026f47b2702020-bc89199f546d6f7d-01
+      Set-Cookie:
+      - JSESSIONID=71ac2022c3b6dddf~5428CB950ED0A8D6C1767F8EF18C821E; Path=/configurationapi;
+        Secure; HttpOnly
+      Pspreference:
+      - 9ccacf57-fb13-f0af-ff92-1b375817c28b_1-X3WZW2SX3FZ28222
+      Requestid:
+      - 9ccacf57-fb13-f0af-ff92-1b375817c28b_1-X3WZW2SX3FZ28222
+      Content-Type:
+      - application/json;charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Wed, 06 Aug 2025 13:56:06 GMT
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: '{"clientKey":"test_KGBHF7PXZNCEJB3Y657IGUYUBIH62LEB"}'
+  recorded_at: Wed, 06 Aug 2025 13:56:06 GMT
+recorded_with: VCR 6.3.1
