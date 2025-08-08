@@ -1,0 +1,100 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://management-test.adyen.com/v3/me
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - adyen-ruby-api-library/10.3.0
+      X-Api-Key:
+      - "<ADYEN_API_KEY>"
+      Adyen-Library-Name:
+      - adyen-ruby-api-library
+      Adyen-Library-Version:
+      - 10.3.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Traceparent:
+      - 00-ca328c08bed42c5ae188c6d3ca7724f1-a2bf803d6b664273-01
+      Set-Cookie:
+      - JSESSIONID=76240ac06c1c2ef2~48969DE2E0682D48315852C9FED4B5A7; Path=/configurationapi;
+        Secure; HttpOnly
+      Pspreference:
+      - f8e6a983-3bc1-7579-5b18-13f6e675b78b_1-VNNZVPM24FZ28222
+      Requestid:
+      - f8e6a983-3bc1-7579-5b18-13f6e675b78b_1-VNNZVPM24FZ28222
+      Content-Type:
+      - application/json;charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Fri, 08 Aug 2025 15:20:43 GMT
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        eyJpZCI6IkNSRUQ0MkNTRDIyMzIyOTM1TVNKSkQ0QzlDNk1CWiIsInVzZXJuYW1lIjoid3NfNDE2NzE0QENvbXBhbnkuU3ByZWVDb21tZXJjZSIsImNsaWVudEtleSI6InRlc3RfS0dCSEY3UFhaTkNFSkIzWTY1N0lHVVlVQklINjJMRUIiLCJhbGxvd2VkSXBBZGRyZXNzZXMiOltdLCJyb2xlcyI6WyJNYW5hZ2VtZW50IEFQSSAtIEFjY291bnRzIHJlYWQiLCJNYW5hZ2VtZW50IEFQSSAtIFdlYmhvb2tzIHJlYWQiLCJNYW5hZ2VtZW50IEFQSSAtIEFQSSBjcmVkZW50aWFscyByZWFkIGFuZCB3cml0ZSIsIk1hbmFnZW1lbnQgQVBJIC0gU3RvcmVzIHJlYWQiLCJNYW5hZ2VtZW50IEFQSSDigJQgUGF5bWVudCBtZXRob2RzIHJlYWQiLCJBUEkgQ2xpZW50c2lkZSBFbmNyeXB0aW9uIFBheW1lbnRzIHJvbGUiLCJNYW5hZ2VtZW50IEFQSSAtIFN0b3JlcyByZWFkIGFuZCB3cml0ZSIsIk1hbmFnZW1lbnQgQVBJIC0gV2ViaG9va3MgcmVhZCBhbmQgd3JpdGUiLCJDaGVja291dCBlbmNyeXB0ZWQgY2FyZGhvbGRlciBkYXRhIiwiTWVyY2hhbnQgUmVjdXJyaW5nIHJvbGUiLCJEYXRhIFByb3RlY3Rpb24gQVBJIiwiTWFuYWdlbWVudCBBUEkgLSBQYXlvdXQgQWNjb3VudCBTZXR0aW5ncyBSZWFkIiwiQ2hlY2tvdXQgd2Vic2VydmljZSByb2xlIiwiTWFuYWdlbWVudCBBUEkgLSBBY2NvdW50cyByZWFkIGFuZCB3cml0ZSIsIk1lcmNoYW50IFBBTCBXZWJzZXJ2aWNlIHJvbGUiXSwiYWN0aXZlIjp0cnVlLCJhbGxvd2VkT3JpZ2lucyI6W3siaWQiOiJTMi00MDU3NkQ1NzQxMkE0ODU4NEIyOTZDMzk2RDZENjgzNTUwNjk2OTZBNjg1MzZBMkI1RDRBNzI3QjQ0NzMzMzY4M0IzQjQ5NzkzRDUzNDY2RTc5NEUzMyIsImRvbWFpbiI6Imh0dHA6XC9cL2NvZmZlZS1tYXJrZXRwbGFjZS52ZW5kby5kZXYiLCJfbGlua3MiOnsic2VsZiI6eyJocmVmIjoiaHR0cHM6XC9cL21hbmFnZW1lbnQtdGVzdC5hZHllbi5jb21cL3YzXC9tZVwvYWxsb3dlZE9yaWdpbnNcL1MyLTQwNTc2RDU3NDEyQTQ4NTg0QjI5NkMzOTZENkQ2ODM1NTA2OTY5NkE2ODUzNkEyQjVENEE3MjdCNDQ3MzMzNjgzQjNCNDk3OTNENTM0NjZFNzk0RTMzIn19fSx7ImlkIjoiUzItNzE2ODREMzk2NjY1N0M0RTY5Mjc1OTYzNjk2MzQ4NDQ2OTY3M0Y1RTVCMjIyNjc1NjQ2MiIsImRvbWFpbiI6Imh0dHA6XC9cL2V4YW1wbGUuY29tIiwiX2xpbmtzIjp7InNlbGYiOnsiaHJlZiI6Imh0dHBzOlwvXC9tYW5hZ2VtZW50LXRlc3QuYWR5ZW4uY29tXC92M1wvbWVcL2FsbG93ZWRPcmlnaW5zXC9TMi03MTY4NEQzOTY2NjU3QzRFNjkyNzU5NjM2OTYzNDg0NDY5NjczRjVFNUIyMjI2NzU2NDYyIn19fSx7ImlkIjoiUzItMzUyMTJBNTEzQTQ3NEM1NzcxNEQyNDNGNTAyNTZENjg3NTJFNjU1MjZGNjg0QzZFNzUyMjZBM0U2QiIsImRvbWFpbiI6Imh0dHA6XC9cL2xvY2FsaG9zdDozMDAwIiwiX2xpbmtzIjp7InNlbGYiOnsiaHJlZiI6Imh0dHBzOlwvXC9tYW5hZ2VtZW50LXRlc3QuYWR5ZW4uY29tXC92M1wvbWVcL2FsbG93ZWRPcmlnaW5zXC9TMi0zNTIxMkE1MTNBNDc0QzU3NzE0RDI0M0Y1MDI1NkQ2ODc1MkU2NTUyNkY2ODRDNkU3NTIyNkEzRTZCIn19fSx7ImlkIjoiUzItMkMyMzRDNEI1NzIxMzQ1QjJCNjY1QTVDMkQzRDcwN0M1ODI5NUY1QzU4NEIyNzczNUY0RTYyNTYyMCIsImRvbWFpbiI6Imh0dHA6XC9cL2xvY2FsaG9zdDo4MDgwIiwiX2xpbmtzIjp7InNlbGYiOnsiaHJlZiI6Imh0dHBzOlwvXC9tYW5hZ2VtZW50LXRlc3QuYWR5ZW4uY29tXC92M1wvbWVcL2FsbG93ZWRPcmlnaW5zXC9TMi0yQzIzNEM0QjU3MjEzNDVCMkI2NjVBNUMyRDNENzA3QzU4Mjk1RjVDNTg0QjI3NzM1RjRFNjI1NjIwIn19fSx7ImlkIjoiUzItNDEyQTVEM0Q3NTIyNDc0ODM4NjUzNDRENkY3MjRFNzYzQzYyNzEzNjZBMkY1QTM4NkM1QjZFNjUyNjRBIiwiZG9tYWluIjoiaHR0cDpcL1wvd3d3LmV4YW1wbGUuY29tIiwiX2xpbmtzIjp7InNlbGYiOnsiaHJlZiI6Imh0dHBzOlwvXC9tYW5hZ2VtZW50LXRlc3QuYWR5ZW4uY29tXC92M1wvbWVcL2FsbG93ZWRPcmlnaW5zXC9TMi00MTJBNUQzRDc1MjI0NzQ4Mzg2NTM0NEQ2RjcyNEU3NjNDNjI3MTM2NkEyRjVBMzg2QzVCNkU2NTI2NEEifX19LHsiaWQiOiJTMi0zRjY2NDIzODY2MkIyNTU1NjA1MDQwNkE2NjNCNEYzRTIyNTkzNTY5MjQ1QjI3M0YyQjc5NzI0RDYzNTk0NCIsImRvbWFpbiI6Imh0dHBzOlwvXC9iYXIuZXhhbXBsZS5jb20iLCJfbGlua3MiOnsic2VsZiI6eyJocmVmIjoiaHR0cHM6XC9cL21hbmFnZW1lbnQtdGVzdC5hZHllbi5jb21cL3YzXC9tZVwvYWxsb3dlZE9yaWdpbnNcL1MyLTNGNjY0MjM4NjYyQjI1NTU2MDUwNDA2QTY2M0I0RjNFMjI1OTM1NjkyNDVCMjczRjJCNzk3MjRENjM1OTQ0In19fSx7ImlkIjoiUzItN0M2RDU5NjA3NDNBNEM1RTMyM0E2RjU3N0Q2RDM0NDU2QTRFNDczQjIxNkUzMzY2MkQ1RjZDNTM0NDY4N0U2MDQ3NkE2RDYwMkUyODY5NzEyRjRBM0Y2RiIsImRvbWFpbiI6Imh0dHBzOlwvXC9jb2ZmZWUtbWFya2V0cGxhY2UudmVuZG8uZGV2IiwiX2xpbmtzIjp7InNlbGYiOnsiaHJlZiI6Imh0dHBzOlwvXC9tYW5hZ2VtZW50LXRlc3QuYWR5ZW4uY29tXC92M1wvbWVcL2FsbG93ZWRPcmlnaW5zXC9TMi03QzZENTk2MDc0M0E0QzVFMzIzQTZGNTc3RDZEMzQ0NTZBNEU0NzNCMjE2RTMzNjYyRDVGNkM1MzQ0Njg3RTYwNDc2QTZENjAyRTI4Njk3MTJGNEEzRjZGIn19fSx7ImlkIjoiUzItNzQ3RjVGMkQ1QjdDNTk1QzYwNEY3NzU4Mzc2NjU1NjA3QTZBNzE3QTc2N0I1QjI3NkM3MzZDMkQ1RjY5NEU0NjMyNjIiLCJkb21haW4iOiJodHRwczpcL1wvZm9vYmFyLmV4YW1wbGUuY29tIiwiX2xpbmtzIjp7InNlbGYiOnsiaHJlZiI6Imh0dHBzOlwvXC9tYW5hZ2VtZW50LXRlc3QuYWR5ZW4uY29tXC92M1wvbWVcL2FsbG93ZWRPcmlnaW5zXC9TMi03NDdGNUYyRDVCN0M1OTVDNjA0Rjc3NTgzNzY2NTU2MDdBNkE3MTdBNzY3QjVCMjc2QzczNkMyRDVGNjk0RTQ2MzI2MiJ9fX0seyJpZCI6IlMyLTQ5Mzk3QjQ2MzA0RjY3M0QzOTMxN0QyQjIzMzI1OTJDNkI2QjUwNUMzOTY1NjEyNzM2NTM2RTI4NTIzMTJDIiwiZG9tYWluIjoiaHR0cHM6XC9cL3d3dy5leGFtcGxlLmNvbSIsIl9saW5rcyI6eyJzZWxmIjp7ImhyZWYiOiJodHRwczpcL1wvbWFuYWdlbWVudC10ZXN0LmFkeWVuLmNvbVwvdjNcL21lXC9hbGxvd2VkT3JpZ2luc1wvUzItNDkzOTdCNDYzMDRGNjczRDM5MzE3RDJCMjMzMjU5MkM2QjZCNTA1QzM5NjU2MTI3MzY1MzZFMjg1MjMxMkMifX19XSwiX2xpbmtzIjp7InNlbGYiOnsiaHJlZiI6Imh0dHBzOlwvXC9tYW5hZ2VtZW50LXRlc3QuYWR5ZW4uY29tXC92M1wvbWUifSwiYWxsb3dlZE9yaWdpbnMiOnsiaHJlZiI6Imh0dHBzOlwvXC9tYW5hZ2VtZW50LXRlc3QuYWR5ZW4uY29tXC92M1wvbWVcL2FsbG93ZWRPcmlnaW5zIn19LCJhc3NvY2lhdGVkTWVyY2hhbnRBY2NvdW50cyI6WyJTcHJlZUNvbW1lcmNlRUNPTSJdLCJjb21wYW55TmFtZSI6IlNwcmVlQ29tbWVyY2UifQ==
+  recorded_at: Fri, 08 Aug 2025 15:20:43 GMT
+- request:
+    method: post
+    uri: https://management-test.adyen.com/v3/merchants/SpreeCommerceECOM/webhooks
+    body:
+      encoding: UTF-8
+      string: '{"active":true,"communicationFormat":"json","url":"http://store.example.com/adyen/webhooks","description":"Webhook
+        created by SpreeAdyen on 2025-08-08 17:20:43"}'
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - adyen-ruby-api-library/10.3.0
+      X-Api-Key:
+      - "<ADYEN_API_KEY>"
+      Adyen-Library-Name:
+      - adyen-ruby-api-library
+      Adyen-Library-Version:
+      - 10.3.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 500
+      message: Internal Server Error
+    headers:
+      Traceparent:
+      - 00-ffb5f9635f8ab304c01295571dd658f7-8e67a6feeb37e4b2-01
+      Set-Cookie:
+      - JSESSIONID=0e9170946f2acea3~EC405B60CCDF258EA7125FBC6EA1FA63; Path=/configurationapi;
+        Secure; HttpOnly
+      Pspreference:
+      - ae586cb0-4605-6bef-6c3c-7db4f97543a8_2-DFX7WPM24FZ28222
+      Requestid:
+      - ae586cb0-4605-6bef-6c3c-7db4f97543a8_2-DFX7WPM24FZ28222
+      Content-Type:
+      - application/json;charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Fri, 08 Aug 2025 15:20:44 GMT
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: '{"type":"https:\/\/docs.adyen.com\/errors\/internal","title":"An internal
+        error happened","status":500,"detail":"Unexpected internal error","errorCode":"00_500"}'
+  recorded_at: Fri, 08 Aug 2025 15:20:43 GMT
+recorded_with: VCR 6.3.1

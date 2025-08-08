@@ -13,7 +13,7 @@ module SpreeAdyen
 
     def validate_hmac!
       event = SpreeAdyen::Webhooks::Event.new(event_data: webhook_params)
-      gateway = SpreeAdyen::Gateway.find(event.payment_method_id)
+      gateway = current_store.adyen_gateway
       return if Adyen::Utils::HmacValidator.new.valid_webhook_hmac?(
         webhook_params.dig('notificationItems', 0, 'NotificationRequestItem'),
         gateway.preferred_hmac_key

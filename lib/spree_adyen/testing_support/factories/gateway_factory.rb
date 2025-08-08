@@ -5,8 +5,10 @@ FactoryBot.define do
 
     preferences do
       {
-        api_key: ENV.fetch('ADYEN_API_KEY', 'sk_test_1234567890'),
-        merchant_account: ENV.fetch('ADYEN_MERCHANT_ACCOUNT', 'SpreeCommerceECOM')
+        api_key: 'secret',
+        merchant_account: 'SpreeCommerceECOM',
+        hmac_key: 'secret123',
+        client_key: 'client123'
       }
     end
 

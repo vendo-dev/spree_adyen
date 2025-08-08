@@ -1,0 +1,52 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://management-test.adyen.com/v3/me/allowedOrigins
+    body:
+      encoding: UTF-8
+      string: '{"domain":"https://example.com"}'
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - adyen-ruby-api-library/10.3.0
+      X-Api-Key:
+      - "<ADYEN_API_KEY>"
+      Adyen-Library-Name:
+      - adyen-ruby-api-library
+      Adyen-Library-Version:
+      - 10.3.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 422
+      message: Unprocessable Content
+    headers:
+      Traceparent:
+      - 00-4539b7a7b538d39c34b6b2b92e83f5da-850b65fa189f6feb-01
+      Set-Cookie:
+      - JSESSIONID=76240ac06c1c2ef2~3FC561AC563F0416BB22EE6134836C11; Path=/configurationapi;
+        Secure; HttpOnly
+      Pspreference:
+      - f8e6a983-3bc1-7579-5b18-13f6e675b78b_1-LH4PS6N24FZ28222
+      Requestid:
+      - f8e6a983-3bc1-7579-5b18-13f6e675b78b_1-LH4PS6N24FZ28222
+      Content-Type:
+      - application/json;charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Fri, 08 Aug 2025 15:47:11 GMT
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: '{"type":"https:\/\/docs.adyen.com\/errors\/validation","title":"Invalid
+        allowed origin information provided.","status":422,"requestId":"f8e6a983-3bc1-7579-5b18-13f6e675b78b_1-LH4PS6N24FZ28222","invalidFields":[{"name":"domain","value":"https:\/\/example.com","message":"Origin
+        already exists"}],"errorCode":"31_004"}'
+  recorded_at: Fri, 08 Aug 2025 15:47:11 GMT
+recorded_with: VCR 6.3.1
