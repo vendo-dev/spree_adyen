@@ -5,6 +5,7 @@ module SpreeAdyen
         CREDIT_CARD_SOURCES = %i[
           accel
           amex
+          jcb
           carnet
           cartebancaire
           cup
@@ -29,7 +30,12 @@ module SpreeAdyen
           clearpay: SpreeAdyen::PaymentSources::Clearpay,
           eps: SpreeAdyen::PaymentSources::Eps,
           ideal: SpreeAdyen::PaymentSources::Ideal,
-          jcb: SpreeAdyen::PaymentSources::Jcb,
+          facilypay_3x: SpreeAdyen::PaymentSources::Oney,
+          facilypay_4x: SpreeAdyen::PaymentSources::Oney,
+          facilypay_6x: SpreeAdyen::PaymentSources::Oney,
+          facilypay_10x: SpreeAdyen::PaymentSources::Oney,
+          facilypay_12x: SpreeAdyen::PaymentSources::Oney,
+          scalapay_3x: SpreeAdyen::PaymentSources::Scalapay,
           klarna: SpreeAdyen::PaymentSources::Klarna,
           klarna_account: SpreeAdyen::PaymentSources::Klarna,
           klarna_paynow: SpreeAdyen::PaymentSources::Klarna,

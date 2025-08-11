@@ -21,7 +21,7 @@ RSpec.describe SpreeAdyen::Webhooks::Actions::CreateSource do
                 "cardSummary": "0004",
                 "isCardCommercial": "something",
                 "threeds2.cardEnrolled": "false",
-                "paymentMethod": "mc",
+                "paymentMethod": payment_method_reference,
                 "checkout.cardAddedBrand": "**",
                 "storedPaymentMethodId": "HF7Z59JSZZSBJWT5",
                 "hmacSignature": "m1dnv+xFOwkdlMhiACVsms6Z/wmal0tuodl4qzD0BTs="
@@ -39,7 +39,7 @@ RSpec.describe SpreeAdyen::Webhooks::Actions::CreateSource do
                 "CAPTURE",
                 "REFUND"
               ],
-              "paymentMethod": "mc",
+              "paymentMethod": payment_method_reference,
               "pspReference": "123432123",
               "reason": "087969:0004:03/2030",
               "success": "true"
@@ -49,15 +49,36 @@ RSpec.describe SpreeAdyen::Webhooks::Actions::CreateSource do
       }
     end
 
-    it 'creates a credit card' do
-      expect { service }.to change(Spree::CreditCard, :count).by(1)
-    end
+    context 'with mastercard credit card' do
+      let(:payment_method_reference) { 'mc' }
 
-    it 'creates a credit card with the correct attributes' do
-      expect { service }.to change(Spree::CreditCard, :count).by(1)
-      expect(Spree::CreditCard.last.gateway_payment_profile_id).to eq('HF7Z59JSZZSBJWT5')
-      expect(Spree::CreditCard.last.month).to eq(3)
-      expect(Spree::CreditCard.last.year).to eq(2030)
+      it 'creates a credit card' do
+        expect { service }.to change(Spree::CreditCard, :count).by(1)
+      end
+
+      it 'creates a mastercard credit card with the correct attributes' do
+        expect { service }.to change(Spree::CreditCard, :count).by(1)
+        expect(Spree::CreditCard.last.gateway_payment_profile_id).to eq('HF7Z59JSZZSBJWT5')
+        expect(Spree::CreditCard.last.month).to eq(3)
+        expect(Spree::CreditCard.last.cc_type).to eq('master')
+        expect(Spree::CreditCard.last.year).to eq(2030)
+      end
+
+      context 'with jcb credit card' do
+        let(:payment_method_reference) { 'jcb' }
+
+        it 'creates a credit card' do
+          expect { service }.to change(Spree::CreditCard, :count).by(1)
+        end
+
+        it 'creates a mastercard credit card with the correct attributes' do
+          expect { service }.to change(Spree::CreditCard, :count).by(1)
+          expect(Spree::CreditCard.last.gateway_payment_profile_id).to eq('HF7Z59JSZZSBJWT5')
+          expect(Spree::CreditCard.last.month).to eq(3)
+          expect(Spree::CreditCard.last.cc_type).to eq('jcb')
+          expect(Spree::CreditCard.last.year).to eq(2030)
+        end
+      end
     end
   end
 
