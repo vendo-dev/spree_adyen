@@ -8,7 +8,8 @@ FactoryBot.define do
         api_key: 'secret',
         merchant_account: 'SpreeCommerceECOM',
         hmac_key: 'secret123',
-        client_key: 'client123'
+        client_key: 'client123',
+        webhook_id: 'webhook123'
       }
     end
 

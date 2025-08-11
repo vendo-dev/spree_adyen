@@ -1,13 +1,9 @@
 require 'spec_helper'
 
 RSpec.describe SpreeAdyen::Gateway do
-<<<<<<< Updated upstream
-  subject(:gateway) { create(:adyen_gateway, preferred_api_key: 'secret', preferred_merchant_account: 'SpreeCommerceECOM') }
-=======
+  subject(:gateway) { create(:adyen_gateway, stores: [store], preferred_api_key: 'secret', preferred_merchant_account: 'SpreeCommerceECOM') }
   let(:store) { Spree::Store.default }
-  let(:gateway) { create(:adyen_gateway, stores: [store], preferred_api_key: 'AQEvhmfxK4vIbBRGw0m/n3Q5qf3Ve5tfCJZpV2hbw2qom++FEca+71BKDHj55mWPzdAQwV1bDb7kfNy1WIxIIkxgBw==-nGKyaWaKpW3QXj0AyKqmEkEoL4igjamBa0klnyYva0U=-i1iW8&%Jsdx*$&pn(gu') }
   let(:amount) { 100 }
->>>>>>> Stashed changes
 
   describe '#payment_session_result' do
     subject { gateway.payment_session_result(payment_session_id, session_result) }
@@ -77,17 +73,6 @@ RSpec.describe SpreeAdyen::Gateway do
 
     it 'returns proper (successful) ActiveMerchant::Billing::Response instance' do
       VCR.use_cassette('management_api/generate_client_key/success') do
-        expect(subject).to be_a(ActiveMerchant::Billing::Response)
-        expect(subject.success?).to be_truthy
-      end
-    end
-  end
-
-  describe '#get_allowed_origins' do
-    subject { gateway.get_allowed_origins }
-
-    it 'returns proper (successful) ActiveMerchant::Billing::Response instance' do
-      VCR.use_cassette('management_api/get_allowed_origins/success') do
         expect(subject).to be_a(ActiveMerchant::Billing::Response)
         expect(subject.success?).to be_truthy
       end
@@ -195,6 +180,17 @@ RSpec.describe SpreeAdyen::Gateway do
       it 'should return failure response' do
         expect(subject.success?).to eq(false)
         expect(subject.message).to eq("foobar - Payment not found")
+      end
+    end
+  end
+
+  describe '#set_up_webhook' do
+    subject { gateway.set_up_webhook(url) }
+    let(:url) { "https://c33e96aee20a.ngrok-free.app/adyen/webhooks" }
+
+    it 'creates a webhook' do
+      VCR.use_cassette("management_api/create_webhook/success") do
+        expect(subject.success?).to be(true)
       end
     end
   end

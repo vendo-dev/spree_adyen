@@ -1,19 +1,22 @@
 module SpreeAdyen
   class AddAllowedOriginJob < SpreeAdyen::BaseJob
-    ALREADY_EXISTS_ERROR_CODE = '31_004'
-
-    def perform(url, gateway_id)
-      allowed_origin = URI::HTTPS.build(host: url).to_s
+    def perform(record_id, gateway_id, klass_type = 'store')
+      @klass_type = klass_type
+      record = klass.find(record_id)
       gateway = SpreeAdyen::Gateway.find(gateway_id)
-      response = gateway.add_allowed_origin(allowed_origin)
 
-      if response.success?
-        Rails.logger.info("[SpreeAdyen][AddAllowedOriginJob]: Origin #{allowed_origin} added to gateway #{gateway_id}")
-      elsif response.message['errorCode'] == ALREADY_EXISTS_ERROR_CODE
-        Rails.logger.warn("[SpreeAdyen][AddAllowedOriginJob]: Origin #{allowed_origin} already exists")
-      else
-        Rails.error.unexpected('Cannot create allowed origin', context: { url: allowed_origin, gateway_id: gateway_id }, source: 'spree_adyen')
-      end
+      SpreeAdyen::Gateways::AddAllowedOrigin.new(record, gateway).call
+    end
+
+    private
+
+    def klass
+      @klass ||= case @klass_type
+                 when 'store'
+                   Spree::Store
+                 when 'custom_domain'
+                   Spree::CustomDomain
+                 end
     end
   end
 end

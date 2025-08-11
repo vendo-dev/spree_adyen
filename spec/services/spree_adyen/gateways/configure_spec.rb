@@ -3,8 +3,8 @@ require 'spec_helper'
 RSpec.describe SpreeAdyen::Gateways::Configure do
   subject(:service) { described_class.new(gateway).call }
 
-  let(:gateway) { build(:adyen_gateway, stores: [store], preferred_hmac_key: hmac_key, preferred_webhook_id: webhook_id, preferred_api_key: 'AQEvhmfxK4vIbBRGw0m/n3Q5qf3Ve5tfCJZpV2hbw2qom++FEca+71BKDHj55mWPzdAQwV1bDb7kfNy1WIxIIkxgBw==-nGKyaWaKpW3QXj0AyKqmEkEoL4igjamBa0klnyYva0U=-i1iW8&%Jsdx*$&pn(gu') }
-  let(:store) { create(:store, url: 'store.example.com') }
+  let(:gateway) { build(:adyen_gateway, stores: [store], preferred_hmac_key: hmac_key, preferred_webhook_id: webhook_id) }
+  let(:store) { create(:store, url: 'c33e96aee20a.ngrok-free.app') }
 
   before do
     create(:custom_domain, store: store, url: 'foo.store.example.com')
@@ -19,6 +19,7 @@ RSpec.describe SpreeAdyen::Gateways::Configure do
       VCR.use_cassette('gateways/configure/success/webhook_not_valid') do
         expect { service }.to change(gateway, :preferred_webhook_id)
                          .and change(gateway, :preferred_hmac_key)
+                         .and change(gateway, :previous_hmac_key).from(nil).to(hmac_key)
       end
     end
   end
@@ -27,9 +28,10 @@ RSpec.describe SpreeAdyen::Gateways::Configure do
     let(:webhook_id) { nil }
     let(:hmac_key) { nil }
 
-    it 'does a thing' do
+    it 'updates the webhook_id and hmac_key' do
       VCR.use_cassette('gateways/configure/success/webhook_not_set_up') do
-        service
+        expect { service }.to change(gateway, :preferred_webhook_id)
+                          .and change(gateway, :preferred_hmac_key)
       end
     end
   end
@@ -38,9 +40,9 @@ RSpec.describe SpreeAdyen::Gateways::Configure do
     let(:hmac_key) { '803CB6B178ECEBD56C378B546AC75FEB786FA39352A51B370711377BCE763F63' }
     let(:webhook_id) { 'WBHK42CLX22322945MWKG7R6LH6G9V' }
 
-    it 'does a thing' do
+    it 'does not update the webhook_id and hmac_key' do
       VCR.use_cassette('gateways/configure/success/webhook_set_up') do
-        service
+        expect { service }.not_to change(gateway, :preferred_webhook_id)
       end
     end
   end

@@ -53,8 +53,8 @@ http_interactions:
     uri: https://management-test.adyen.com/v3/merchants/SpreeCommerceECOM/webhooks
     body:
       encoding: UTF-8
-      string: '{"active":true,"communicationFormat":"json","url":"http://store.example.com/adyen/webhooks","description":"Webhook
-        created by SpreeAdyen on 2025-08-08 17:20:43"}'
+      string: '{"url":"https://c33e96aee20a.ngrok-free.app/adyen/webhooks","description":"Webhook
+        created by SpreeAdyen on 2025-08-13 11:48:06","active":true,"communicationFormat":"json","type":"standard"}'
     headers:
       Content-Type:
       - application/json
@@ -72,29 +72,123 @@ http_interactions:
       - "*/*"
   response:
     status:
-      code: 500
-      message: Internal Server Error
+      code: 200
+      message: OK
     headers:
       Traceparent:
-      - 00-ffb5f9635f8ab304c01295571dd658f7-8e67a6feeb37e4b2-01
+      - 00-06a6b14ab4e52ece851662e1a8be7737-18b8e287b3fc18ef-01
       Set-Cookie:
-      - JSESSIONID=0e9170946f2acea3~EC405B60CCDF258EA7125FBC6EA1FA63; Path=/configurationapi;
+      - JSESSIONID=0e9170946f2acea3~139AA66375758BF7AD8F0DC8BF965ACD; Path=/configurationapi;
         Secure; HttpOnly
       Pspreference:
-      - ae586cb0-4605-6bef-6c3c-7db4f97543a8_2-DFX7WPM24FZ28222
+      - ae586cb0-4605-6bef-6c3c-7db4f97543a8_2-VG8T9JZ64FZ28222
       Requestid:
-      - ae586cb0-4605-6bef-6c3c-7db4f97543a8_2-DFX7WPM24FZ28222
+      - ae586cb0-4605-6bef-6c3c-7db4f97543a8_2-VG8T9JZ64FZ28222
       Content-Type:
       - application/json;charset=utf-8
       Transfer-Encoding:
       - chunked
       Date:
-      - Fri, 08 Aug 2025 15:20:44 GMT
+      - Wed, 13 Aug 2025 11:48:07 GMT
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains
     body:
       encoding: UTF-8
-      string: '{"type":"https:\/\/docs.adyen.com\/errors\/internal","title":"An internal
-        error happened","status":500,"detail":"Unexpected internal error","errorCode":"00_500"}'
-  recorded_at: Fri, 08 Aug 2025 15:20:43 GMT
+      string: '{"id":"WBHK42CRJ22322955MZF3PPFTS32NP","type":"standard","url":"https:\/\/c33e96aee20a.ngrok-free.app\/adyen\/webhooks","description":"Webhook
+        created by SpreeAdyen on 2025-08-13 11:48:06","username":"","hasPassword":false,"active":true,"hasError":false,"encryptionProtocol":"TLSv1.3","communicationFormat":"json","acceptsExpiredCertificate":false,"acceptsSelfSignedCertificate":false,"acceptsUntrustedRootCertificate":false,"certificateAlias":"signed-test.adyen.com_2025","populateSoapActionHeader":false,"additionalSettings":{"properties":{"includePosTerminalInfo":false,"includeARN":false,"includeExtraCostsSurcharge":false,"includePaymentAccountOwnerDetails":false,"includePosDetails":false,"includeCardInfoForRecurringContractNotification":false,"includeRiskData":false,"includeRiskExperimentReference":false,"includeSoapSecurityHeader":false,"includeContactlessWalletTokenInformation":false,"includeExtraCostsGratuity":false,"includeAdjustAuthorisationData":false,"includeAcquirerReference":false,"includeRiskProfileReference":false,"includeOriginalMerchantReferenceCancelOrRefundNotification":false,"includeNfcTokenInformation":false,"includeSubvariant":false,"includeThreeDSVersion":false,"includeInstallmentsInfo":false,"includeAliasInfo":false,"includeShopperCountry":false,"includeRawThreeDSecureResult":false,"includeAirlineData":false,"includeGrossCurrencyChargebackDetails":false,"includeSwishPayerAlias":false,"includeThreeDSecureResult":false,"includeUpiMetadata":false,"includeMetadataIn3DSecurePaymentNotification":false,"includeCashAppCashtag":false,"includeGiftCardNumber":false,"includeOriginalReferenceForChargebackReversed":false,"includeMerchantAdviceCode":false,"addAcquirerResult":false,"includeDeliveryAddress":false,"includeRetryAttempts":false,"includeVisaRdrDisputeIndicator":false,"includeExtraCosts":false,"includeCardHolderName":false,"includeShopperDetail":false,"includeBankAccountDetails":false,"includeMandateDetails":false,"includeAuthAmountForDynamicZeroAuth":false,"includeIssuerCountry":false,"includeAcquirerErrorDetails":false,"includeCoBrandedWith":false,"includeShopperInteraction":false,"includeDeviceAndBrowserInfo":false,"includeUpiVpa":false,"includePixEndToEndId":false,"addRawAcquirerResult":false,"includeCardBin":false,"includeFundingSource":false,"includeThreeDS2ChallengeInformation":false,"includeRiskProfile":false,"includeRealtimeAccountUpdaterStatus":false,"includePixPayerInfo":false,"includeDunningProjectData":false,"includePaymentResultInOrderClosedNotification":false,"includeCardBinDetails":false,"includeNotesInManualReviewNotifications":false,"includeZeroAuthFlag":false,"oAuthSupported":false,"addCaptureReferenceToDisputeNotification":false,"includeAfterPayTouchConsumerReference":false,"includePayPalDetails":false,"includeRawThreeDSecureDetailsResult":false,"includeBankVerificationResults":false,"includeCaptureDelayHours":false,"addPaymentAccountReference":false,"includePayULatamDetails":false,"includeStore":false,"returnAvsData":false,"includeApplicationIdentifier":false,"includeWeChatPayOpenid":false,"includeCustomRoutingFlagging":false,"includeGoPayDetails":false,"includeTokenisedPaymentMetaData":false},"includeEventCodes":["CAPTURE_FAILED","CHARGEBACK_REVERSED","REQUEST_FOR_INFORMATION","MANUAL_REVIEW_REJECT","PAIDOUT_REVERSED","PAYOUT_THIRDPARTY","NOTIFICATION_OF_CHARGEBACK","CANCELLATION","REFUNDED_REVERSED","MANUAL_REVIEW_ACCEPT","TECHNICAL_CANCEL","NOTIFICATION_OF_FRAUD","PREARBITRATION_OPEN","RECURRING_CONTRACT","PAYOUT_EXPIRE","CANCEL_AUTORESCUE","POSTPONED_REFUND","CANCEL_OR_REFUND","CAPTURE","ORDER_CLOSED","REFUND","REFUND_WITH_DATA","AUTHORISATION_ADJUSTMENT","HANDLED_EXTERNALLY","PENDING","AUTORESCUE","REFUND_FAILED","CHARGEBACK","VOID_PENDING_REFUND","PREARBITRATION_WON","ORDER_OPENED","PAYOUT_DECLINE","SECOND_CHARGEBACK","AUTHORISATION","REPORT_AVAILABLE","PREARBITRATION_LOST"],"excludeEventCodes":["DONATION","DISPUTE_OPENED_WITH_CHARGEBACK","ISSUER_COMMENTS","AUTHENTICATION","EXPIRE","OFFER_CLOSED","DISPUTE_DEFENSE_PERIOD_ENDED","ADVICE_OF_DEBIT","INFORMATION_SUPPLIED","ISSUER_RESPONSE_TIMEFRAME_EXPIRED","DISABLE_RECURRING"]},"_links":{"self":{"href":"https:\/\/management-test.adyen.com\/v3\/merchants\/SpreeCommerceECOM\/webhooks\/WBHK42CRJ22322955MZF3PPFTS32NP"},"generateHmac":{"href":"https:\/\/management-test.adyen.com\/v3\/merchants\/SpreeCommerceECOM\/webhooks\/WBHK42CRJ22322955MZF3PPFTS32NP\/generateHmac"},"merchant":{"href":"https:\/\/management-test.adyen.com\/v3\/merchants\/SpreeCommerceECOM"},"testWebhook":{"href":"https:\/\/management-test.adyen.com\/v3\/merchants\/SpreeCommerceECOM\/webhooks\/WBHK42CRJ22322955MZF3PPFTS32NP\/test"}}}'
+  recorded_at: Wed, 13 Aug 2025 11:48:07 GMT
+- request:
+    method: post
+    uri: https://management-test.adyen.com/v3/merchants/SpreeCommerceECOM/webhooks/WBHK42CRJ22322955MZF3PPFTS32NP/generateHmac
+    body:
+      encoding: UTF-8
+      string: "{}"
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - adyen-ruby-api-library/10.3.0
+      X-Api-Key:
+      - "<ADYEN_API_KEY>"
+      Adyen-Library-Name:
+      - adyen-ruby-api-library
+      Adyen-Library-Version:
+      - 10.3.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Traceparent:
+      - 00-c50d9efc875db79f73246fb179212366-9c0a48069bb92118-01
+      Set-Cookie:
+      - JSESSIONID=c6adc0b1a2dfd077~8BB2A2C038DB9688926954163E0657DF; Path=/configurationapi;
+        Secure; HttpOnly
+      Pspreference:
+      - b5547fa3-54a1-ada5-4f66-0ceb55af95ad_2-ZLBWJKZ64FZ28222
+      Requestid:
+      - b5547fa3-54a1-ada5-4f66-0ceb55af95ad_2-ZLBWJKZ64FZ28222
+      Content-Type:
+      - application/json;charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Wed, 13 Aug 2025 11:50:40 GMT
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: '{"hmacKey":"E76A17CC59F63E208C26A4EB6D9439EB68D33A98EA5CEE888F32BEA10E3ECE7F"}'
+  recorded_at: Wed, 13 Aug 2025 11:50:40 GMT
+- request:
+    method: post
+    uri: https://management-test.adyen.com/v3/merchants/SpreeCommerceECOM/webhooks/WBHK42CRJ22322955MZF3PPFTS32NP/generateHmac
+    body:
+      encoding: UTF-8
+      string: "{}"
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - adyen-ruby-api-library/10.3.0
+      X-Api-Key:
+      - "<ADYEN_API_KEY>"
+      Adyen-Library-Name:
+      - adyen-ruby-api-library
+      Adyen-Library-Version:
+      - 10.3.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Traceparent:
+      - 00-3b6d35ada66339c11d6556a3dde41cc6-231e1e44e00755d2-01
+      Set-Cookie:
+      - JSESSIONID=0e9170946f2acea3~A20031150CA3DE9CC3D76FC2F65D013C; Path=/configurationapi;
+        Secure; HttpOnly
+      Pspreference:
+      - ae586cb0-4605-6bef-6c3c-7db4f97543a8_2-LQQ43QZ64FZ28222
+      Requestid:
+      - ae586cb0-4605-6bef-6c3c-7db4f97543a8_2-LQQ43QZ64FZ28222
+      Content-Type:
+      - application/json;charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Wed, 13 Aug 2025 11:59:54 GMT
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: '{"hmacKey":"63596F8441A0E7BD16D9173408C1CA8266E9B8E0BAF0671B398473314167D306"}'
+  recorded_at: Wed, 13 Aug 2025 11:59:54 GMT
 recorded_with: VCR 6.3.1
