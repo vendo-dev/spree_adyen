@@ -35,25 +35,52 @@ RSpec.describe 'API V2 Storefront Adyen Payment Sessions', type: :request do
 
     context 'with valid headers' do
       context 'with valid params' do
-        it 'creates a payment session successfully' do
-          VCR.use_cassette('payment_sessions/success') do
-            expect {
-              post url, params: params, headers: headers
-            }.to change(SpreeAdyen::PaymentSession, :count).by(1)
+        context 'with channel' do
+          let(:params) do
+            {
+              payment_session: {
+                amount: amount,
+                channel: 'iOS'
+              }
+            }
+          end
 
-            expect(response).to have_http_status(:ok)
+          it 'creates a payment session successfully' do
+            VCR.use_cassette('payment_sessions/success') do
+              expect {
+                post url, params: params, headers: headers
+              }.to change(SpreeAdyen::PaymentSession, :count).by(1)
 
-            json_data = json_response['data']
-            expect(json_data['type']).to eq('adyen_payment_session')
-            expect(json_data['attributes']['amount']).to eq(amount.to_f.to_s)
-            expect(json_data['attributes']['status']).to eq('initial')
-            expect(json_data['attributes']['adyen_id']).to be_present
-            expect(json_data['attributes']['client_key']).to eq('test_client_key')
-            expect(json_data['attributes']['adyen_data']).to be_present
+              expect(response).to have_http_status(:ok)
 
-            # Verify relationships
-            expect(json_data['relationships']['order']['data']['id']).to eq(order.id.to_s)
-            expect(json_data['relationships']['payment_method']['data']['id']).to eq(adyen_gateway.id.to_s)
+              json_data = json_response['data']
+              expect(json_data['attributes']['channel']).to eq('iOS')
+            end
+          end
+        end
+
+        context 'without channel' do
+          it 'creates a payment session successfully' do
+            VCR.use_cassette('payment_sessions/success') do
+              expect {
+                post url, params: params, headers: headers
+              }.to change(SpreeAdyen::PaymentSession, :count).by(1)
+
+              expect(response).to have_http_status(:ok)
+
+              json_data = json_response['data']
+              expect(json_data['type']).to eq('adyen_payment_session')
+              expect(json_data['attributes']['amount']).to eq(amount.to_f.to_s)
+              expect(json_data['attributes']['status']).to eq('initial')
+              expect(json_data['attributes']['adyen_id']).to be_present
+              expect(json_data['attributes']['client_key']).to eq('test_client_key')
+              expect(json_data['attributes']['adyen_data']).to be_present
+              expect(json_data['attributes']['channel']).to be_nil
+
+              # Verify relationships
+              expect(json_data['relationships']['order']['data']['id']).to eq(order.id.to_s)
+              expect(json_data['relationships']['payment_method']['data']['id']).to eq(adyen_gateway.id.to_s)
+            end
           end
         end
       end
@@ -63,6 +90,26 @@ RSpec.describe 'API V2 Storefront Adyen Payment Sessions', type: :request do
           {
             payment_session: {
               amount: 'invalid'
+            }
+          }
+        end
+
+        it 'returns unprocessable entity error' do
+          VCR.use_cassette('payment_sessions/failure') do
+            post url, params: params, headers: headers
+
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(json_response['errors']).to be_present
+          end
+        end
+      end
+
+      context 'with invalid channel' do
+        let(:params) do
+          {
+            payment_session: {
+              amount: amount,
+              channel: 'invalid'
             }
           }
         end

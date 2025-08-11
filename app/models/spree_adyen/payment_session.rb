@@ -21,6 +21,7 @@ module SpreeAdyen
     validates :adyen_data, :status, :expires_at, presence: true
     validates :amount, presence: true, numericality: { greater_than: 0 }
     validates :currency, presence: true
+    validates :channel, inclusion: { in: %w[iOS Android Web] }, allow_nil: true
 
     validate :amount_cannot_be_greater_than_order_total
     validate :currency_matches_order_currency
@@ -84,7 +85,7 @@ module SpreeAdyen
     def create_session_in_adyen
       return if adyen_id.present?
 
-      response = payment_method.create_payment_session(amount, order)
+      response = payment_method.create_payment_session(amount, order, channel)
       return unless response.success?
 
       self.adyen_id = response.params['id']

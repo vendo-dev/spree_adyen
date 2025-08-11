@@ -1,6 +1,9 @@
 module SpreeAdyen
   module PaymentSessions
     class FindOrCreate
+      # @note sessions for mobile channels are created in API controller
+      DEFAULT_CHANNEL = 'Web'.freeze
+
       def initialize(order:, user:, amount:, payment_method:)
         @order = order
         @amount = amount
@@ -16,7 +19,8 @@ module SpreeAdyen
           amount: amount,
           currency: order.currency,
           user: user,
-          payment_method: payment_method
+          payment_method: payment_method,
+          channel: DEFAULT_CHANNEL
         )
       end
 
@@ -30,7 +34,8 @@ module SpreeAdyen
           order: order,
           currency: order.currency,
           user: user,
-          amount: amount
+          amount: amount,
+          channel: DEFAULT_CHANNEL
         )
       end
     end
