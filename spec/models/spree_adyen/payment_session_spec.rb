@@ -103,7 +103,7 @@ RSpec.describe SpreeAdyen::PaymentSession do
       subject(:payment_session) { build(:payment_session, channel: nil) }
 
       it 'sets the default channel' do
-        expect { payment_session.validate! }.to change(payment_session, :channel).to('Web')
+        expect { payment_session.validate }.to change(payment_session, :channel).to('Web')
       end
     end
   end
