@@ -15,7 +15,7 @@ RSpec.describe 'API V2 Storefront Adyen Payment Sessions', type: :request do
 
   before do
     # Freeze time to match VCR cassette expiration dates
-    Timecop.freeze('2025-07-07T00:00:00+02:00')
+    Timecop.freeze('2025-08-13T00:00:00+02:00')
   end
 
   after do
@@ -42,28 +42,24 @@ RSpec.describe 'API V2 Storefront Adyen Payment Sessions', type: :request do
             {
               payment_session: {
                 amount: amount,
-                channel: 'Web'
+                channel: 'iOS'
               }
             }
           end
 
           it 'creates a payment session successfully' do
-            VCR.use_cassette('payment_sessions/success') do
+            VCR.use_cassette('payment_sessions/success_with_ios_channel') do
               expect { post_request }.to change(SpreeAdyen::PaymentSession, :count).by(1)
 
               expect(response).to have_http_status(:ok)
 
               json_data = json_response['data']
-              expect(json_data['attributes']['channel']).to eq('Web')
+              expect(json_data['attributes']['channel']).to eq('iOS')
             end
           end
         end
 
         context 'without channel' do
-          before do
-            Timecop.freeze('2025-08-13T00:00:00+02:00')
-          end
-
           it 'creates a payment session successfully' do
             VCR.use_cassette('payment_sessions/success_without_channel') do
               expect { post_request }.to change(SpreeAdyen::PaymentSession, :count).by(1)
@@ -77,7 +73,7 @@ RSpec.describe 'API V2 Storefront Adyen Payment Sessions', type: :request do
               expect(json_data['attributes']['adyen_id']).to be_present
               expect(json_data['attributes']['client_key']).to eq('test_client_key')
               expect(json_data['attributes']['adyen_data']).to be_present
-              expect(json_data['attributes']['channel']).to be_nil
+              expect(json_data['attributes']['channel']).to eq('Web') # default channel
 
               # Verify relationships
               expect(json_data['relationships']['order']['data']['id']).to eq(order.id.to_s)

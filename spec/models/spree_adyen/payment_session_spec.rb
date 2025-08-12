@@ -97,4 +97,14 @@ RSpec.describe SpreeAdyen::PaymentSession do
       end
     end
   end
+
+  describe 'callbacks' do
+    describe 'set_default_channel' do
+      subject(:payment_session) { build(:payment_session, channel: nil) }
+
+      it 'sets the default channel' do
+        expect { payment_session.validate! }.to change(payment_session, :channel).to('Web')
+      end
+    end
+  end
 end

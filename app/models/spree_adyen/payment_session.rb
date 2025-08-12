@@ -27,7 +27,7 @@ module SpreeAdyen
     validates :adyen_data, :status, :expires_at, presence: true
     validates :amount, presence: true, numericality: { greater_than: 0 }
     validates :currency, presence: true
-    validates :channel, inclusion: { in: AVAILABLE_CHANNELS.values }, allow_nil: true
+    validates :channel, presence: true, inclusion: { in: AVAILABLE_CHANNELS.values }
 
     validate :amount_cannot_be_greater_than_order_total
     validate :currency_matches_order_currency
@@ -55,6 +55,7 @@ module SpreeAdyen
     #
     before_validation :set_amount_from_order
     before_validation :set_currency_from_order
+    before_validation :set_default_channel, if: -> { channel.blank? }
     before_validation :create_session_in_adyen, on: :create
 
     #
@@ -70,6 +71,10 @@ module SpreeAdyen
 
     def set_currency_from_order
       self.currency = order&.currency
+    end
+
+    def set_default_channel
+      self.channel = AVAILABLE_CHANNELS[:web]
     end
 
     def expiration_date_cannot_be_in_the_past_or_later_than_24_hours
