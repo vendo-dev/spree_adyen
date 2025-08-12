@@ -7,12 +7,13 @@ module SpreeAdyen
         storePaymentMethodMode: 'enabled'
       }.freeze
 
-      def initialize(order:, amount:, user:, merchant_account:, payment_method:)
+      def initialize(order:, amount:, user:, merchant_account:, payment_method:, channel:)
         @order = order
         @amount = amount
         @user = user
         @merchant_account = merchant_account
         @payment_method = payment_method
+        @channel = channel
       end
 
       def to_h
@@ -26,19 +27,18 @@ module SpreeAdyen
             currency: currency
           },
           returnUrl: return_url,
-          channel: SpreeAdyen::Config.channel,
           reference: reference,
           countryCode: address.country_iso,
           lineItems: line_items,
           merchantAccount: merchant_account,
           merchantOrderReference: order_number,
           expiresAt: expires_at
-        }.merge!(shopper_details, DEFAULT_PARAMS)
+        }.merge!(shopper_details, DEFAULT_PARAMS, channel_params)
       end
 
       private
 
-      attr_reader :order, :amount, :user, :merchant_account, :payment_method
+      attr_reader :order, :amount, :user, :merchant_account, :payment_method, :channel
 
       delegate :number, to: :order, prefix: true
       delegate :currency, to: :order
@@ -51,6 +51,19 @@ module SpreeAdyen
           payment_method.id,
           order.adyen_payment_sessions.with_deleted.count + 1
         ].join('_')
+      end
+
+      def channel_params
+        case channel
+        when 'iOS'
+          { blockedPaymentMethods: ['googlepay'], channel: 'iOS' }
+        when 'Android'
+          { blockedPaymentMethods: ['applepay'], channel: 'Android' }
+        when 'Web'
+          { channel: 'Web' }
+        else
+          {}
+        end
       end
 
       def shopper_details

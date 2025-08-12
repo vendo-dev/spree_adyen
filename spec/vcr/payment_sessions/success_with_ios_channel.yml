@@ -1,0 +1,63 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://checkout-test.adyen.com/v71/sessions
+    body:
+      encoding: UTF-8
+      string: '{"metadata":{"spree_payment_method_id":1,"spree_order_id":"R175760637"},"amount":{"value":11000,"currency":"USD"},"returnUrl":"http://www.example.com/adyen/payment_sessions/redirect","reference":"R175760637_1_1","countryCode":"US","lineItems":[{"amountExcludingTax":1000,"amountIncludingTax":1000,"description":"Product
+        133268","id":1,"sku":"SKU-13","quantity":1}],"merchantAccount":"SpreeCommerceECOM","merchantOrderReference":"R175760637","expiresAt":"2025-08-12T23:00:00Z","shopperName":{"firstName":"John","lastName":"Doe"},"shopperEmail":null,"shopperReference":"guest_R175760637","recurringProcessingModel":"UnscheduledCardOnFile","shopperInteraction":"Ecommerce","storePaymentMethodMode":"enabled","blockedPaymentMethods":["googlepay"],"channel":"iOS"}'
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - adyen-ruby-api-library/10.3.0
+      X-Api-Key:
+      - "<ADYEN_API_KEY>"
+      Idempotency-Key:
+      - c33b4b1d-3aac-4a51-bacb-247d08c00ff5
+      Adyen-Library-Name:
+      - adyen-ruby-api-library
+      Adyen-Library-Version:
+      - 10.3.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Traceparent:
+      - 00-cc2608155376d44cb81ed7485ea1af87-f477f04a9ea33c8e-01
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Cache-Control:
+      - no-cache, no-store, private, must-revalidate, max-age=0
+      Pragma:
+      - no-cache
+      Expires:
+      - '0'
+      Set-Cookie:
+      - JSESSIONID=2DA9A0D416758509D90FB9D2A4309833; Path=/checkout; Secure; HttpOnly
+      Idempotency-Key:
+      - c33b4b1d-3aac-4a51-bacb-247d08c00ff5
+      Pspreference:
+      - NQWWX4FPKJBH7H65
+      Content-Type:
+      - application/json;charset=UTF-8
+      Content-Length:
+      - '2919'
+      Date:
+      - Tue, 12 Aug 2025 12:13:47 GMT
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: '{"amount":{"currency":"USD","value":11000},"blockedPaymentMethods":["googlepay"],"channel":"iOS","countryCode":"US","expiresAt":"2025-08-13T01:00:00+02:00","id":"CS8C129487D31C1B7DEBBC2D1","lineItems":[{"amountExcludingTax":1000,"amountIncludingTax":1000,"description":"Product
+        133268","id":"1","quantity":1,"sku":"SKU-13","taxAmount":0,"taxPercentage":0}],"merchantAccount":"SpreeCommerceECOM","merchantOrderReference":"R175760637","metadata":{"spree_payment_method_id":"1","spree_order_id":"R175760637"},"recurringProcessingModel":"UnscheduledCardOnFile","reference":"R175760637_1_1","returnUrl":"http:\/\/www.example.com\/adyen\/payment_sessions\/redirect","shopperInteraction":"Ecommerce","shopperLocale":"en-US","shopperName":{"firstName":"John","lastName":"Doe"},"shopperReference":"guest_R175760637","storePaymentMethodMode":"enabled","mode":"embedded","sessionData":"Ab02b4c0!BQABAgCcJh9IFLtPdHtav9Cs3IB3QwhblbJDHRzTqqcRaTAzbUKGnQnJu\/dDPXSl4aQZNKtiAvGQZTXDabsTZmTGeh4LXs84pqxnCrHMGGq9fCTrFOeFYT4UrSw4kkO73lW\/WHXR+7pOxrXhPptqpls9Ku26xVmscrgz3G\/S30YqgRGvp+YcImlCrCESGiUn898w5\/Mup7Jbok51YvvY3IE2cYR6AsTNNOENQ8pePVdYr51JIwDv5XIjcUQM53EHo8ycZ9h9tBgKnab2eqvG29MYNJsEq70lYcCN64tQbHcflZMrraobRazULjt5aXVeXrcbfMmLRBx9qJ8etYmijlJ680d8w6h6CUze4aRI7Jes9KcVovkVSVYOc4TZ3QMXfTA6vrk6K6lD3BjNEr4aofjfwSVN0Ohb1NOp6uXNnXwd9CB6eR4TZDAUpNRqTL7qhgmSQa84zS4lvCCK\/hwD5gYquW1ND4QnCqD6npBGsoiUv5CJ+haTH\/XmRF5pv1DU+wcXmFPSTwn1p8VUQJ7f9AMWOxoTHFzujlUHAazdxeTs1IZ87bkaCbdd4CtZVYfFtxojtQaFx+cTbSB9BIvIAxFKr+rWGGz\/cQcWXCJ3EarOm91r2Gj1ficyvosJnERVAUv05ESjJiCQISxozyN3o1XZ7eO8cp+8qhH4sSvvdNOAoLGACAy1pyZ7Ufb9PwwJ4NQASnsia2V5IjoiQUYwQUFBMTAzQ0E1MzdFQUVEODdDMjRERDUzOTA5QjgwQTc4QTkyM0UzODIzRDY4REFDQzk0QjlGRjgzMDVEQyJ97vG3tOvwWu5UVZdC18HbOhJ\/8XX5mAkbKJc0BwZyU9FDKUFFI+aDWh6O3O9bpo\/FQdCJSU5yWGF4hPiWPs+XyWcYfw5Q2doI07fvFRKr2QGbOrHECa5WjEp4GELc6O12YhM4v+9wDl5esanEWAwvwUl4L8OQeyeMa42Rd9BWNvjyM\/DdgWK\/DUoOrTcJVwEaOA8106YN588PNgynnLxeXRiyVVJ3xj5zcyLhl0yEGqapqlvwq7p9Eq0NJDK1u7a6o4DC1x8jvNleaAbZV\/bdsg6bElg\/nPxuLPjya2\/n6zbdWO1QQf49orGvwc+TqxTIZtnH4r\/DAPOP+CWrr5Bv4CiHQx4KS0bFJ5ss3f0AEbwLt0\/EUi3q+qAp3gfSXvRytsNFppfYp+MV5umCxwqvQzZopDcxn8GfOe60ufgAXMJJGyRw\/5RKjQughQZi\/ioNkT9lhuJah7iFuPVNTsE7oQ7zQACTAzBISynjFh7TINJ6KDI+04L8v4HYAdNByzrcMg9Hl+fUIxzG9XX5Vk0qUv2WXfGz2d0+623bICBvaqHm0NoWWj3bBbU+OcPSlHgPEw57rDcMYuYiiaNs0cHtb3NHGxYqXbbv+Vs6xR\/j4hqZzqTwjy3NfpFC+htj3Ag7ocN6SUxILM7HrnfCZcOAjvPMa9pGrjTl5PSlwn3zFgjGzQN8pM0IjHFhCu5UfTjpY7QX2lo7s\/htF9299A5BjYxo8Cjr0qFglOBWiiGi39y+RP6ZTGuTSB+3gqItchZ5kfad2kcS6J2jmdS8AP7ePHzQbWiCT4AJAhePxwRAYVbSiRQXJPfIrCHwT2Tk7fOhSTZUNIRDfJVgAdqhblbANquRs56NZAyu+RMh5bVqr9Grp6inQiTujDKPt3li7e1SZOCsCUTFurRD3hrvEAlhR+mpOS+\/Zbi8A\/GJOtsSQygiRj1EnmX+HisSMa2J7PGJnJsErtdwsRWjqj7aDpkVab4YGO++fbufT+aX1EN\/FbcEXQUJlFogJzG9cj6OAKePgwCmY2Mjs9HMvsML86+AreaxTmgAV3rrGexViU6SZWP7QorJngNcCWXUsnxt5ppP2yVuxJuNgCvrZn4EAXRCjPD8O9R8i0eAHxeI7DmEVd9bSmnveutQdFSA0bbhnr1W8dHhtg0yuH9gV2\/VL+VE3UJw9yis\/1GTPQ81RKH9f1vseg=="}'
+  recorded_at: Tue, 12 Aug 2025 22:00:00 GMT
+recorded_with: VCR 6.3.1

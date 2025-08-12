@@ -16,7 +16,8 @@ module Spree
                 order: spree_current_order,
                 amount: permitted_attributes[:amount],
                 user: spree_current_user,
-                payment_method: adyen_gateway
+                payment_method: adyen_gateway,
+                channel: permitted_attributes[:channel]
               )
 
               if @payment_session.save
@@ -36,7 +37,7 @@ module Spree
             private
 
             def permitted_attributes
-              params.require(:payment_session).permit(:amount)
+              params.require(:payment_session).permit(:amount, :channel)
             end
 
             def resource_serializer

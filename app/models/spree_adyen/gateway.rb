@@ -120,13 +120,14 @@ module SpreeAdyen
     # @param amount_in_cents [Integer] the amount in cents
     # @param order [Spree::Order] the order to create a payment session for
     # @return [ActiveMerchant::Billing::Response] the response from the payment session creation
-    def create_payment_session(amount_in_cents, order)
+    def create_payment_session(amount_in_cents, order, channel)
       payload = SpreeAdyen::PaymentSessions::RequestPayloadPresenter.new(
         order: order,
         amount: amount_in_cents,
         user: order.user,
         merchant_account: preferred_merchant_account,
-        payment_method: self
+        payment_method: self,
+        channel: channel
       ).to_h
 
       response = send_request do

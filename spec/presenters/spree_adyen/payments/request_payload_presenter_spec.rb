@@ -40,7 +40,6 @@ RSpec.describe SpreeAdyen::Payments::RequestPayloadPresenter do
           storedPaymentMethodId: '12345',
           type: 'scheme'
         },
-        channel: 'Web',
         shopperReference: "customer_#{user.id}"
       }
     end
