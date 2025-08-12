@@ -23,6 +23,8 @@ RSpec.describe 'API V2 Storefront Adyen Payment Sessions', type: :request do
   end
 
   describe 'POST /api/v2/storefront/adyen/payment_sessions' do
+    subject(:post_request) { post url, params: params, headers: headers }
+
     let(:url) { '/api/v2/storefront/adyen/payment_sessions' }
     let(:amount) { order.total_minus_store_credits }
     let(:params) do
@@ -40,31 +42,31 @@ RSpec.describe 'API V2 Storefront Adyen Payment Sessions', type: :request do
             {
               payment_session: {
                 amount: amount,
-                channel: 'iOS'
+                channel: 'Web'
               }
             }
           end
 
           it 'creates a payment session successfully' do
             VCR.use_cassette('payment_sessions/success') do
-              expect {
-                post url, params: params, headers: headers
-              }.to change(SpreeAdyen::PaymentSession, :count).by(1)
+              expect { post_request }.to change(SpreeAdyen::PaymentSession, :count).by(1)
 
               expect(response).to have_http_status(:ok)
 
               json_data = json_response['data']
-              expect(json_data['attributes']['channel']).to eq('iOS')
+              expect(json_data['attributes']['channel']).to eq('Web')
             end
           end
         end
 
         context 'without channel' do
+          before do
+            Timecop.freeze('2025-08-13T00:00:00+02:00')
+          end
+
           it 'creates a payment session successfully' do
-            VCR.use_cassette('payment_sessions/success') do
-              expect {
-                post url, params: params, headers: headers
-              }.to change(SpreeAdyen::PaymentSession, :count).by(1)
+            VCR.use_cassette('payment_sessions/success_without_channel') do
+              expect { post_request }.to change(SpreeAdyen::PaymentSession, :count).by(1)
 
               expect(response).to have_http_status(:ok)
 
@@ -96,7 +98,7 @@ RSpec.describe 'API V2 Storefront Adyen Payment Sessions', type: :request do
 
         it 'returns unprocessable entity error' do
           VCR.use_cassette('payment_sessions/failure') do
-            post url, params: params, headers: headers
+            post_request
 
             expect(response).to have_http_status(:unprocessable_entity)
             expect(json_response['errors']).to be_present
@@ -116,7 +118,7 @@ RSpec.describe 'API V2 Storefront Adyen Payment Sessions', type: :request do
 
         it 'returns unprocessable entity error' do
           VCR.use_cassette('payment_sessions/failure') do
-            post url, params: params, headers: headers
+            post_request
 
             expect(response).to have_http_status(:unprocessable_entity)
             expect(json_response['errors']).to be_present
@@ -129,7 +131,7 @@ RSpec.describe 'API V2 Storefront Adyen Payment Sessions', type: :request do
       let(:headers) { {} }
 
       it 'returns not found error' do
-        post url, params: params, headers: headers
+        post_request
 
         expect(response).to have_http_status(:not_found)
       end
@@ -139,7 +141,7 @@ RSpec.describe 'API V2 Storefront Adyen Payment Sessions', type: :request do
       let(:adyen_gateway) { nil }
 
       it 'returns error when adyen gateway is not present' do
-        post url, params: params, headers: headers
+        post_request
 
         expect(response).to have_http_status(:unprocessable_entity)
         expect(json_response['error']).to include('Adyen gateway is not present')
@@ -158,7 +160,7 @@ RSpec.describe 'API V2 Storefront Adyen Payment Sessions', type: :request do
       end
 
       it 'returns not found error' do
-        post url, params: params, headers: headers
+        post_request
 
         expect(response).to have_http_status(:not_found)
       end
@@ -166,6 +168,8 @@ RSpec.describe 'API V2 Storefront Adyen Payment Sessions', type: :request do
   end
 
   describe 'GET /api/v2/storefront/adyen/payment_sessions/:id' do
+    subject(:get_request) { get url, params: params, headers: headers }
+
     let(:payment_session) { create(:payment_session, amount: order.total, order: order, user: user, payment_method: adyen_gateway) }
     let(:url) { "/api/v2/storefront/adyen/payment_sessions/#{payment_session.id}" }
     let(:params) { {} }
@@ -173,7 +177,7 @@ RSpec.describe 'API V2 Storefront Adyen Payment Sessions', type: :request do
     context 'with authenticated user' do
       context 'with valid payment session' do
         it 'returns payment session data' do
-          get url, params: params, headers: headers
+          get_request
 
           expect(response).to have_http_status(:ok)
 
@@ -187,7 +191,7 @@ RSpec.describe 'API V2 Storefront Adyen Payment Sessions', type: :request do
         end
 
         it 'includes correct relationships' do
-          get url, params: params, headers: headers
+          get_request
 
           expect(response).to have_http_status(:ok)
 
@@ -202,7 +206,7 @@ RSpec.describe 'API V2 Storefront Adyen Payment Sessions', type: :request do
         let(:url) { '/api/v2/storefront/adyen/payment_sessions/999999' }
 
         it 'returns not found error' do
-          get url, params: params, headers: headers
+          get_request
 
           expect(response).to have_http_status(:not_found)
         end
@@ -214,7 +218,7 @@ RSpec.describe 'API V2 Storefront Adyen Payment Sessions', type: :request do
         let(:url) { "/api/v2/storefront/adyen/payment_sessions/#{other_payment_session.id}" }
 
         it 'returns not found error' do
-          get url, params: params, headers: headers
+          get_request
 
           expect(response).to have_http_status(:not_found)
         end
@@ -225,7 +229,7 @@ RSpec.describe 'API V2 Storefront Adyen Payment Sessions', type: :request do
       let(:order_token) { 'invalid_token' }
 
       it 'returns not found error' do
-        get url, params: params, headers: headers
+        get_request
 
         expect(response).to have_http_status(:not_found)
       end

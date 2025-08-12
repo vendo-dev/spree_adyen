@@ -1,5 +1,11 @@
 module SpreeAdyen
   class PaymentSession < Base
+    AVAILABLE_CHANNELS = {
+      ios: 'iOS',
+      android: 'Android',
+      web: 'Web'
+    }.freeze
+
     acts_as_paranoid
     #
     # Associations
@@ -21,7 +27,7 @@ module SpreeAdyen
     validates :adyen_data, :status, :expires_at, presence: true
     validates :amount, presence: true, numericality: { greater_than: 0 }
     validates :currency, presence: true
-    validates :channel, inclusion: { in: %w[iOS Android Web] }, allow_nil: true
+    validates :channel, inclusion: { in: AVAILABLE_CHANNELS.values }, allow_nil: true
 
     validate :amount_cannot_be_greater_than_order_total
     validate :currency_matches_order_currency
