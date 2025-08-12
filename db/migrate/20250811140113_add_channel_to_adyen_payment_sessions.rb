@@ -5,6 +5,6 @@ class AddChannelToAdyenPaymentSessions < ActiveRecord::Migration[7.2]
     SpreeAdyen::PaymentSession.reset_column_information
     SpreeAdyen::PaymentSession.where(channel: nil).update_all(channel: 'Web')
 
-    add_index :spree_adyen_payment_sessions, :channel, algorithm: :concurrently
+    add_index :spree_adyen_payment_sessions, :channel
   end
 end
