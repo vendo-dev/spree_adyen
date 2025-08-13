@@ -55,8 +55,9 @@ module SpreeAdyen
     #
     before_validation :set_amount_from_order
     before_validation :set_currency_from_order
-    before_validation :set_default_channel, if: -> { channel.blank? }
+    before_validation :set_default_channel, on: :create, if: -> { channel.blank? }
     before_validation :create_session_in_adyen, on: :create
+    before_validation :set_return_url, on: :create, if: -> { return_url.blank? }
 
     #
     # Delegations
@@ -75,6 +76,12 @@ module SpreeAdyen
 
     def set_default_channel
       self.channel = AVAILABLE_CHANNELS[:web]
+    end
+
+    def set_return_url
+      return if order.blank?
+
+      self.return_url = Spree::Core::Engine.routes.url_helpers.redirect_adyen_payment_session_url(host: order.store.url)
     end
 
     def expiration_date_cannot_be_in_the_past_or_later_than_24_hours
