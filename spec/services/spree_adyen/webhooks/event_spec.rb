@@ -19,7 +19,7 @@ RSpec.describe SpreeAdyen::Webhooks::Event do
               "paymentMethod": "mc",
               "checkout.cardAddedBrand": "**",
               "storedPaymentMethodId": "HF7Z59JSZZSBJWT5",
-              "hmacSignature": "hmacSignature"
+              "hmacSignature": "ZmFrZV9zaWduYXR1cmU="
             },
             "amount": {
               "currency": "EUR",
