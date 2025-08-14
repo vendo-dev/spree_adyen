@@ -26,15 +26,6 @@ http_interactions:
       code: 200
       message: OK
     headers:
-      Traceparent:
-      - 00-3c972f3e7f829fc3cd74039a54f2cac1-e5ed96b7cb2db36b-01
-      Set-Cookie:
-      - JSESSIONID=71ac2022c3b6dddf~13377D9DB1F3599E982FC408DA4451E5; Path=/configurationapi;
-        Secure; HttpOnly
-      Pspreference:
-      - 9ccacf57-fb13-f0af-ff92-1b375817c28b_1-D8NGX2SX3FZ28222
-      Requestid:
-      - 9ccacf57-fb13-f0af-ff92-1b375817c28b_1-D8NGX2SX3FZ28222
       Content-Type:
       - application/json;charset=utf-8
       Transfer-Encoding:

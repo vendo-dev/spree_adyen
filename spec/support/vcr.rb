@@ -10,31 +10,36 @@ VCR.configure do |c|
   c.ignore_localhost = true
   c.configure_rspec_metadata!
   c.default_cassette_options = { record: :new_episodes }
-  c.filter_sensitive_data('<ADYEN_API_KEY>') { |i| i.request.headers['X-Api-Key']&.first }
-  c.filter_sensitive_data('<ADYEN_HMAC_KEY>') do |i|
+  c.filter_sensitive_data('ADYEN_API_KEY') { |i| i.request.headers['X-Api-Key']&.first }
+  c.filter_sensitive_data('ADYEN_HMAC_KEY') do |i|
     body = i.response&.body.to_s
     body[/\"hmacKey\":\"([A-F0-9]+)\"/, 1]
   end
-  c.filter_sensitive_data('<ADYEN_HMAC_SIGNATURE>') do |i|
+  c.filter_sensitive_data('ADYEN_HMAC_SIGNATURE') do |i|
     body = i.response&.body.to_s
     # match either normal JSON: "hmacSignature":"<value>"
     # or escaped nested JSON: \"hmacSignature\":\"<value>\"
     body[/"hmacSignature":"(.*?)"/, 1] || body[/\\\"hmacSignature\\\":\\\"(.*?)\\\"/, 1]
   end
 
-  c.filter_sensitive_data('<ADYEN_CLIENT_KEY>') do |i|
+  c.filter_sensitive_data('ADYEN_CLIENT_KEY') do |i|
     body = i.response&.body.to_s
-    body[/"clientKey":"(.*?)"/, 1]
+    body[/"clientKey":"(.*?)"/, 1] || body[/\\\"clientKey\\\":\\\"(.*?)\\\"/, 1]
   end
   
-  c.filter_sensitive_data('<ADYEN_USERNAME>') do |i|
+  c.filter_sensitive_data('ADYEN_USERNAME') do |i|
     body = i.response&.body.to_s
-    body[/"username":"(.*?)"/, 1]
+    body[/"username":"(.*?)"/, 1] || body[/\\\"username\\\":\\\"(.*?)\\\"/, 1]
   end
   
-  c.filter_sensitive_data('<ADYEN_PSP_REFERENCE>') do |i|
+  c.filter_sensitive_data('ADYEN_PSP_REFERENCE') do |i|
     body = i.response&.body.to_s
-    body[/"pspReference":"(.*?)"/, 1]
+    body[/"pspReference":"(.*?)"/, 1] || body[/\\\"pspReference\\\":\\\"(.*?)\\\"/, 1]
+  end
+
+  c.filter_sensitive_data('ADYEN_PAYMENT_PSP_REFERENCE') do |i|
+    body = i.response&.body.to_s
+    body[/"paymentPspReference":"(.*?)"/, 1] || body[/\\\"paymentPspReference\\\":\\\"(.*?)\\\"/, 1]
   end
 
   c.before_record do |interaction|

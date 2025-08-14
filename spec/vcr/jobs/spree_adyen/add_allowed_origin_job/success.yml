@@ -12,7 +12,7 @@ http_interactions:
       User-Agent:
       - adyen-ruby-api-library/10.3.0
       X-Api-Key:
-      - "<ADYEN_API_KEY>"
+      - "ADYEN_API_KEY"
       Adyen-Library-Name:
       - adyen-ruby-api-library
       Adyen-Library-Version:
@@ -26,15 +26,6 @@ http_interactions:
       code: 200
       message: OK
     headers:
-      Traceparent:
-      - 00-a9495eb50ec75ad2acff1295c22bd15c-38ceb0d5d783a891-01
-      Set-Cookie:
-      - JSESSIONID=86f226c5f4e48334~193C1C7DEDF79F3EF257BC8BFA7E2709; Path=/configurationapi;
-        Secure; HttpOnly
-      Pspreference:
-      - 7080757d-cb70-72a9-d939-d4522e9bddbf_0-MT2HS6N24FZ28222
-      Requestid:
-      - 7080757d-cb70-72a9-d939-d4522e9bddbf_0-MT2HS6N24FZ28222
       Content-Type:
       - application/json;charset=utf-8
       Transfer-Encoding:

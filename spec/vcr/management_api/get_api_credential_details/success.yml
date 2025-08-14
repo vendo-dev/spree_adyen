@@ -12,7 +12,7 @@ http_interactions:
       User-Agent:
       - adyen-ruby-api-library/10.4.0
       X-Api-Key:
-      - "<ADYEN_API_KEY>"
+      - "ADYEN_API_KEY"
       Adyen-Library-Name:
       - adyen-ruby-api-library
       Adyen-Library-Version:
@@ -26,15 +26,6 @@ http_interactions:
       code: 200
       message: OK
     headers:
-      Traceparent:
-      - 00-a38c4fe35b9ddfeb41734d1ecf2ddac5-4593183d8118a81d-01
-      Set-Cookie:
-      - JSESSIONID=fb5c508462f3b37c~3C3CAFEBF9C4BDABAABC42F9ED0EF65B; Path=/configurationapi;
-        Secure; HttpOnly
-      Pspreference:
-      - ec91b44c-f5d2-3145-714b-630cbd006976_1-M75VCCT74FZ28222
-      Requestid:
-      - ec91b44c-f5d2-3145-714b-630cbd006976_1-M75VCCT74FZ28222
       Content-Type:
       - application/json;charset=utf-8
       Transfer-Encoding:
@@ -45,8 +36,8 @@ http_interactions:
       - max-age=31536000; includeSubDomains
     body:
       encoding: UTF-8
-      string: '{"id":"CRED42CLS22322945MZF5ZNDQ26BBP","username":"user@Company.companyName","description":"testing
-        auto-configure","clientKey":"test_clientKey","allowedIpAddresses":[],"roles":["Merchant
+      string: '{"id":"CRED42CLS22322945MZF5ZNDQ26BBP","username":"ADYEN_USERNAME","description":"testing
+        auto-configure","clientKey":"ADYEN_CLIENT_KEY","allowedIpAddresses":[],"roles":["Merchant
         PAL Webservice role"],"active":true,"_links":{"self":{"href":"https:\/\/management-test.adyen.com\/v3\/me"},"allowedOrigins":{"href":"https:\/\/management-test.adyen.com\/v3\/me\/allowedOrigins"}},"associatedMerchantAccounts":["SpreeCommerceECOM"],"companyName":"SpreeCommerce"}'
   recorded_at: Thu, 14 Aug 2025 10:34:50 GMT
 recorded_with: VCR 6.3.1

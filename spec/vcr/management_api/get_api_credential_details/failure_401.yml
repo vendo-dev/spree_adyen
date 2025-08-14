@@ -12,7 +12,7 @@ http_interactions:
       User-Agent:
       - adyen-ruby-api-library/10.4.0
       X-Api-Key:
-      - "<ADYEN_API_KEY>"
+      - "ADYEN_API_KEY"
       Adyen-Library-Name:
       - adyen-ruby-api-library
       Adyen-Library-Version:

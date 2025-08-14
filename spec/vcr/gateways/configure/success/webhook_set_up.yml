@@ -12,7 +12,7 @@ http_interactions:
       User-Agent:
       - adyen-ruby-api-library/10.4.0
       X-Api-Key:
-      - "<ADYEN_API_KEY>"
+      - "ADYEN_API_KEY"
       Adyen-Library-Name:
       - adyen-ruby-api-library
       Adyen-Library-Version:
@@ -36,8 +36,8 @@ http_interactions:
       - max-age=31536000; includeSubDomains
     body:
       encoding: UTF-8
-      string: '{"id":"CRED42CLS22322945MZF5ZNDQ26BBP","username":"username@Company.SpreeCommerce","description":"testing
-        auto-configure","clientKey":"test_UN5FFTJ7SVG75CDZV73OZFOLBUITW63N","allowedIpAddresses":[],"roles":["Management
+      string: '{"id":"CRED42CLS22322945MZF5ZNDQ26BBP","username":"ADYEN_USERNAME","description":"testing
+        auto-configure","clientKey":"ADYEN_CLIENT_KEY","allowedIpAddresses":[],"roles":["Management
         API - Accounts read","Management API - Webhooks read","Cloud Device API role","Management
         API - API credentials read and write","Management API - Stores read","Management
         API — Payment methods read","Allow SDK download for POS developers","API Clientside
@@ -59,7 +59,7 @@ http_interactions:
       User-Agent:
       - adyen-ruby-api-library/10.4.0
       X-Api-Key:
-      - "<ADYEN_API_KEY>"
+      - "ADYEN_API_KEY"
       Adyen-Library-Name:
       - adyen-ruby-api-library
       Adyen-Library-Version:
@@ -84,7 +84,7 @@ http_interactions:
       - max-age=31536000; includeSubDomains
     body:
       encoding: UTF-8
-      string: '{"data":[{"output":"The server did not respond with HTTP 2XX.","requestSent":"{\"live\":\"false\",\"notificationItems\":[{\"NotificationRequestItem\":{\"additionalData\":{\"expiryDate\":\"12\\\/2012\",\"authCode\":\"1234\",\"cardSummary\":\"7777\",\"totalFraudScore\":\"10\",\"hmacSignature\":\"hmacSignature\\\/ZmFrZV9zaWduYXR1cmU=\",\"NAME2\":\"VALUE2\",\"NAME1\":\"VALUE1\",\"fraudCheck-6-ShopperIpUsage\":\"10\"},\"amount\":{\"currency\":\"EUR\",\"value\":10100},\"eventCode\":\"AUTHORISATION\",\"eventDate\":\"2025-08-14T13:03:41+02:00\",\"merchantAccountCode\":\"SpreeCommerceECOM\",\"merchantReference\":\"8313842560770001\",\"operations\":[\"CANCEL\",\"CAPTURE\",\"REFUND\"],\"paymentMethod\":\"visa\",\"pspReference\":\"BVM7DTNRK29F2S75\",\"reason\":\"1234:7777:12\\\/2012\",\"success\":\"true\"}}]}","responseCode":"404","responseTime":"106
+      string: '{"data":[{"output":"The server did not respond with HTTP 2XX.","requestSent":"{\"live\":\"false\",\"notificationItems\":[{\"NotificationRequestItem\":{\"additionalData\":{\"expiryDate\":\"12\\\/2012\",\"authCode\":\"1234\",\"cardSummary\":\"7777\",\"totalFraudScore\":\"10\",\"hmacSignature\":\"hmacSignature\\\/ZmFrZV9zaWduYXR1cmU=\",\"NAME2\":\"VALUE2\",\"NAME1\":\"VALUE1\",\"fraudCheck-6-ShopperIpUsage\":\"10\"},\"amount\":{\"currency\":\"EUR\",\"value\":10100},\"eventCode\":\"AUTHORISATION\",\"eventDate\":\"2025-08-14T13:03:41+02:00\",\"merchantAccountCode\":\"SpreeCommerceECOM\",\"merchantReference\":\"8313842560770001\",\"operations\":[\"CANCEL\",\"CAPTURE\",\"REFUND\"],\"paymentMethod\":\"visa\",\"pspReference\":\"ADYEN_PSP_REFERENCE\",\"reason\":\"1234:7777:12\\\/2012\",\"success\":\"true\"}}]}","responseCode":"404","responseTime":"106
         ms","status":"failed"}]}'
   recorded_at: Thu, 14 Aug 2025 11:03:41 GMT
 recorded_with: VCR 6.3.1

@@ -12,7 +12,7 @@ http_interactions:
       User-Agent:
       - adyen-ruby-api-library/10.3.0
       X-Api-Key:
-      - "<ADYEN_API_KEY>"
+      - "ADYEN_API_KEY"
       Adyen-Library-Name:
       - adyen-ruby-api-library
       Adyen-Library-Version:
@@ -26,15 +26,6 @@ http_interactions:
       code: 200
       message: OK
     headers:
-      Traceparent:
-      - 00-a01e86c727f3a30984444abac8196f26-f4216746db0e07db-01
-      Set-Cookie:
-      - JSESSIONID=51c7077fdad0538e~918C89493E55E0548ADF2A8107EE24B0; Path=/configurationapi;
-        Secure; HttpOnly
-      Pspreference:
-      - 329fe07c-f722-b69d-b59a-16069a09e7ad_0-WGXQCD754FZ28222
-      Requestid:
-      - 329fe07c-f722-b69d-b59a-16069a09e7ad_0-WGXQCD754FZ28222
       Content-Type:
       - application/json;charset=utf-8
       Transfer-Encoding:
@@ -45,6 +36,6 @@ http_interactions:
       - max-age=31536000; includeSubDomains
     body:
       encoding: UTF-8
-      string: '{"clientKey":"test_ABCD123"}'
+      string: '{"clientKey":"ADYEN_CLIENT_KEY"}'
   recorded_at: Mon, 11 Aug 2025 11:51:39 GMT
 recorded_with: VCR 6.3.1

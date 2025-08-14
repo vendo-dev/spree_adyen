@@ -12,7 +12,7 @@ http_interactions:
       User-Agent:
       - adyen-ruby-api-library/10.4.0
       X-Api-Key:
-      - "<ADYEN_API_KEY>"
+      - "ADYEN_API_KEY"
       Adyen-Library-Name:
       - adyen-ruby-api-library
       Adyen-Library-Version:
@@ -36,8 +36,8 @@ http_interactions:
       - max-age=31536000; includeSubDomains
     body:
       encoding: UTF-8
-      string: '{"id":"CRED42CLS22322945MZF5ZNDQ26BBP","username":"username@Company.SpreeCommerce","description":"testing
-        auto-configure","clientKey":"test_UN5FFTJ7SVG75CDZV73OZFOLBUITW63N","allowedIpAddresses":[],"roles":["Management
+      string: '{"id":"CRED42CLS22322945MZF5ZNDQ26BBP","username":"ADYEN_USERNAME","description":"testing
+        auto-configure","clientKey":"ADYEN_CLIENT_KEY","allowedIpAddresses":[],"roles":["Management
         API - Accounts read","Management API - Webhooks read","Cloud Device API role","Management
         API - API credentials read and write","Management API - Stores read","Management
         API — Payment methods read","Allow SDK download for POS developers","API Clientside
@@ -60,7 +60,7 @@ http_interactions:
       User-Agent:
       - adyen-ruby-api-library/10.4.0
       X-Api-Key:
-      - "<ADYEN_API_KEY>"
+      - "ADYEN_API_KEY"
       Adyen-Library-Name:
       - adyen-ruby-api-library
       Adyen-Library-Version:
@@ -99,7 +99,7 @@ http_interactions:
       User-Agent:
       - adyen-ruby-api-library/10.4.0
       X-Api-Key:
-      - "<ADYEN_API_KEY>"
+      - "ADYEN_API_KEY"
       Adyen-Library-Name:
       - adyen-ruby-api-library
       Adyen-Library-Version:
@@ -123,6 +123,6 @@ http_interactions:
       - max-age=31536000; includeSubDomains
     body:
       encoding: UTF-8
-      string: '{"hmacKey":"<ADYEN_HMAC_KEY>"}'
+      string: '{"hmacKey":"ADYEN_HMAC_KEY"}'
   recorded_at: Thu, 14 Aug 2025 11:03:42 GMT
 recorded_with: VCR 6.3.1

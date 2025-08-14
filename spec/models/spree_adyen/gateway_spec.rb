@@ -105,7 +105,7 @@ RSpec.describe SpreeAdyen::Gateway do
         VCR.use_cassette('payment_session_results/failure') do
           expect(subject).to be_a(ActiveMerchant::Billing::Response)
           expect(subject.success?).to be_falsey
-          expect(subject.message).to eq('F7CHQBP9MCWNRQT5 - server could not process request')
+          expect(subject.message).to eq('ADYEN_PSP_REFERENCE - server could not process request')
         end
       end
     end
@@ -139,7 +139,7 @@ RSpec.describe SpreeAdyen::Gateway do
         VCR.use_cassette('payment_sessions/failure') do
           expect(subject).to be_a(ActiveMerchant::Billing::Response)
           expect(subject.success?).to be_falsey
-          expect(subject.message).to eq("N3FFD9KVFQ85K5V5 - Field 'countryCode' is not valid.")
+          expect(subject.message).to eq("ADYEN_PSP_REFERENCE - Field 'countryCode' is not valid.")
         end
       end
     end
@@ -177,7 +177,7 @@ RSpec.describe SpreeAdyen::Gateway do
 
     context 'when payment is completed' do
       let(:order) { create(:order, total: 10, number: 'R142767632') }
-      let(:payment) { create(:payment, state: 'completed', order: order, payment_method: gateway, amount: 10.0, response_code: 'X4G6K4DDZ46B8ZV5') }
+      let(:payment) { create(:payment, state: 'completed', order: order, payment_method: gateway, amount: 10.0, response_code: 'ADYEN_PAYMENT_PSP_REFERENCE') }
 
       it 'creates a refund with credit_allowed_amount' do
         VCR.use_cassette("payment_api/create_refund/success") do
@@ -217,7 +217,7 @@ RSpec.describe SpreeAdyen::Gateway do
 
       it 'should raises Spree::Core::GatewayError with the error message' do
         VCR.use_cassette("payment_api/create_refund/failure/invalid_payment_id") do
-          expect { subject }.to raise_error(Spree::Core::GatewayError, 'X4NZMCHN86JCNP65 - Original pspReference required for this operation')
+          expect { subject }.to raise_error(Spree::Core::GatewayError, 'ADYEN_PSP_REFERENCE - Original pspReference required for this operation')
         end
       end
     end
@@ -227,7 +227,7 @@ RSpec.describe SpreeAdyen::Gateway do
     subject { gateway.credit(amount_in_cents, payment.source, passed_response_code, {}) }
 
     let(:order) { create(:order, total: 10, number: 'R142767632') }
-    let(:payment) { create(:payment, state: 'completed', order: order, payment_method: gateway, amount: 10.0, response_code: 'X4G6K4DDZ46B8ZV5') }
+    let(:payment) { create(:payment, state: 'completed', order: order, payment_method: gateway, amount: 10.0, response_code: 'ADYEN_PAYMENT_PSP_REFERENCE') }
     let(:amount_in_cents) { 800 }
     let(:passed_response_code) { payment.response_code }
 
@@ -239,7 +239,7 @@ RSpec.describe SpreeAdyen::Gateway do
     end
 
     context 'when response is not successful' do
-      let(:payment) { create(:payment, state: 'completed', order: order, payment_method: gateway, amount: 10.0, response_code: 'X4G6K4DDZ46B8ZV5') }
+      let(:payment) { create(:payment, state: 'completed', order: order, payment_method: gateway, amount: 10.0, response_code: 'ADYEN_PAYMENT_PSP_REFERENCE') }
       let(:order) { create(:order, total: 10, number: 'R142767632') }
       let(:amount_in_cents) { 0 }
 
