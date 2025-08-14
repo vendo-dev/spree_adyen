@@ -2,10 +2,10 @@
 http_interactions:
 - request:
     method: post
-    uri: https://checkout-test.adyen.com/v71/payments/X4G6K4DDZ46B8ZV5/refunds
+    uri: https://checkout-test.adyen.com/v71/payments/ADYEN_PAYMENT_PSP_REFERENCE/refunds
     body:
       encoding: UTF-8
-      string: '{"amount":{"value":1000,"currency":"USD"},"reference":"R142767632_1_X4G6K4DDZ46B8ZV5_refund","merchantAccount":"SpreeCommerceECOM"}'
+      string: '{"amount":{"value":1000,"currency":"USD"},"reference":"R142767632_1_ADYEN_PAYMENT_PSP_REFERENCE_refund","merchantAccount":"SpreeCommerceECOM"}'
     headers:
       Content-Type:
       - application/json
@@ -28,8 +28,6 @@ http_interactions:
       code: 201
       message: Created
     headers:
-      Traceparent:
-      - 00-04f488722f44ec62231b6b71595db4eb-8588989a8e153cfd-01
       X-Frame-Options:
       - SAMEORIGIN
       X-Content-Type-Options:
@@ -40,30 +38,22 @@ http_interactions:
       - no-cache
       Expires:
       - '0'
-      Set-Cookie:
-      - JSESSIONID=BF6D39E0C9EAB122B83ED4C097636018; Path=/checkout; Secure; HttpOnly
-      Idempotency-Key:
-      - 7e21809b-dd49-4bf2-a426-77af1432c2c8
-      Pspreference:
-      - MK2PZFG9K3MPDKV5
       Content-Type:
       - application/json;charset=UTF-8
-      Content-Length:
-      - '226'
       Date:
       - Tue, 05 Aug 2025 13:09:04 GMT
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains
     body:
       encoding: UTF-8
-      string: '{"merchantAccount":"SpreeCommerceECOM","paymentPspReference":"X4G6K4DDZ46B8ZV5","pspReference":"VVSFXX52QMZGJ2W5","reference":"R142767632_1_X4G6K4DDZ46B8ZV5_refund","status":"received","amount":{"currency":"USD","value":1000}}'
+      string: '{"merchantAccount":"SpreeCommerceECOM","paymentPspReference":"ADYEN_PAYMENT_PSP_REFERENCE","pspReference":"VVSFXX52QMZGJ2W5","reference":"R142767632_1_ADYEN_PAYMENT_PSP_REFERENCE_refund","status":"received","amount":{"currency":"USD","value":1000}}'
   recorded_at: Tue, 05 Aug 2025 13:09:04 GMT
 - request:
     method: post
-    uri: https://checkout-test.adyen.com/v71/payments/X4G6K4DDZ46B8ZV5/refunds
+    uri: https://checkout-test.adyen.com/v71/payments/ADYEN_PAYMENT_PSP_REFERENCE/refunds
     body:
       encoding: UTF-8
-      string: '{"amount":{"value":800,"currency":"USD"},"reference":"R657488354_1_X4G6K4DDZ46B8ZV5_refund","merchantAccount":"SpreeCommerceECOM"}'
+      string: '{"amount":{"value":800,"currency":"USD"},"reference":"R657488354_1_ADYEN_PAYMENT_PSP_REFERENCE_refund","merchantAccount":"SpreeCommerceECOM"}'
     headers:
       Content-Type:
       - application/json
@@ -116,10 +106,10 @@ http_interactions:
   recorded_at: Tue, 05 Aug 2025 13:54:22 GMT
 - request:
     method: post
-    uri: https://checkout-test.adyen.com/v71/payments/X4G6K4DDZ46B8ZV5/refunds
+    uri: https://checkout-test.adyen.com/v71/payments/ADYEN_PAYMENT_PSP_REFERENCE/refunds
     body:
       encoding: UTF-8
-      string: '{"amount":{"value":1000,"currency":"USD"},"reference":"R709809158_1_X4G6K4DDZ46B8ZV5_refund","merchantAccount":"SpreeCommerceECOM"}'
+      string: '{"amount":{"value":1000,"currency":"USD"},"reference":"R709809158_1_ADYEN_PAYMENT_PSP_REFERENCE_refund","merchantAccount":"SpreeCommerceECOM"}'
     headers:
       Content-Type:
       - application/json
@@ -185,10 +175,10 @@ http_interactions:
   recorded_at: Tue, 05 Aug 2025 14:03:40 GMT
 - request:
     method: post
-    uri: https://checkout-test.adyen.com/v71/payments/X4G6K4DDZ46B8ZV5/refunds
+    uri: https://checkout-test.adyen.com/v71/payments/ADYEN_PAYMENT_PSP_REFERENCE/refunds
     body:
       encoding: UTF-8
-      string: '{"amount":{"value":1000,"currency":"USD"},"reference":"R646322028_1_X4G6K4DDZ46B8ZV5_refund","merchantAccount":"SpreeCommerceECOM"}'
+      string: '{"amount":{"value":1000,"currency":"USD"},"reference":"R646322028_1_ADYEN_PAYMENT_PSP_REFERENCE_refund","merchantAccount":"SpreeCommerceECOM"}'
     headers:
       Content-Type:
       - application/json
