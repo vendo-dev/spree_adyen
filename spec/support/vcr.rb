@@ -22,6 +22,21 @@ VCR.configure do |c|
     body[/"hmacSignature":"(.*?)"/, 1] || body[/\\\"hmacSignature\\\":\\\"(.*?)\\\"/, 1]
   end
 
+  c.filter_sensitive_data('<ADYEN_CLIENT_KEY>') do |i|
+    body = i.response&.body.to_s
+    body[/"clientKey":"(.*?)"/, 1]
+  end
+  
+  c.filter_sensitive_data('<ADYEN_USERNAME>') do |i|
+    body = i.response&.body.to_s
+    body[/"username":"(.*?)"/, 1]
+  end
+  
+  c.filter_sensitive_data('<ADYEN_PSP_REFERENCE>') do |i|
+    body = i.response&.body.to_s
+    body[/"pspReference":"(.*?)"/, 1]
+  end
+
   c.before_record do |interaction|
     header_names = %w[X-Stripe-Client-User-Agent]
     headers = header_names.flat_map { |header_name| interaction.request.headers[header_name] }.compact
