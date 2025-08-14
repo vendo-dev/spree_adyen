@@ -3,6 +3,9 @@ FactoryBot.define do
     name { 'Adyen' }
     type { 'SpreeAdyen::Gateway' }
 
+    skip_auto_configuration { true }
+    skip_api_key_validation { true }
+
     preferences do
       {
         api_key: 'secret',

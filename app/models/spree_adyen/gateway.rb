@@ -1,5 +1,11 @@
 module SpreeAdyen
   class Gateway < ::Spree::Gateway
+    #
+    # Attributes
+    #
+    attribute :skip_auto_configuration, :boolean, default: false
+    attribute :skip_api_key_validation, :boolean, default: false
+
     preference :api_key, :password
     preference :merchant_account, :string
     preference :client_key, :password
@@ -8,11 +14,20 @@ module SpreeAdyen
     preference :webhook_id, :string
 
     store_accessor :private_metadata, :previous_hmac_key
+    #
+    # Validations
+    #
+    validates :preferred_api_key, presence: true
+    validate :validate_api_key, if: -> { preferred_api_key_changed? }, unless: :skip_api_key_validation
 
-    validates :preferred_api_key, :preferred_hmac_key, :preferred_webhook_id, :preferred_merchant_account, :preferred_client_key, presence: true
+    #
+    # Callbacks
+    #
+    before_save :configure, if: -> { preferred_api_key_changed? }, unless: :skip_auto_configuration
 
-    before_validation :configure, unless: -> { Rails.env.test? }, if: -> { preferred_api_key_changed? }
-
+    #
+    # Associations
+    #
     has_many :payment_sessions, class_name: 'SpreeAdyen::PaymentSession',
                                 foreign_key: 'payment_method_id',
                                 dependent: :delete_all,
@@ -184,16 +199,6 @@ module SpreeAdyen
       end
     end
 
-    def configure
-      SpreeAdyen::Gateways::Configure.new(self).call
-    rescue Adyen::AuthenticationError => e
-      errors.add(:preferred_api_key, "API key is invalid. Response: #{e.message}")
-    rescue Adyen::PermissionError => e
-      errors.add(:preferred_api_key, "You don't have permission to access this resource. Response: #{e.message}")
-    rescue Adyen::AdyenError => e
-      errors.add(:preferred_api_key, "An error occurred. Response: #{e.message}")
-    end
-
     def get_api_credential_details
       response = client.management.my_api_credential_api.get_api_credential_details
 
@@ -256,6 +261,24 @@ module SpreeAdyen
     end
 
     private
+
+    def validate_api_key
+      return if preferred_api_key.blank?
+
+      get_api_credential_details
+    rescue Adyen::AuthenticationError => e
+      errors.add(:preferred_api_key, "is invalid. Response: #{e.message}")
+    rescue Adyen::PermissionError => e
+      errors.add(:preferred_api_key, "has insufficient permissions. Add missing roles to API credential. Response: #{e.message}")
+    rescue Adyen::AdyenError => e
+      errors.add(:preferred_api_key, "An error occurred. Response: #{e.message}")
+    end
+
+    def configure
+      return if preferred_api_key.blank?
+
+      SpreeAdyen::Gateways::Configure.new(self).call
+    end
 
     def client
       @client ||= Adyen::Client.new.tap do |client|

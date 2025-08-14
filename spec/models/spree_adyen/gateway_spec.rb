@@ -5,6 +5,79 @@ RSpec.describe SpreeAdyen::Gateway do
   let(:store) { Spree::Store.default }
   let(:amount) { 100 }
 
+  describe 'validations' do
+    describe 'api key validation' do
+      before do
+        gateway.preferred_api_key = 'new_api_key'
+      end
+
+      context 'when skip_api_key_validation is false' do
+        before do
+          gateway.skip_api_key_validation = false
+        end
+
+        context 'with valid api key' do
+          it 'does not validate the api key' do
+            VCR.use_cassette('management_api/get_api_credential_details/success') do
+              expect(gateway).to be_valid
+            end
+          end
+
+          it 'with invalid api key (401)' do
+            VCR.use_cassette('management_api/get_api_credential_details/failure_401') do
+              expect(gateway).to be_invalid
+              expect(gateway.errors.full_messages).to include(a_string_matching(/Preferred api key is invalid. Response: Adyen::AuthenticationError code:401/))
+            end
+          end
+
+          it 'without required permissions (403)' do
+            VCR.use_cassette('management_api/get_api_credential_details/failure_403') do
+              expect(gateway).to be_invalid
+              expect(gateway.errors.full_messages).to include(a_string_matching(/Preferred api key has insufficient permissions. Add missing roles to API credential. Response: Adyen::PermissionError code:403/))
+            end
+          end
+        end
+      end
+    end
+  end
+
+  describe 'callbacks' do
+    describe 'before_save' do
+      describe 'auto configuration' do
+        let(:configure_double) { double(call: true) }
+  
+        before do
+          allow(SpreeAdyen::Gateways::Configure).to receive(:new).with(gateway).and_return(configure_double)
+          gateway.preferred_api_key = 'new_api_key'
+        end
+
+        context 'when skip_auto_configuration is true' do
+          before do
+            gateway.skip_auto_configuration = true
+          end
+  
+          it 'does not configure the gateway' do
+            expect(configure_double).to_not receive(:call)
+  
+            gateway.save
+          end
+        end
+  
+        context 'when skip_auto_configuration is false' do
+          before do
+            gateway.skip_auto_configuration = false
+          end
+  
+          it 'configures the gateway' do
+            expect(configure_double).to receive(:call).once
+  
+            gateway.save
+          end
+        end
+      end
+    end
+  end
+
   describe '#payment_session_result' do
     subject { gateway.payment_session_result(payment_session_id, session_result) }
 
