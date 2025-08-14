@@ -27,25 +27,26 @@ http_interactions:
       message: OK
     headers:
       Traceparent:
-      - 00-c2aa70915402f1d1eed32b0123ac213e-0308b1f0b9147089-01
+      - 00-a38c4fe35b9ddfeb41734d1ecf2ddac5-4593183d8118a81d-01
       Set-Cookie:
-      - JSESSIONID=7ac307dc7e5cbf93~29DCBCA6917DDEEF28AF4B9820326245; Path=/configurationapi;
+      - JSESSIONID=fb5c508462f3b37c~3C3CAFEBF9C4BDABAABC42F9ED0EF65B; Path=/configurationapi;
         Secure; HttpOnly
       Pspreference:
-      - 03b05b24-6413-dcc1-330a-cf866e031c40_0-G37637S74FZ28222
+      - ec91b44c-f5d2-3145-714b-630cbd006976_1-M75VCCT74FZ28222
       Requestid:
-      - 03b05b24-6413-dcc1-330a-cf866e031c40_0-G37637S74FZ28222
+      - ec91b44c-f5d2-3145-714b-630cbd006976_1-M75VCCT74FZ28222
       Content-Type:
       - application/json;charset=utf-8
       Transfer-Encoding:
       - chunked
       Date:
-      - Thu, 14 Aug 2025 09:28:38 GMT
+      - Thu, 14 Aug 2025 10:34:50 GMT
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains
     body:
-      encoding: ASCII-8BIT
-      string: !binary |-
-        eyJpZCI6IkNSRUQ0MkNMUzIyMzIyOTQ1TVpGNVpORFEyNkJCUCIsInVzZXJuYW1lIjoid3NfNTQwNzA1QENvbXBhbnkuU3ByZWVDb21tZXJjZSIsImRlc2NyaXB0aW9uIjoidGVzdGluZyBhdXRvLWNvbmZpZ3VyZSIsImNsaWVudEtleSI6InRlc3RfVU41RkZUSjdTVkc3NUNEWlY3M09aRk9MQlVJVFc2M04iLCJhbGxvd2VkSXBBZGRyZXNzZXMiOltdLCJyb2xlcyI6WyJNYW5hZ2VtZW50IEFQSSAtIEFjY291bnRzIHJlYWQiLCJNYW5hZ2VtZW50IEFQSSAtIFdlYmhvb2tzIHJlYWQiLCJNYW5hZ2VtZW50IEFQSSAtIEFQSSBjcmVkZW50aWFscyByZWFkIGFuZCB3cml0ZSIsIk1hbmFnZW1lbnQgQVBJIC0gU3RvcmVzIHJlYWQiLCJNYW5hZ2VtZW50IEFQSSDigJQgUGF5bWVudCBtZXRob2RzIHJlYWQiLCJNYW5hZ2VtZW50IEFQSSAtIFN0b3JlcyByZWFkIGFuZCB3cml0ZSIsIk1hbmFnZW1lbnQgQVBJIC0gV2ViaG9va3MgcmVhZCBhbmQgd3JpdGUiLCJDaGVja291dCBlbmNyeXB0ZWQgY2FyZGhvbGRlciBkYXRhIiwiTWVyY2hhbnQgUmVjdXJyaW5nIHJvbGUiLCJEYXRhIFByb3RlY3Rpb24gQVBJIiwiTWFuYWdlbWVudCBBUEkgLSBQYXlvdXQgQWNjb3VudCBTZXR0aW5ncyBSZWFkIiwiQ2hlY2tvdXQgd2Vic2VydmljZSByb2xlIiwiTWFuYWdlbWVudCBBUEkgLSBBY2NvdW50cyByZWFkIGFuZCB3cml0ZSIsIk1lcmNoYW50IFBBTCBXZWJzZXJ2aWNlIHJvbGUiXSwiYWN0aXZlIjp0cnVlLCJfbGlua3MiOnsic2VsZiI6eyJocmVmIjoiaHR0cHM6XC9cL21hbmFnZW1lbnQtdGVzdC5hZHllbi5jb21cL3YzXC9tZSJ9LCJhbGxvd2VkT3JpZ2lucyI6eyJocmVmIjoiaHR0cHM6XC9cL21hbmFnZW1lbnQtdGVzdC5hZHllbi5jb21cL3YzXC9tZVwvYWxsb3dlZE9yaWdpbnMifX0sImFzc29jaWF0ZWRNZXJjaGFudEFjY291bnRzIjpbIlNwcmVlQ29tbWVyY2VFQ09NIl0sImNvbXBhbnlOYW1lIjoiU3ByZWVDb21tZXJjZSJ9
-  recorded_at: Thu, 14 Aug 2025 09:28:38 GMT
+      encoding: UTF-8
+      string: '{"id":"CRED42CLS22322945MZF5ZNDQ26BBP","username":"user@Company.companyName","description":"testing
+        auto-configure","clientKey":"test_clientKey","allowedIpAddresses":[],"roles":["Merchant
+        PAL Webservice role"],"active":true,"_links":{"self":{"href":"https:\/\/management-test.adyen.com\/v3\/me"},"allowedOrigins":{"href":"https:\/\/management-test.adyen.com\/v3\/me\/allowedOrigins"}},"associatedMerchantAccounts":["SpreeCommerceECOM"],"companyName":"SpreeCommerce"}'
+  recorded_at: Thu, 14 Aug 2025 10:34:50 GMT
 recorded_with: VCR 6.3.1

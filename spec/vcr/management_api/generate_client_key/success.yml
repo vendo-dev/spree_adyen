@@ -45,6 +45,6 @@ http_interactions:
       - max-age=31536000; includeSubDomains
     body:
       encoding: UTF-8
-      string: '{"clientKey":"test_I5CPMY5YCVGOJBGZSBUUL2G4FYNYI27D"}'
+      string: '{"clientKey":"test_ABCD123"}'
   recorded_at: Mon, 11 Aug 2025 11:51:39 GMT
 recorded_with: VCR 6.3.1
