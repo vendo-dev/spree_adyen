@@ -57,8 +57,8 @@ module SpreeAdyen
     before_validation :set_amount_from_order
     before_validation :set_currency_from_order
     before_validation :set_default_channel, on: :create, if: -> { channel.blank? }
-    before_validation :create_session_in_adyen, on: :create
     before_validation :set_return_url, on: :create, if: -> { return_url.blank? }
+    before_validation :create_session_in_adyen, on: :create
 
     #
     # Delegations
