@@ -15,7 +15,7 @@ VCR.configure do |c|
     body = i.response&.body.to_s
     body[/\"hmacKey\":\"([A-F0-9]+)\"/, 1]
   end
-  c.filter_sensitive_data('ADYEN_HMAC_SIGNATURE') do |i|
+  c.filter_sensitive_data('ZmFrZV9zaWduYXR1cmU=') do |i|
     body = i.response&.body.to_s
     # match either normal JSON: "hmacSignature":"<value>"
     # or escaped nested JSON: \"hmacSignature\":\"<value>\"
