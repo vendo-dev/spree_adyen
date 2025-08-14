@@ -15,6 +15,9 @@ VCR.configure do |c|
     body = i.response&.body.to_s
     body[/\"hmacKey\":\"([A-F0-9]+)\"/, 1]
   end
+  c.filter_sensitive_data('<ADYEN_HMAC_SIGNATURE>') do |i|
+    i.response&.body.to_s[/"hmacSignature":"([A-Za-z0-9+\/=]+)"/, 1]
+  end
 
   c.before_record do |interaction|
     header_names = %w[X-Stripe-Client-User-Agent]

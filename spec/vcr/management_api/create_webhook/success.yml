@@ -5,7 +5,7 @@ http_interactions:
     uri: https://management-test.adyen.com/v3/merchants/SpreeCommerceECOM/webhooks
     body:
       encoding: UTF-8
-      string: '{"url":"https://url.ngrok-free.app/adyen/webhooks","description":"Webhook
+      string: '{"url":"https://c33e96aee20a.ngrok-free.app/adyen/webhooks","description":"Webhook
         created by SpreeAdyen on 2025-08-12 13:02:47","active":true,"communicationFormat":"json","type":"standard"}'
     headers:
       Content-Type:
@@ -27,15 +27,6 @@ http_interactions:
       code: 200
       message: OK
     headers:
-      Traceparent:
-      - 00-c50050a5fea431383f498be07bcea356-17f394eaa10d9b2e-01
-      Set-Cookie:
-      - JSESSIONID=0e9170946f2acea3~5F40AAA6E0F17D4B6C726D9F3121E075; Path=/configurationapi;
-        Secure; HttpOnly
-      Pspreference:
-      - ae586cb0-4605-6bef-6c3c-7db4f97543a8_2-S8J8CM364FZ28222
-      Requestid:
-      - ae586cb0-4605-6bef-6c3c-7db4f97543a8_2-S8J8CM364FZ28222
       Content-Type:
       - application/json;charset=utf-8
       Transfer-Encoding:

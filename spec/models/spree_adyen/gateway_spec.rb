@@ -22,15 +22,19 @@ RSpec.describe SpreeAdyen::Gateway do
               expect(gateway).to be_valid
             end
           end
-
-          it 'with invalid api key (401)' do
+        end
+        
+        context 'with invalid api key (401)' do
+          it 'is invalid' do
             VCR.use_cassette('management_api/get_api_credential_details/failure_401') do
               expect(gateway).to be_invalid
               expect(gateway.errors.full_messages).to include(a_string_matching(/Preferred api key is invalid. Response: Adyen::AuthenticationError code:401/))
             end
           end
+        end
 
-          it 'without required permissions (403)' do
+        context 'without required permissions (403)' do
+          it 'is invalid' do
             VCR.use_cassette('management_api/get_api_credential_details/failure_403') do
               expect(gateway).to be_invalid
               expect(gateway.errors.full_messages).to include(a_string_matching(/Preferred api key has insufficient permissions. Add missing roles to API credential. Response: Adyen::PermissionError code:403/))

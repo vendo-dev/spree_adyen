@@ -78,12 +78,13 @@ http_interactions:
       Transfer-Encoding:
       - chunked
       Date:
+
       - Thu, 14 Aug 2025 11:03:41 GMT
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains
     body:
       encoding: UTF-8
-      string: '{"data":[{"output":"The server did not respond with HTTP 2XX.","requestSent":"{\"live\":\"false\",\"notificationItems\":[{\"NotificationRequestItem\":{\"additionalData\":{\"expiryDate\":\"12\\\/2012\",\"authCode\":\"1234\",\"cardSummary\":\"7777\",\"totalFraudScore\":\"10\",\"hmacSignature\":\"UFfhnJvporql2M6M0M5lGBFyKdsny\\\/3gJiybxhCJryQ=\",\"NAME2\":\"VALUE2\",\"NAME1\":\"VALUE1\",\"fraudCheck-6-ShopperIpUsage\":\"10\"},\"amount\":{\"currency\":\"EUR\",\"value\":10100},\"eventCode\":\"AUTHORISATION\",\"eventDate\":\"2025-08-14T13:03:41+02:00\",\"merchantAccountCode\":\"SpreeCommerceECOM\",\"merchantReference\":\"8313842560770001\",\"operations\":[\"CANCEL\",\"CAPTURE\",\"REFUND\"],\"paymentMethod\":\"visa\",\"pspReference\":\"BVM7DTNRK29F2S75\",\"reason\":\"1234:7777:12\\\/2012\",\"success\":\"true\"}}]}","responseCode":"404","responseTime":"106
+      string: '{"data":[{"output":"The server did not respond with HTTP 2XX.","requestSent":"{\"live\":\"false\",\"notificationItems\":[{\"NotificationRequestItem\":{\"additionalData\":{\"expiryDate\":\"12\\\/2012\",\"authCode\":\"1234\",\"cardSummary\":\"7777\",\"totalFraudScore\":\"10\",\"hmacSignature\":\"hmacSignature\\\/3gJiybxhCJryQ=\",\"NAME2\":\"VALUE2\",\"NAME1\":\"VALUE1\",\"fraudCheck-6-ShopperIpUsage\":\"10\"},\"amount\":{\"currency\":\"EUR\",\"value\":10100},\"eventCode\":\"AUTHORISATION\",\"eventDate\":\"2025-08-14T13:03:41+02:00\",\"merchantAccountCode\":\"SpreeCommerceECOM\",\"merchantReference\":\"8313842560770001\",\"operations\":[\"CANCEL\",\"CAPTURE\",\"REFUND\"],\"paymentMethod\":\"visa\",\"pspReference\":\"BVM7DTNRK29F2S75\",\"reason\":\"1234:7777:12\\\/2012\",\"success\":\"true\"}}]}","responseCode":"404","responseTime":"106
         ms","status":"failed"}]}'
   recorded_at: Thu, 14 Aug 2025 11:03:41 GMT
 recorded_with: VCR 6.3.1

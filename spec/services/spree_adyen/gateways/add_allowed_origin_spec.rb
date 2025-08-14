@@ -35,7 +35,7 @@ RSpec.describe SpreeAdyen::Gateways::AddAllowedOrigin do
       let(:current_allowed_origin) { 'https://example.com' }
       
       it 'does not call adyen API' do
-        expect { subject }.to not_change(record, :adyen_allowed_origin_id)
+        expect { subject }.to_not change(record, :adyen_allowed_origin_id)
       end
     end
 
@@ -56,6 +56,11 @@ RSpec.describe SpreeAdyen::Gateways::AddAllowedOrigin do
       expect(Rails.logger).to receive(:warn).with('[SpreeAdyen][AddAllowedOrigin]: Origin https://example.com already exists')
 
       VCR.use_cassette('jobs/spree_adyen/add_allowed_origin_job/already_exists') { subject }
+    end
+
+    it 'caches the URL locally to avoid repeated API calls' do
+      VCR.use_cassette('jobs/spree_adyen/add_allowed_origin_job/already_exists') { subject }
+      expect(record.reload.adyen_allowed_origin_url).to eq('https://example.com')
     end
   end
 
