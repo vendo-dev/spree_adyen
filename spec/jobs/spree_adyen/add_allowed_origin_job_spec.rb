@@ -32,5 +32,25 @@ RSpec.describe SpreeAdyen::AddAllowedOriginJob do
 
       subject
     end
+
+    context 'when the model type symbol' do
+      let(:model_type) { :custom_domain }
+      let(:record) { create(:custom_domain) }
+
+      it 'normalizes model_type and calls SpreeAdyen::Gateways::AddAllowedOrigin with the correct arguments' do
+        expect(add_allowed_origin_instance).to receive(:call)
+
+        subject
+      end
+    end
+
+    context 'when the model type is not a valid type' do
+      let(:model_type) { 'invalid' }
+      let(:record) { create(:store) }
+
+      it 'raises an error' do
+        expect { subject }.to raise_error(ActiveSupport::ErrorReporter::UnexpectedError, "RuntimeError: Unexpected klass_type: invalid")
+      end
+    end
   end
 end

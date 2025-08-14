@@ -1,7 +1,7 @@
 module SpreeAdyen
   module CustomDomainDecorator
     def self.prepended(base)
-      base.after_create :add_allowed_origin
+      base.after_commit :add_allowed_origin
 
       base.store_accessor :private_metadata, :adyen_allowed_origin_id
       base.store_accessor :private_metadata, :adyen_allowed_origin_url
