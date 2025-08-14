@@ -33,13 +33,13 @@ RSpec.describe SpreeAdyen::Gateway do
   end
 
   describe '#create_payment_session' do
-    subject { gateway.create_payment_session(amount, order, channel) }
+    subject { gateway.create_payment_session(amount, order, channel, return_url) }
 
     let(:order) { create(:order_with_line_items) }
     let(:bill_address) { order.bill_address }
     let(:amount) { 100 }
     let(:channel) { 'Web' }
-
+    let(:return_url) { 'http://www.example.com/adyen/payment_sessions/redirect' }
     let(:payment_session_id) { 'CS6B11058E72127704' }
 
     context 'with valid params' do

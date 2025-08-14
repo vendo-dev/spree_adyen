@@ -7,13 +7,14 @@ module SpreeAdyen
         storePaymentMethodMode: 'enabled'
       }.freeze
 
-      def initialize(order:, amount:, user:, merchant_account:, payment_method:, channel:)
+      def initialize(order:, amount:, user:, merchant_account:, payment_method:, channel:, return_url:)
         @order = order
         @amount = amount
         @user = user
         @merchant_account = merchant_account
         @payment_method = payment_method
         @channel = channel
+        @return_url = return_url
       end
 
       def to_h
@@ -38,7 +39,7 @@ module SpreeAdyen
 
       private
 
-      attr_reader :order, :amount, :user, :merchant_account, :payment_method, :channel
+      attr_reader :order, :amount, :user, :merchant_account, :payment_method, :channel, :return_url
 
       delegate :number, to: :order, prefix: true
       delegate :currency, to: :order
@@ -101,10 +102,6 @@ module SpreeAdyen
             quantity: line_item.quantity
           }
         end
-      end
-
-      def return_url
-        Spree::Core::Engine.routes.url_helpers.redirect_adyen_payment_session_url(host: order.store.url)
       end
 
       def expires_at
