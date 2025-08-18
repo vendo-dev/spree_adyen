@@ -82,7 +82,7 @@ module SpreeAdyen
     def set_return_url
       return if order.blank?
 
-      self.return_url = Spree::Core::Engine.routes.url_helpers.redirect_adyen_payment_session_url(host: order.store.url)
+      self.return_url = Spree::Core::Engine.routes.url_helpers.redirect_adyen_payment_session_url(host: order.store.url_or_custom_domain)
     end
 
     def expiration_date_cannot_be_in_the_past_or_later_than_24_hours
