@@ -1,7 +1,14 @@
 require 'spec_helper'
 
 RSpec.describe SpreeAdyen::Gateway do
-  subject(:gateway) { create(:adyen_gateway, preferred_api_key: 'secret', preferred_merchant_account: 'SpreeCommerceECOM') }
+  subject(:gateway) do
+    create(:adyen_gateway,
+      preferred_api_key: 'secret',
+      preferred_merchant_account: 'SpreeCommerceECOM',
+      preferred_test_mode: test_mode)
+  end
+
+  let(:test_mode) { true }
 
   describe '#payment_session_result' do
     subject { gateway.payment_session_result(payment_session_id, session_result) }
@@ -28,6 +35,40 @@ RSpec.describe SpreeAdyen::Gateway do
           expect(subject.success?).to be_falsey
           expect(subject.message).to eq('F7CHQBP9MCWNRQT5 - server could not process request')
         end
+      end
+    end
+  end
+
+  describe '#gateway_dashboard_payment_url' do
+    subject { gateway.gateway_dashboard_payment_url(payment) }
+    
+    let(:payment) { create(:payment, transaction_id: transaction_id) }
+
+    context 'when payment has a transaction_id' do
+      let(:transaction_id) { '1234567890' }
+
+      context 'when test_mode is true' do
+        let(:test_mode) { true }
+
+        it 'returns the correct URL' do
+          expect(subject).to eq('https://ca-test.adyen.com/ca/ca/accounts/showTx.shtml?pspReference=1234567890&txType=Payment')
+        end
+      end
+
+      context 'when test_mode is false' do
+        let(:test_mode) { false }
+
+        it 'returns the correct URL' do
+          expect(subject).to eq('https://ca-live.adyen.com/ca/ca/accounts/showTx.shtml?pspReference=1234567890&txType=Payment')
+        end
+      end
+    end
+
+    context 'when payment has no transaction_id' do
+      let(:payment) { create(:payment, transaction_id: nil) }
+      
+      it 'returns nil' do
+        expect(subject).to be_nil
       end
     end
   end

@@ -168,6 +168,12 @@ module SpreeAdyen
       'spree_adyen'
     end
 
+    def gateway_dashboard_payment_url(payment)
+      return if payment.transaction_id.blank?
+
+      "https://ca-#{environment}.adyen.com/ca/ca/accounts/showTx.shtml?pspReference=#{payment.transaction_id}&txType=Payment"
+    end
+
     def reusable_sources(order)
       if order.completed?
         sources_by_order order
