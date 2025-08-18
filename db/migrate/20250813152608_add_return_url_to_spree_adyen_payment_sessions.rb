@@ -4,7 +4,7 @@ class AddReturnUrlToSpreeAdyenPaymentSessions < ActiveRecord::Migration[7.2]
 
     SpreeAdyen::PaymentSession.reset_column_information
     Spree::Store.find_each do |store|
-      redirect_to = Spree::Core::Engine.routes.url_helpers.redirect_adyen_payment_session_url(host: store.url)
+      redirect_to = Spree::Core::Engine.routes.url_helpers.redirect_adyen_payment_session_url(host: store.url_or_custom_domain)
       store.payment_methods.adyen.find_each do |gateway|
         store.adyen_gateway.payment_sessions.with_deleted.where(return_url: nil).update_all(return_url: redirect_to)
       end
