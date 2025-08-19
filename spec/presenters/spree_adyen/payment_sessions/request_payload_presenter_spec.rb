@@ -1,7 +1,19 @@
 require 'spec_helper'
 
 RSpec.describe SpreeAdyen::PaymentSessions::RequestPayloadPresenter do
-  subject(:serializer) { described_class.new(order: order, amount: amount, user: user, merchant_account: merchant_account, payment_method: payment_method, channel: channel) }
+  subject(:serializer) { described_class.new(**params) }
+
+  let(:params) do
+    {
+      order: order,
+      amount: amount,
+      user: user,
+      merchant_account: merchant_account,
+      payment_method: payment_method,
+      channel: channel,
+      return_url: return_url
+    }
+  end
 
   let(:order) { create(:order, bill_address: bill_address, number: 'R123456789', total: 100, user: user, currency: 'USD', line_items: [line_item]) }
   let(:user) { create(:user, email: 'test@example.com', first_name: 'John', last_name: 'Doe') }
@@ -13,6 +25,7 @@ RSpec.describe SpreeAdyen::PaymentSessions::RequestPayloadPresenter do
   let(:variant) { create(:variant, sku: 'variant_sku', name: 'variant_name') }
   let(:bill_address) { create(:address, firstname: 'John', lastname: 'Doe') }
   let(:channel) { 'Web' }
+  let(:return_url) { 'http://www.example.com/adyen/payment_sessions/redirect' }
 
   context 'with valid params' do
     let(:expected_payload) do

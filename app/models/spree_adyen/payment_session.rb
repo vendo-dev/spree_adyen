@@ -28,6 +28,7 @@ module SpreeAdyen
     validates :amount, presence: true, numericality: { greater_than: 0 }
     validates :currency, presence: true
     validates :channel, presence: true, inclusion: { in: AVAILABLE_CHANNELS.values }
+    validates :return_url, presence: true
 
     validate :amount_cannot_be_greater_than_order_total
     validate :currency_matches_order_currency
@@ -55,7 +56,8 @@ module SpreeAdyen
     #
     before_validation :set_amount_from_order
     before_validation :set_currency_from_order
-    before_validation :set_default_channel, if: -> { channel.blank? }
+    before_validation :set_default_channel, on: :create, if: -> { channel.blank? }
+    before_validation :set_return_url, on: :create, if: -> { return_url.blank? }
     before_validation :create_session_in_adyen, on: :create
 
     #
@@ -77,6 +79,12 @@ module SpreeAdyen
       self.channel = AVAILABLE_CHANNELS[:web]
     end
 
+    def set_return_url
+      return if order.blank?
+
+      self.return_url = Spree::Core::Engine.routes.url_helpers.redirect_adyen_payment_session_url(host: order.store.url_or_custom_domain)
+    end
+
     def expiration_date_cannot_be_in_the_past_or_later_than_24_hours
       errors.add(:expires_at, "can't be in the past") if expires_at.present? && expires_at < DateTime.current
 
@@ -96,7 +104,7 @@ module SpreeAdyen
     def create_session_in_adyen
       return if adyen_id.present?
 
-      response = payment_method.create_payment_session(amount, order, channel)
+      response = payment_method.create_payment_session(amount, order, channel, return_url)
       return unless response.success?
 
       self.adyen_id = response.params['id']
