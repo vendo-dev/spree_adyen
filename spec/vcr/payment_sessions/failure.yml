@@ -13,7 +13,7 @@ http_interactions:
       User-Agent:
       - adyen-ruby-api-library/10.3.0
       X-Api-Key:
-      - secret
+      - "<ADYEN_API_KEY>"
       Idempotency-Key:
       - 868e08b6-172c-4533-939d-0f57736a7340
       Adyen-Library-Name:

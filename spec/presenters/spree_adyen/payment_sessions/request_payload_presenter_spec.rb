@@ -1,7 +1,19 @@
 require 'spec_helper'
 
 RSpec.describe SpreeAdyen::PaymentSessions::RequestPayloadPresenter do
-  subject(:serializer) { described_class.new(order: order, amount: amount, user: user, merchant_account: merchant_account, payment_method: payment_method) }
+  subject(:serializer) { described_class.new(**params) }
+
+  let(:params) do
+    {
+      order: order,
+      amount: amount,
+      user: user,
+      merchant_account: merchant_account,
+      payment_method: payment_method,
+      channel: channel,
+      return_url: return_url
+    }
+  end
 
   let(:order) { create(:order, bill_address: bill_address, number: 'R123456789', total: 100, user: user, currency: 'USD', line_items: [line_item]) }
   let(:user) { create(:user, email: 'test@example.com', first_name: 'John', last_name: 'Doe') }
@@ -12,6 +24,8 @@ RSpec.describe SpreeAdyen::PaymentSessions::RequestPayloadPresenter do
   let(:line_item) { build(:line_item, price: 100, variant: variant) }
   let(:variant) { create(:variant, sku: 'variant_sku', name: 'variant_name') }
   let(:bill_address) { create(:address, firstname: 'John', lastname: 'Doe') }
+  let(:channel) { 'Web' }
+  let(:return_url) { 'http://www.example.com/adyen/payment_sessions/redirect' }
 
   context 'with valid params' do
     let(:expected_payload) do
@@ -60,6 +74,30 @@ RSpec.describe SpreeAdyen::PaymentSessions::RequestPayloadPresenter do
 
       it 'returns a valid payload' do
         expect(payload).to eq(expected_payload)
+      end
+
+      context 'without channel' do
+        let(:channel) { nil }
+
+        it 'does not include channel' do
+          expect(payload.keys).not_to include(:channel)
+        end
+      end
+
+      context 'with iOS channel' do
+        let(:channel) { 'iOS' }
+        
+        it 'blocks google pay' do
+          expect(payload).to include(blockedPaymentMethods: ['googlepay'])
+        end
+      end
+
+      context 'with Android channel' do
+        let(:channel) { 'Android' }
+        
+        it 'blocks apple pay' do
+          expect(payload).to include(blockedPaymentMethods: ['applepay'])
+        end
       end
 
       context 'when payment session already exists' do

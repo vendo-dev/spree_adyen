@@ -1,9 +1,16 @@
 require 'spec_helper'
 
 RSpec.describe SpreeAdyen::Gateway do
-  subject(:gateway) { create(:adyen_gateway, stores: [store], preferred_api_key: 'secret', preferred_merchant_account: 'SpreeCommerceECOM') }
+  subject(:gateway) do
+    create(:adyen_gateway,
+      stores: [store],
+      preferred_api_key: 'secret',
+      preferred_merchant_account: 'SpreeCommerceECOM',
+      preferred_test_mode: test_mode)
+  end
   let(:store) { Spree::Store.default }
   let(:amount) { 100 }
+  let(:test_mode) { true }
 
   describe 'validations' do
     describe 'api key validation' do
@@ -111,13 +118,48 @@ RSpec.describe SpreeAdyen::Gateway do
     end
   end
 
+  describe '#gateway_dashboard_payment_url' do
+    subject { gateway.gateway_dashboard_payment_url(payment) }
+    
+    let(:payment) { create(:payment, transaction_id: transaction_id) }
+
+    context 'when payment has a transaction_id' do
+      let(:transaction_id) { '1234567890' }
+
+      context 'when test_mode is true' do
+        let(:test_mode) { true }
+
+        it 'returns the correct URL' do
+          expect(subject).to eq('https://ca-test.adyen.com/ca/ca/accounts/showTx.shtml?pspReference=1234567890&txType=Payment')
+        end
+      end
+
+      context 'when test_mode is false' do
+        let(:test_mode) { false }
+
+        it 'returns the correct URL' do
+          expect(subject).to eq('https://ca-live.adyen.com/ca/ca/accounts/showTx.shtml?pspReference=1234567890&txType=Payment')
+        end
+      end
+    end
+
+    context 'when payment has no transaction_id' do
+      let(:payment) { create(:payment, transaction_id: nil) }
+      
+      it 'returns nil' do
+        expect(subject).to be_nil
+      end
+    end
+  end
+
   describe '#create_payment_session' do
-    subject { gateway.create_payment_session(amount, order) }
+    subject { gateway.create_payment_session(amount, order, channel, return_url) }
 
     let(:order) { create(:order_with_line_items) }
     let(:bill_address) { order.bill_address }
     let(:amount) { 100 }
-
+    let(:channel) { 'Web' }
+    let(:return_url) { 'http://www.example.com/adyen/payment_sessions/redirect' }
     let(:payment_session_id) { 'CS6B11058E72127704' }
 
     context 'with valid params' do

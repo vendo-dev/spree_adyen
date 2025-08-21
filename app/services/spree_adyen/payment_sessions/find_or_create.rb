@@ -16,7 +16,8 @@ module SpreeAdyen
           amount: amount,
           currency: order.currency,
           user: user,
-          payment_method: payment_method
+          payment_method: payment_method,
+          channel: SpreeAdyen::PaymentSession::AVAILABLE_CHANNELS[:web]
         )
       end
 
@@ -30,7 +31,8 @@ module SpreeAdyen
           order: order,
           currency: order.currency,
           user: user,
-          amount: amount
+          amount: amount,
+          channel: SpreeAdyen::PaymentSession::AVAILABLE_CHANNELS[:web]
         )
       end
     end
