@@ -47,6 +47,6 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"status":422,"errorCode":"137","message":"Field ''amount'' is not
-        valid.","errorType":"validation","pspReference":"SQLBC925DFMK8B75"}'
+        valid.","errorType":"validation","pspReference":"ADYEN_PSP_REFERENCE"}'
   recorded_at: Wed, 06 Aug 2025 11:09:51 GMT
 recorded_with: VCR 6.3.1

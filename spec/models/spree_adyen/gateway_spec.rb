@@ -288,7 +288,7 @@ RSpec.describe SpreeAdyen::Gateway do
       it 'should return failure response' do
         VCR.use_cassette("payment_api/create_refund/failure/invalid_amount") do
           expect(subject.success?).to eq(false)
-          expect(subject.message).to eq("SQLBC925DFMK8B75 - Field 'amount' is not valid.")
+          expect(subject.message).to eq("ADYEN_PSP_REFERENCE - Field 'amount' is not valid.")
         end
       end
     end

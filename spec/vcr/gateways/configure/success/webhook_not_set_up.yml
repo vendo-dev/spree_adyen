@@ -12,7 +12,7 @@ http_interactions:
       User-Agent:
       - adyen-ruby-api-library/10.4.0
       X-Api-Key:
-      - "ADYEN_API_KEY"
+      - ADYEN_API_KEY
       Adyen-Library-Name:
       - adyen-ruby-api-library
       Adyen-Library-Version:
@@ -60,7 +60,7 @@ http_interactions:
       User-Agent:
       - adyen-ruby-api-library/10.4.0
       X-Api-Key:
-      - "ADYEN_API_KEY"
+      - ADYEN_API_KEY
       Adyen-Library-Name:
       - adyen-ruby-api-library
       Adyen-Library-Version:
@@ -99,7 +99,7 @@ http_interactions:
       User-Agent:
       - adyen-ruby-api-library/10.4.0
       X-Api-Key:
-      - "ADYEN_API_KEY"
+      - ADYEN_API_KEY
       Adyen-Library-Name:
       - adyen-ruby-api-library
       Adyen-Library-Version:
@@ -125,4 +125,118 @@ http_interactions:
       encoding: UTF-8
       string: '{"hmacKey":"ADYEN_HMAC_KEY"}'
   recorded_at: Thu, 14 Aug 2025 11:03:42 GMT
+- request:
+    method: post
+    uri: https://management-test.adyen.com/v3/me/allowedOrigins
+    body:
+      encoding: UTF-8
+      string: '{"domain":"https://c33e96aee20a.ngrok-free.app"}'
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - adyen-ruby-api-library/10.4.0
+      X-Api-Key:
+      - ADYEN_API_KEY
+      Adyen-Library-Name:
+      - adyen-ruby-api-library
+      Adyen-Library-Version:
+      - 10.4.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json;charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Fri, 22 Aug 2025 14:22:02 GMT
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: '{"id":"S2-73203828494D4E6A6269573D7C763A4074476E304E2B40663F664628423C662A717C70453F385F31256C72","domain":"https:\/\/c33e96aee20a.ngrok-free.app","_links":{"self":{"href":"https:\/\/management-test.adyen.com\/v3\/me\/allowedOrigins\/S2-73203828494D4E6A6269573D7C763A4074476E304E2B40663F664628423C662A717C70453F385F31256C72"}}}'
+  recorded_at: Fri, 22 Aug 2025 14:22:02 GMT
+- request:
+    method: post
+    uri: https://management-test.adyen.com/v3/me/allowedOrigins
+    body:
+      encoding: UTF-8
+      string: '{"domain":"https://foo.store.example.com"}'
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - adyen-ruby-api-library/10.4.0
+      X-Api-Key:
+      - ADYEN_API_KEY
+      Adyen-Library-Name:
+      - adyen-ruby-api-library
+      Adyen-Library-Version:
+      - 10.4.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json;charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Fri, 22 Aug 2025 14:22:02 GMT
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: '{"id":"S2-24596C2E5250734B552661215D244A6F696C7F66744D2E7975234E4232266F464162414C27","domain":"https:\/\/foo.store.example.com","_links":{"self":{"href":"https:\/\/management-test.adyen.com\/v3\/me\/allowedOrigins\/S2-24596C2E5250734B552661215D244A6F696C7F66744D2E7975234E4232266F464162414C27"}}}'
+  recorded_at: Fri, 22 Aug 2025 14:22:02 GMT
+- request:
+    method: post
+    uri: https://management-test.adyen.com/v3/me/allowedOrigins
+    body:
+      encoding: UTF-8
+      string: '{"domain":"https://bar.store.example.com"}'
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - adyen-ruby-api-library/10.4.0
+      X-Api-Key:
+      - ADYEN_API_KEY
+      Adyen-Library-Name:
+      - adyen-ruby-api-library
+      Adyen-Library-Version:
+      - 10.4.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json;charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Fri, 22 Aug 2025 14:22:02 GMT
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: '{"id":"S2-245B3E5476305D377C3B5C5E2C67235C626C4F7F534C2C6A6D66512F5D7A4D426739732C58","domain":"https:\/\/bar.store.example.com","_links":{"self":{"href":"https:\/\/management-test.adyen.com\/v3\/me\/allowedOrigins\/S2-245B3E5476305D377C3B5C5E2C67235C626C4F7F534C2C6A6D66512F5D7A4D426739732C58"}}}'
+  recorded_at: Fri, 22 Aug 2025 14:22:02 GMT
 recorded_with: VCR 6.3.1

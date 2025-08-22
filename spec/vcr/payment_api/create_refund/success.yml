@@ -46,7 +46,7 @@ http_interactions:
       - max-age=31536000; includeSubDomains
     body:
       encoding: UTF-8
-      string: '{"merchantAccount":"SpreeCommerceECOM","paymentPspReference":"ADYEN_PAYMENT_PSP_REFERENCE","pspReference":"VVSFXX52QMZGJ2W5","reference":"R142767632_1_ADYEN_PAYMENT_PSP_REFERENCE_refund","status":"received","amount":{"currency":"USD","value":1000}}'
+      string: '{"merchantAccount":"SpreeCommerceECOM","paymentPspReference":"ADYEN_PAYMENT_PSP_REFERENCE","pspReference":"ADYEN_PSP_REFERENCE","reference":"R142767632_1_ADYEN_PAYMENT_PSP_REFERENCE_refund","status":"received","amount":{"currency":"USD","value":1000}}'
   recorded_at: Tue, 05 Aug 2025 13:09:04 GMT
 - request:
     method: post

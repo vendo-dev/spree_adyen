@@ -42,7 +42,7 @@ http_interactions:
       - 96a6cb252fbaecbc-WAW
     body:
       encoding: UTF-8
-      string: '{"merchantAccount":"SpreeCommerceECOM","paymentPspReference":"ADYEN_PAYMENT_PSP_REFERENCE","pspReference":"C8B3S4HDZ46B8ZV5","reference":"R598258713_1_ADYEN_PAYMENT_PSP_REFERENCE_refund","status":"received","amount":{"currency":"USD","value":800}}'
+      string: '{"merchantAccount":"SpreeCommerceECOM","paymentPspReference":"ADYEN_PAYMENT_PSP_REFERENCE","pspReference":"ADYEN_PSP_REFERENCE","reference":"R598258713_1_ADYEN_PAYMENT_PSP_REFERENCE_refund","status":"received","amount":{"currency":"USD","value":800}}'
   recorded_at: Tue, 05 Aug 2025 13:55:41 GMT
 - request:
     method: post
@@ -56,7 +56,7 @@ http_interactions:
       User-Agent:
       - adyen-ruby-api-library/10.3.0
       X-Api-Key:
-      - AQEvhmfxK4vIbBRGw0m/n3Q5qf3Ve5tfCJZpV2hbw2qom++FEca+71BKDHj55mWPzdAQwV1bDb7kfNy1WIxIIkxgBw==-nGKyaWaKpW3QXj0AyKqmEkEoL4igjamBa0klnyYva0U=-i1iW8&%Jsdx*$&pn(gu
+      - ADYEN_API_KEY
       Idempotency-Key:
       - 88c6b07d-662e-4ca1-a5e4-325951fb02d6
       Adyen-Library-Name:
@@ -112,7 +112,7 @@ http_interactions:
       User-Agent:
       - adyen-ruby-api-library/10.3.0
       X-Api-Key:
-      - AQEvhmfxK4vIbBRGw0m/n3Q5qf3Ve5tfCJZpV2hbw2qom++FEca+71BKDHj55mWPzdAQwV1bDb7kfNy1WIxIIkxgBw==-nGKyaWaKpW3QXj0AyKqmEkEoL4igjamBa0klnyYva0U=-i1iW8&%Jsdx*$&pn(gu
+      - ADYEN_API_KEY
       Idempotency-Key:
       - bfb37f07-763a-4328-9463-8070a80966ad
       Adyen-Library-Name:
@@ -154,7 +154,7 @@ http_interactions:
       - 96a6cc22292abf21-WAW
     body:
       encoding: UTF-8
-      string: '{"merchantAccount":"SpreeCommerceECOM","paymentPspReference":"ADYEN_PAYMENT_PSP_REFERENCE","pspReference":"WLNK2S62QMZGJ2W5","reference":"R037959619_1_ADYEN_PAYMENT_PSP_REFERENCE_refund","status":"received","amount":{"currency":"USD","value":800}}'
+      string: '{"merchantAccount":"SpreeCommerceECOM","paymentPspReference":"ADYEN_PAYMENT_PSP_REFERENCE","pspReference":"ADYEN_PSP_REFERENCE","reference":"R037959619_1_ADYEN_PAYMENT_PSP_REFERENCE_refund","status":"received","amount":{"currency":"USD","value":800}}'
   recorded_at: Tue, 05 Aug 2025 13:56:21 GMT
 - request:
     method: post

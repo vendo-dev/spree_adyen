@@ -9,8 +9,6 @@ module SpreeAdyen
       end
 
       def call
-        return if record.adyen_allowed_origin_url == allowed_origin
-
         response = gateway.add_allowed_origin(allowed_origin)
 
         if response.success?

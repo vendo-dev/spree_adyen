@@ -12,7 +12,7 @@ http_interactions:
       User-Agent:
       - adyen-ruby-api-library/10.4.0
       X-Api-Key:
-      - "ADYEN_API_KEY"
+      - ADYEN_API_KEY
       Adyen-Library-Name:
       - adyen-ruby-api-library
       Adyen-Library-Version:
@@ -59,7 +59,7 @@ http_interactions:
       User-Agent:
       - adyen-ruby-api-library/10.4.0
       X-Api-Key:
-      - "ADYEN_API_KEY"
+      - ADYEN_API_KEY
       Adyen-Library-Name:
       - adyen-ruby-api-library
       Adyen-Library-Version:
@@ -99,7 +99,7 @@ http_interactions:
       User-Agent:
       - adyen-ruby-api-library/10.4.0
       X-Api-Key:
-      - "ADYEN_API_KEY"
+      - ADYEN_API_KEY
       Adyen-Library-Name:
       - adyen-ruby-api-library
       Adyen-Library-Version:
@@ -138,7 +138,7 @@ http_interactions:
       User-Agent:
       - adyen-ruby-api-library/10.4.0
       X-Api-Key:
-      - "ADYEN_API_KEY"
+      - ADYEN_API_KEY
       Adyen-Library-Name:
       - adyen-ruby-api-library
       Adyen-Library-Version:
@@ -164,4 +164,124 @@ http_interactions:
       encoding: UTF-8
       string: '{"hmacKey":"ADYEN_HMAC_KEY"}'
   recorded_at: Thu, 14 Aug 2025 11:03:40 GMT
+- request:
+    method: post
+    uri: https://management-test.adyen.com/v3/me/allowedOrigins
+    body:
+      encoding: UTF-8
+      string: '{"domain":"https://c33e96aee20a.ngrok-free.app"}'
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - adyen-ruby-api-library/10.4.0
+      X-Api-Key:
+      - ADYEN_API_KEY
+      Adyen-Library-Name:
+      - adyen-ruby-api-library
+      Adyen-Library-Version:
+      - 10.4.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 422
+      message: Unprocessable Content
+    headers:
+      Content-Type:
+      - application/json;charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Fri, 22 Aug 2025 14:22:04 GMT
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: '{"type":"https:\/\/docs.adyen.com\/errors\/validation","title":"Invalid
+        allowed origin information provided.","status":422,"requestId":"76fd3fc8-b604-0193-34c7-26e9c493de85_1-GGQNW46H4FZ28222","invalidFields":[{"name":"domain","value":"https:\/\/c33e96aee20a.ngrok-free.app","message":"Origin
+        already exists"}],"errorCode":"31_004"}'
+  recorded_at: Fri, 22 Aug 2025 14:22:04 GMT
+- request:
+    method: post
+    uri: https://management-test.adyen.com/v3/me/allowedOrigins
+    body:
+      encoding: UTF-8
+      string: '{"domain":"https://foo.store.example.com"}'
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - adyen-ruby-api-library/10.4.0
+      X-Api-Key:
+      - ADYEN_API_KEY
+      Adyen-Library-Name:
+      - adyen-ruby-api-library
+      Adyen-Library-Version:
+      - 10.4.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 422
+      message: Unprocessable Content
+    headers:
+      Content-Type:
+      - application/json;charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Fri, 22 Aug 2025 14:22:04 GMT
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: '{"type":"https:\/\/docs.adyen.com\/errors\/validation","title":"Invalid
+        allowed origin information provided.","status":422,"requestId":"eaac7fb9-e505-651a-7d4c-36708e2adf44_2-Q42PW46H4FZ28222","invalidFields":[{"name":"domain","value":"https:\/\/foo.store.example.com","message":"Origin
+        already exists"}],"errorCode":"31_004"}'
+  recorded_at: Fri, 22 Aug 2025 14:22:04 GMT
+- request:
+    method: post
+    uri: https://management-test.adyen.com/v3/me/allowedOrigins
+    body:
+      encoding: UTF-8
+      string: '{"domain":"https://bar.store.example.com"}'
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - adyen-ruby-api-library/10.4.0
+      X-Api-Key:
+      - ADYEN_API_KEY
+      Adyen-Library-Name:
+      - adyen-ruby-api-library
+      Adyen-Library-Version:
+      - 10.4.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 422
+      message: Unprocessable Content
+    headers:
+      Content-Type:
+      - application/json;charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Fri, 22 Aug 2025 14:22:05 GMT
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: '{"type":"https:\/\/docs.adyen.com\/errors\/validation","title":"Invalid
+        allowed origin information provided.","status":422,"requestId":"7cbde996-3649-c44a-5684-4b1e535fd6d0_2-S6XVW46H4FZ28222","invalidFields":[{"name":"domain","value":"https:\/\/bar.store.example.com","message":"Origin
+        already exists"}],"errorCode":"31_004"}'
+  recorded_at: Fri, 22 Aug 2025 14:22:05 GMT
 recorded_with: VCR 6.3.1
