@@ -15,3 +15,9 @@ New migration can be generated and executed by calling `bundle exec rails g spre
 - return_url in spree_adyen_payment_sessions table
 - return_url param in body POST adyen/payment_sessions
 - return_url param in GET adyen/payment_sessions/{id}
+
+## [0.0.3] - 2024-08-21
+
+### Fixed
+ 
+- `Spree::PaymentMethod#adyen?` method
