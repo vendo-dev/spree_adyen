@@ -1,14 +1,16 @@
 require 'spec_helper'
 
-RSpec.describe SpreeAdyen::PlatformPresenter do
+RSpec.describe SpreeAdyen::ApplicationInfoPresenter do
   subject { described_class.new.to_h }
 
   let(:expected_hash) do
     {
-      externalPlatform: {
-        name: 'Spree Commerce',
-        version: '42.0.0',
-        integrator: 'Spree Adyen'
+      applicationInfo: {
+        externalPlatform: {
+          name: 'Spree Commerce',
+          version: '42.0.0',
+          integrator: 'Spree Adyen'
+        }
       }
     }
   end

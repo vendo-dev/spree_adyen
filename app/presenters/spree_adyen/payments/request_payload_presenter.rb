@@ -29,7 +29,7 @@ module SpreeAdyen
           reference: reference,
           shopperReference: shopper_reference,
           merchantAccount: source.payment_method.preferred_merchant_account
-        }.merge!(DEFAULT_PARAMS, SpreeAdyen::PlatformPresenter.new.to_h)
+        }.merge!(DEFAULT_PARAMS, SpreeAdyen::ApplicationInfoPresenter.new.to_h)
       end
 
       private

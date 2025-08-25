@@ -68,10 +68,12 @@ RSpec.describe SpreeAdyen::PaymentSessions::RequestPayloadPresenter do
         },
         shopperEmail: order.email,
         shopperReference: "customer_#{user.id}",
-        externalPlatform: {
-          name: 'Spree Commerce',
-          version: '42.0.0',
-          integrator: 'Spree Adyen'
+        applicationInfo: {
+          externalPlatform: {
+            name: 'Spree Commerce',
+            version: '42.0.0',
+            integrator: 'Spree Adyen'
+          }
         }
       }
     end

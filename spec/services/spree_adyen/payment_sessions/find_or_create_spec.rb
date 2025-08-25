@@ -23,7 +23,7 @@ RSpec.describe SpreeAdyen::PaymentSessions::FindOrCreate do
 
   before do
     # we use expires_at from the cassette, so we need to freeze the time
-    Timecop.freeze('2025-07-07T0:00:00+02:00')
+    Timecop.freeze('2025-08-25T16:00:00+02:00')
   end
 
   after do

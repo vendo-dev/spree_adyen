@@ -32,10 +32,12 @@ RSpec.describe SpreeAdyen::RefundPayloadPresenter do
         },
         reference: "R123456789_#{payment_method.id}_#{payment.response_code}_refund",
         merchantAccount: payment_method.preferred_merchant_account,
-        externalPlatform: {
-          name: 'Spree Commerce',
-          version: '42.0.0',
-          integrator: 'Spree Adyen'
+        applicationInfo: {
+          externalPlatform: {
+            name: 'Spree Commerce',
+            version: '42.0.0',
+            integrator: 'Spree Adyen'
+          }
         }
       }
     end
