@@ -38,7 +38,7 @@ RSpec.describe SpreeAdyen::Gateways::Configure do
 
   context 'when webhook is set up' do
     let(:hmac_key) { '803CB6B178ECEBD56C378B546AC75FEB786FA39352A51B370711377BCE763F63' }
-    let(:webhook_id) { 'WBHK42CLX22322945MWKG7R6LH6G9V' }
+    let(:webhook_id) { 'WBHK42CLX22322945MWKG7R6LH0000' }
 
     it 'does not update the webhook_id and hmac_key' do
       VCR.use_cassette('gateways/configure/success/webhook_set_up') do

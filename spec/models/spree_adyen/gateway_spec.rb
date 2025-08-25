@@ -6,11 +6,16 @@ RSpec.describe SpreeAdyen::Gateway do
       stores: [store],
       preferred_api_key: 'secret',
       preferred_merchant_account: 'SpreeCommerceECOM',
-      preferred_test_mode: test_mode)
+      preferred_test_mode: test_mode,
+      preferred_webhook_id: webhook_id,
+      preferred_hmac_key: hmac_key
+    )
   end
   let(:store) { Spree::Store.default }
   let(:amount) { 100 }
   let(:test_mode) { true }
+  let(:webhook_id) { '1234567890' }
+  let(:hmac_key) { '1234567890' }
 
   describe 'validations' do
     describe 'api key validation' do
@@ -209,6 +214,42 @@ RSpec.describe SpreeAdyen::Gateway do
       let(:gateway) { create(:adyen_gateway, preferred_test_mode: false) }
 
       it { is_expected.to eq(:live) }
+    end
+  end
+
+  describe '#test_webhook' do
+    subject { gateway.test_webhook }
+
+    let(:hmac_key) { 'HMAC_KEY' }
+
+    context 'when webhook is valid' do
+      let(:webhook_id) { 'WBHK42CLH22322975N3464F9TP0000' }
+
+      it 'returns success' do
+        VCR.use_cassette("management_api/test_webhook/success") do
+          expect(subject.success?).to be(true)
+        end
+      end
+    end
+
+    context 'when webhook ID is invalid' do
+      let(:webhook_id) { '1234567890' }
+
+      it 'returns failure' do
+        VCR.use_cassette("management_api/test_webhook/bad_request") do
+          expect(subject.success?).to be(false)
+        end
+      end
+    end
+
+    context 'when webhook does not respond with 2xx' do
+      let(:webhook_id) { 'WBHK42CLH22322975N3464F9TP0000' }
+
+      it 'returns failure' do
+        VCR.use_cassette("management_api/test_webhook/failure") do
+          expect(subject.success?).to be(false)
+        end
+      end
     end
   end
 
